@@ -1,0 +1,173 @@
+﻿@model IEnumerable<APP.Models.BenhAn>
+
+@{
+    ViewData["Title"] = "Danh sách bệnh án";
+}
+
+<div class="container mt-4">
+    <h4 class="page-title text-center mb-4">🩺 DANH SÁCH BỆNH ÁN</h4>
+
+    <form asp-action="Search" method="post" class="d-flex justify-content-center align-items-center mb-3">
+        <input type="text" name="makcb" class="form-control search-box me-2" placeholder="Nhập Mã KCB..." />
+        <button type="submit" class="btn btn-danger me-2">🔍 Tìm kiếm</button>
+        <button type="submit" formaction="/BenhAn/CancelSign" formmethod="post"
+                class="btn btn-outline-light border-danger text-danger"
+                onclick="return confirm('Bạn có chắc muốn hủy các bệnh án đã chọn không?');">
+            ❌ Hủy ký
+        </button>
+    </form>
+
+    <div class="table-responsive shadow-sm rounded">
+        <table class="table table-bordered table-hover compact-table text-center">
+            <thead class="table-header-red text-white">
+                <tr>
+                    <th>Mã KCB</th>
+                    <th>Mẫu bệnh án</th>
+                    <th>Số bệnh án</th>
+                    <th>Ngày làm</th>
+                    <th style="white-space: nowrap;">Mã NV</th>
+                    <th>Đã ký</th>
+                    <th style="white-space: nowrap;">Hủy ký</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.makcb</td>
+                        <td class="text-start maubenhan-cell">@item.maubenhan</td>
+                        <td>@item.sobenhan</td>
+                        <td>@item.ngaylam.ToString("dd/MM/yyyy HH:mm")</td>
+                        <td>@item.manv</td>
+                        
+                        <td class="daky-cell text-start">
+                            @if (!string.IsNullOrEmpty(item.daky))
+                            {
+                                var text = string.Join(" | ", item.daky
+                                    .Split('|', StringSplitOptions.RemoveEmptyEntries)
+                                    .Select(p => p.Trim()));
+
+                                <div class="daky-inline" title="@text">@text</div>
+                            }
+                            else
+                            {
+                                <span class="text-muted">Chưa ký</span>
+                            }
+                        </td>
+                        <td>
+                            <input type="checkbox" name="makcb" value="@item.makcb" class="form-check-input" />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<style>
+    body {
+        background-color: #fff5f7;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .page-title {
+        color: #e91e63;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+    }
+
+    .search-box {
+        max-width: 240px;
+        border: 1px solid #e91e63;
+        border-radius: 5px;
+        font-size: 14px;
+        height: 34px;
+    }
+
+    .btn-danger {
+        background-color: #e91e63 !important;
+        border-color: #e91e63 !important;
+        font-weight: 600;
+        font-size: 14px;
+        padding: 5px 12px;
+    }
+
+    .btn-outline-light {
+        background-color: white !important;
+        border: 1px solid #e91e63 !important;
+        color: #e91e63 !important;
+        font-weight: 600;
+        font-size: 14px;
+        padding: 5px 12px;
+    }
+
+        .btn-outline-light:hover {
+            background-color: #e91e63 !important;
+            color: #fff !important;
+        }
+
+    .table.compact-table th,
+    .table.compact-table td {
+        padding: 6px 8px !important;
+        font-size: 13px;
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    .table-header-red {
+        background-color: #e91e63 !important;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #fff0f3 !important;
+    }
+
+    .table td,
+    .table th {
+        border: 1px solid #f3b8c5;
+    }
+
+    .daky-cell {
+        font-family: monospace;
+        font-size: 12.5px;
+        line-height: 1.2;
+        background-color: #fff8f9;
+        border-radius: 3px;
+        padding: 4px;
+        text-align: left;
+        white-space: nowrap;
+    }
+
+        .daky-cell div {
+            padding: 2px 0;
+            border-bottom: 1px dashed #f1b2c1;
+        }
+
+            .daky-cell div:last-child {
+                border-bottom: none;
+            }
+
+    .shadow-sm {
+        box-shadow: 0 3px 6px rgba(233, 30, 99, 0.1);
+    }
+
+    .daky-inline {
+        font-family: monospace;
+        font-size: 13px;
+        background-color: #fff8f9;
+        border-radius: 3px;
+        padding: 4px 6px;
+        line-height: 1.3;
+        color: #333;
+        max-width: 450px; 
+        overflow: hidden;
+        white-space: nowrap; 
+        text-overflow: ellipsis; 
+    }
+    .maubenhan-cell {
+        text-align: left !important;
+        padding-left: 10px !important;
+        font-weight: 500;
+        color: #333;
+    }
+</style>
