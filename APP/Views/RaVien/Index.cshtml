@@ -1,0 +1,245 @@
+﻿@model IEnumerable<APP.Models.RaVien>
+
+@{
+    ViewData["Title"] = "Danh sách đăng ký ra viện";
+}
+
+<div class="container mt-5 text-center">
+    <h3 class="fw-bold text-danger mb-4">
+        <i class="bi bi-heart-pulse-fill"></i> 📋 DANH SÁCH ĐĂNG KÝ RA VIỆN
+    </h3>
+
+
+    <form method="get" asp-action="Index" class="d-flex justify-content-center mb-4">
+        <input type="text" name="search" value="@ViewBag.Search"
+               class="form-control me-2 search-box" placeholder="Nhập mã KCB..." />
+        <button type="submit" class="btn btn-danger px-4">🔍 Tìm kiếm</button>
+    </form>
+
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success text-center">@TempData["Success"]</div>
+    }
+
+ 
+    <div class="table-responsive shadow-sm">
+        <table class="table table-bordered table-hover align-middle text-center small">
+            <thead class="table-header-red text-white">
+                <tr>
+                    <th>Mã KCB</th>
+                    <th>Ngày</th>
+                    <th>Phòng</th>
+                    <th style="white-space: nowrap;">Bác sỹ</th>
+                    <th style="white-space: nowrap;">Phương pháp điều trị</th>
+                    <th style="white-space: nowrap;">Nhận xét</th>
+                    <th>Đã ký</th>
+                    <th style="white-space: nowrap;">Chuỗi người ký</th>
+                    <th style="white-space: nowrap;">Số ra viện</th>
+                    <th style="white-space: nowrap;">Kết thúc DTNT</th>
+                    <th style="white-space: nowrap;">Người lập</th>
+                    <th style="white-space: nowrap;">Ghi chú</th>
+                    <th style="white-space: nowrap;">Thao tác</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr class="@(string.IsNullOrEmpty(item.soravien) )">
+                            <td>@item.makcb</td>
+                            <td>@(item.ngay?.ToString("dd/MM/yyyy") ?? "-")</td>
+                            <td>@item.maphong</td>
+                            <td>@item.mabs</td>
+
+                         
+                            <td class="text-start">
+                                @{
+                                    var fullPPDT = item.phuongphapdieutri ?? "";
+                                    var shortPPDT = fullPPDT.Length > 40 ? fullPPDT.Substring(0, 40) + "..." : fullPPDT;
+                                }
+                                <span class="clickable-text" data-bs-toggle="modal"
+                                      data-bs-target="#detailModal"
+                                      data-title="Phương pháp điều trị"
+                                      data-content="@fullPPDT">
+                                    @shortPPDT
+                                </span>
+                            </td>
+
+                            <td>@item.nhanxet</td>
+
+                            <td class="text-start">
+                                @{
+                                    var fullDaky = item.daky ?? "";
+                                    var shortDaky = fullDaky.Length > 50 ? fullDaky.Substring(0, 50) + "..." : fullDaky;
+                                }
+                                @if (!string.IsNullOrEmpty(fullDaky))
+                                {
+                                    <span class="clickable-text text-success"
+                                          data-bs-toggle="modal"
+                                          data-bs-target="#detailModal"
+                                          data-title="Thông tin đã ký"
+                                          data-content="@fullDaky">
+                                        @shortDaky
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="text-muted">Chưa ký</span>
+                                }
+                            </td>
+
+                            <td>@item.chuoinguoiky</td>
+                            <td>@(item.soravien ?? "-")</td>
+                            <td>@(item.ketthucdtnt == true ? "Đã kết thúc" : "Chưa")</td>
+                            <td>@item.manv</td>
+                            <td>@item.ghichu</td>
+
+                            
+                            <td class="action-buttons">
+                                <form method="post" asp-action="HuyRaVien" class="d-inline">
+                                    <input type="hidden" name="makcb" value="@item.makcb" />
+                                    <button type="submit" class="btn btn-warning btn-sm">Hủy</button>
+                                </form>
+                                <a asp-action="Edit" asp-route-makcb="@item.makcb" class="btn btn-info btn-sm">Sửa</a>
+                            </td>
+                        </tr>
+
+                    
+                        <tr class="bg-light">
+                            <td colspan="13" class="text-start">
+                                <details>
+                                    <summary class="fw-bold text-danger">Xem thêm chi tiết</summary>
+                                    <div class="row p-2 small">
+                                        <div class="col-md-4"><strong>Ailam:</strong> @item.ailam</div>
+                                        <div class="col-md-4"><strong>BHXH:</strong> @item.bhxh</div>
+                                        <div class="col-md-4"><strong>Chẩn bệnh ICD:</strong> @item.chanbenhicd</div>
+                                        <div class="col-md-4"><strong>Quá trình bệnh lý:</strong> @item.quatrinhbenhly</div>
+                                        <div class="col-md-4"><strong>Kết quả CLS:</strong> @item.ketquacls</div>
+                                        <div class="col-md-4"><strong>Số ngày điều trị:</strong> @item.songaydieutri</div>
+                                    </div>
+                                </details>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr><td colspan="13" class="text-center text-muted">Không có dữ liệu</td></tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+
+<div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content border-0 rounded-4 shadow-lg">
+            <div class="modal-header bg-danger text-white rounded-top-4">
+                <h5 class="modal-title" id="detailModalLabel">Chi tiết</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body text-start p-3" id="modalContent"></div>
+            <div class="modal-footer bg-light">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+@section Scripts {
+    <script>document.addEventListener('DOMContentLoaded', function () {
+            const modal = document.getElementById('detailModal');
+            modal.addEventListener('show.bs.modal', function (event) {
+                const trigger = event.relatedTarget;
+                const content = trigger.getAttribute('data-content');
+                const title = trigger.getAttribute('data-title');
+                document.getElementById('detailModalLabel').textContent = title;
+                document.getElementById('modalContent').textContent = content || "Không có dữ liệu";
+            });
+        });</script>
+}
+
+
+<style>
+    body {
+        background-color: #fff5f7 !important ;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .search-box {
+        max-width: 280px;
+        border: 1px solid #e91e63;
+        border-radius: 6px;
+        font-size: 14px;
+        height: 36px;
+    }
+
+    .table-header-red {
+        background-color: #e91e63 !important;
+        font-weight: 600;
+        text-transform: uppercase;
+    }
+
+    .table th, .table td {
+        vertical-align: middle;
+        font-size: 13px;
+        text-align: center;
+        border: 1px solid #f3b8c5;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #fff5f7 !important;
+    }
+
+
+
+    .clickable-text {
+        color: #e91e63; 
+        cursor: pointer;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: inline-block;
+        max-width: 250px; 
+        font-weight: 500;
+    }
+
+        .clickable-text:hover {
+            text-decoration: underline;
+        }
+
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .btn-sm {
+        padding: 5px 10px;
+        font-size: 13px;
+        font-weight: 600;
+        border-radius: 6px;
+    }
+
+    .btn-danger {
+        background-color: #e91e63 !important;
+        border: none;
+        color: #fff !important;
+    }
+
+    .btn-warning {
+        background-color: #ffc107 !important;
+        color: #000 !important;
+    }
+
+    .btn-info {
+        background-color: #e91e63 !important;
+        color: #000 !important;
+    }
+</style>
