@@ -45,6 +45,7 @@ namespace APP.Data
         public DbSet<DMDichVu> DMDichVu { get; set; }
         public DbSet<KetQuaCLS> KetQuaCLS { get; set; }
         public DbSet<PhauThuatThuThuat> PhauThuatThuThuat { get; set; }
+        public DbSet<DangKy> DangKy { get; set; }
 
     }
 }

@@ -1,0 +1,173 @@
+﻿@model APP.Models.DangKy
+
+<div class="container mt-5" style="max-width: 600px;">
+    <h3 class="text-center text-danger fw-bold mb-4">
+        <i class="bi bi-pencil-square"></i> ✏️ SỬA THÔNG TIN ĐĂNG KÝ
+    </h3>
+
+    <form asp-action="Edit" method="post">
+
+        <div class="row">
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Mã KCB</label>
+                <input asp-for="makcb" class="form-control" readonly />
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Họ tên</label>
+                <input asp-for="hoten" class="form-control" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Giới tính</label>
+                <select asp-for="maphai" class="form-select">
+                    <option value="">-- Chọn giới tính --</option>
+                    <option value="1">Nam</option>
+                    <option value="2">Nữ</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Ngày đăng ký</label>
+                <input asp-for="ngaydk" type="date" class="form-control" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Ngày sinh</label>
+                <input asp-for="ngaysinh" type="date" class="form-control" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Số CCCD</label>
+                <input asp-for="socmnd" class="form-control" />
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Phòng</label>
+                <input asp-for="maphong" class="form-control" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Khoa</label>
+                <input asp-for="makk" class="form-control" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Nhân viên</label>
+                <input asp-for="manv" class="form-control" />
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Chức vụ</label>
+                <input asp-for="machucvu" class="form-control" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Cấp bậc</label>
+                <input asp-for="macapbac" class="form-control" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Đơn vị</label>
+                <input asp-for="madonvi" class="form-control" />
+            </div>
+
+        </div>
+        <div class="row">
+
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Nơi làm việc</label>
+                <input asp-for="noilamviec" class="form-control" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Điện thoại</label>
+                <input asp-for="dienthoai" class="form-control" />
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-semibold">Số BHXH</label>
+                <input asp-for="sobhxh" class="form-control" />
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <label class="form-label fw-bold">Thôn/Phố</label>
+                <input asp-for="thonpho" class="form-control" />
+
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-bold">Xã/Phường</label>
+                <input asp-for="mapx" class="form-control" />
+
+            </div>
+            <div class="col-md-4">
+                <label class="form-label fw-bold">Tỉnh/Thành phố</label>
+                <input asp-for="matt" class="form-control" />
+            </div>
+        </div>
+
+             <div class="row">
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Loại hình KCB</label>
+                    <input asp-for="idloaihinhkcb" class="form-control" />
+                </div>
+
+                <div class="col-md-4">
+                    <label class="form-label fw-bold">Hình thức đến</label>
+                    <input asp-for="mahinhthucden" class="form-control" />
+                </div>
+
+                <div class="col-md-12">
+                    <label class="form-label fw-bold">Lý do vào viện</label>
+                    <textarea asp-for="lydovv130" class="form-control" rows="2"></textarea>
+                </div>
+        </div>
+
+
+
+                <div class="d-flex justify-content-between">
+                    <a asp-action="Index" class="btn btn-secondary px-4">⬅️ Quay lại</a>
+                    <button type="submit" class="btn btn-danger px-4">💾 Lưu thay đổi</button>
+                </div>
+</form>
+</div>
+
+<style>
+    body {
+        background-color: #fff5f7;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    h3 {
+        color: #e91e63;
+        font-weight: 700;
+    }
+
+    .btn-danger {
+        background-color: #e91e63 !important;
+        border: none;
+        font-weight: 600;
+        color: #fff;
+    }
+
+    .btn-secondary {
+        background-color: #ccc !important;
+        color: #000;
+        font-weight: 600;
+    }
+
+    label {
+        color: #e91e63;
+    }
+
+    input, select, textarea {
+        border: 1px solid #f3b8c5;
+    }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: #e91e63;
+            box-shadow: 0 0 3px rgba(233, 30, 99, 0.3);
+        }
+</style>

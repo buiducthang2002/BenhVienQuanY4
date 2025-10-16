@@ -15,8 +15,8 @@
     <None Remove="Data\" />
     <None Remove="Views\RaVien\" />
     <None Remove="Views\PhauThuatThuThuat\" />
-    <None Remove="Views\Đăng ký\" />
     <None Remove="Views\Khám bệnh\" />
+    <None Remove="Views\DangKy\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Views\Account\" />
@@ -28,8 +28,8 @@
     <Folder Include="Data\" />
     <Folder Include="Views\RaVien\" />
     <Folder Include="Views\PhauThuatThuThuat\" />
-    <Folder Include="Views\Đăng ký\" />
     <Folder Include="Views\Khám bệnh\" />
+    <Folder Include="Views\DangKy\" />
   </ItemGroup>
   <ItemGroup>
     <Content Remove="wwwroot\images\" />
