@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "cAbj7496KH2qgJp7Fd2bAgGfuHqHVjAWPIqA6eCyoLoxMygZ8LN95xytfTE2VvmfI4SLDfR01SeGBDlu+bcFDA==",
+  "dgSpecHash": "fB/U3XWKtM9Epz+7R95TKkLOlfQg+JIFz+y354ERNY1hWB7lJlYXkedk4p4xjitT8xcgcmv3hIu11740gSX0Ow==",
   "success": true,
   "projectFilePath": "/Users/buiducthang/Projects/APP/APP/APP.csproj",
   "expectedPackageFiles": [
@@ -46,10 +46,7 @@
     "/Users/buiducthang/.nuget/packages/system.security.permissions/4.7.0/system.security.permissions.4.7.0.nupkg.sha512",
     "/Users/buiducthang/.nuget/packages/system.security.principal.windows/4.7.0/system.security.principal.windows.4.7.0.nupkg.sha512",
     "/Users/buiducthang/.nuget/packages/system.text.encoding.codepages/4.7.0/system.text.encoding.codepages.4.7.0.nupkg.sha512",
-    "/Users/buiducthang/.nuget/packages/system.windows.extensions/4.7.0/system.windows.extensions.4.7.0.nupkg.sha512",
-    "/Users/buiducthang/.nuget/packages/microsoft.netcore.app.ref/6.0.31/microsoft.netcore.app.ref.6.0.31.nupkg.sha512",
-    "/Users/buiducthang/.nuget/packages/microsoft.aspnetcore.app.ref/6.0.31/microsoft.aspnetcore.app.ref.6.0.31.nupkg.sha512",
-    "/Users/buiducthang/.nuget/packages/microsoft.netcore.app.host.osx-arm64/6.0.31/microsoft.netcore.app.host.osx-arm64.6.0.31.nupkg.sha512"
+    "/Users/buiducthang/.nuget/packages/system.windows.extensions/4.7.0/system.windows.extensions.4.7.0.nupkg.sha512"
   ],
   "logs": []
 }

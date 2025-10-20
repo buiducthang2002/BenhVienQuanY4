@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "KV/9TLvhSik6sTe2VbgZdGJEgcRUddaQ+WKtA3rfS+g=",
+  "Hash": "U049sHyuyLmhHsGk0hVc5MHpxifkWiP+38WHnrfOChE=",
   "Source": "APP",
   "BasePath": "_content/APP",
   "Mode": "Default",
@@ -49,6 +49,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "/Users/buiducthang/Projects/APP/APP/obj/Debug/net6.0/scopedcss/projectbundle/APP.bundle.scp.css"
+    },
+    {
+      "Identity": "/Users/buiducthang/Projects/APP/APP/wwwroot/.DS_Store",
+      "SourceId": "APP",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/buiducthang/Projects/APP/APP/wwwroot/",
+      "BasePath": "_content/APP",
+      "RelativePath": ".DS_Store",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/.DS_Store"
     },
     {
       "Identity": "/Users/buiducthang/Projects/APP/APP/wwwroot/css/site.css",

@@ -28,10 +28,53 @@ namespace APP.Data
             }
             optionsBuilder.UseSqlServer("Server=192.168.0.26;Database=QY42026V6;User Id=sa;Password=123@vtt;TrustServerCertificate=True;");
         }
+
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<DangKy>()
+                .ToTable("dangky")
+                .HasKey(d => d.makcb);
+
+            modelBuilder.Entity<DmCapbac>().HasNoKey();
+            modelBuilder.Entity<DmChucvu>().HasNoKey();
+            modelBuilder.Entity<DmKhoa>().HasNoKey();
+            modelBuilder.Entity<DmPhong>().HasNoKey();
+            modelBuilder.Entity<DmPhuongxa>().HasNoKey();
+            modelBuilder.Entity<DmTt>().HasNoKey();
+            modelBuilder.Entity<DmDangkyloaihinhkcb>().HasNoKey();
+            modelBuilder.Entity<DmHinhthucdenkham>().HasNoKey();
+            modelBuilder.Entity<DmKhoa>(entity =>
+            {
+                entity.ToTable("dmkk");
+                entity.HasNoKey();
+                entity.Property(e => e.makk).HasColumnName("makk");
+                entity.Property(e => e.tenkk).HasColumnName("tenkk");
+                entity.Ignore(e => e.maphong); 
+            });
+
+
+            modelBuilder.Entity<PhauThuatThuThuat>()
+                .HasKey(p => new { p.makcb, p.maphauthuat });
+        }
+
         public DbSet<NguoiDung> NguoiDung { get; set; }
         public DbSet<BenhAn> BenhAn { get; set; }
         public DbSet<RaVien> RaVien { get; set; }
         public DbSet<DMDichVu> DMDichVu { get; set; }
         public DbSet<KetQuaCLS> KetQuaCLS { get; set; }
+        public DbSet<PhauThuatThuThuat> PhauThuatThuThuat { get; set; }
+        public DbSet<DangKy> DangKy { get; set; }
+
+        public DbSet<DmKhoa> DmKhoa { get; set; }
+        public DbSet<DmChucvu> DmChucvu { get; set; }
+        public DbSet<DmCapbac> DmCapbac { get; set; }
+        public DbSet<DmPhuongxa> DmPhuongxa { get; set; }
+        public DbSet<DmTt> DmTt { get; set; }
+        public DbSet<DmDangkyloaihinhkcb> DmDangkyloaihinhkcb { get; set; }
+        public DbSet<DmHinhthucdenkham> DmHinhthucdenkham { get; set; }
+        public DbSet<DmPhong> DmPhong { get; set; }
+
     }
 }

@@ -1,0 +1,157 @@
+﻿@model APP.Models.DangKy
+@removeTagHelper Microsoft.AspNetCore.Mvc.TagHelpers.OptionTagHelper, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<div class="container mt-5">
+    <h3 class="fw-bold text-danger mb-4 text-center">
+        <i class="bi bi-person-vcard-fill"></i> ✏️ CẬP NHẬT THÔNG TIN ĐĂNG KÝ KHÁM
+    </h3>
+
+    <form asp-action="Edit" method="post" class="p-4 shadow-sm rounded" style="background-color: #fff5f7;">
+        <div class="row g-3">
+
+            <div class="col-md-6">
+                <div class="form-group mb-3">
+                    <label class="fw-bold">Mã KCB</label>
+                    <input asp-for="makcb" class="form-control" readonly />
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="fw-bold">Họ tên</label>
+                    <input asp-for="hoten" class="form-control" />
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="fw-bold">Ngày đăng ký</label>
+                    <input asp-for="ngaydk" type="date" class="form-control" />
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="fw-bold">Ngày sinh</label>
+                    <input asp-for="ngaysinh" type="date" class="form-control" />
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="fw-bold">Giới tính</label>
+                    <select asp-for="maphai" class="form-select">
+                        <option value="">-- Chọn giới tính --</option>
+                        <option value="1">Nam</option>
+                        <option value="2">Nữ</option>
+                    </select>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="fw-bold">Số CMND</label>
+                    <input asp-for="socmnd" class="form-control" />
+                </div>
+            </div>
+
+            <!-- Cột phải -->
+            <div class="col-md-6">
+                <div class="form-group mb-3">
+                    <label class="fw-bold">Phòng</label>
+                    <select asp-for="maphong" class="form-select" asp-items="ViewBag.PhongList">
+                        <option value="">-- Chọn phòng --</option>
+                    </select>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="fw-bold">Khoa</label>
+                    <select asp-for="makk" class="form-select" asp-items="ViewBag.KhoaList">
+                        <option value="">-- Chọn khoa --</option>
+                    </select>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="fw-bold">Chức vụ</label>
+                    <select asp-for="machucvu" class="form-select" asp-items="ViewBag.ChucVuList">
+                        <option value="">-- Chọn chức vụ --</option>
+                    </select>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="fw-bold">Cấp bậc</label>
+                    <select asp-for="macapbac" class="form-select" asp-items="ViewBag.CapBacList">
+                        <option value="">-- Chọn cấp bậc --</option>
+                    </select>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="fw-bold">Tỉnh</label>
+                    <select asp-for="matt" class="form-select" asp-items="ViewBag.TinhList">
+                        <option value="">-- Chọn tỉnh --</option>
+                    </select>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="fw-bold">Xã/Phường</label>
+                    <select asp-for="mapx" class="form-select" asp-items="ViewBag.PhuongList">
+                        <option value="">-- Chọn xã/phường --</option>
+                    </select>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="fw-bold">Loại hình KCB</label>
+                    <select asp-for="idloaihinhkcb" class="form-select" asp-items="ViewBag.LoaiHinhList">
+                        <option value="">-- Chọn loại hình KCB --</option>
+                    </select>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label class="fw-bold">Hình thức đến khám</label>
+                    <select asp-for="mahtd" class="form-select" asp-items="ViewBag.HinhThucList">
+                        <option value="">-- Chọn hình thức --</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-4 text-center">
+            <button type="submit" class="btn btn-danger px-4 me-2">
+                💾 Lưu thay đổi
+            </button>
+            <a asp-action="Index" class="btn btn-danger px-4 me-2">
+                ↩️ Quay lại
+            </a>
+        </div>
+    </form>
+    
+</div>
+
+
+<style>
+    body {
+        background-color: #fff5f7;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    h3 {
+        color: #e91e63;
+        font-weight: 700;
+    }
+
+    .btn-danger {
+        background-color: #e91e63 !important;
+        border: none;
+        font-weight: 600;
+        color: #fff;
+    }
+
+    .btn-secondary {
+        background-color: #ccc !important;
+        color: #000;
+        font-weight: 600;
+    }
+
+    label {
+        color: #e91e63;
+    }
+
+    input, select, textarea {
+        border: 1px solid #f3b8c5;
+    }
+
+        input:focus, select:focus, textarea:focus {
+            border-color: #e91e63;
+            box-shadow: 0 0 3px rgba(233, 30, 99, 0.3);
+        }
+</style>

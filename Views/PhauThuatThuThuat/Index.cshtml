@@ -1,0 +1,142 @@
+﻿@model IEnumerable<APP.Models.PhauThuatThuThuat>
+
+<div class="container mt-5 text-center">
+    <h3 class="fw-bold text-danger mb-4">
+        <i class="bi bi-scissors"></i> DANH SÁCH PHẪU THUẬT / THỦ THUẬT
+    </h3>
+
+
+    <form method="get" asp-action="Index" class="d-flex justify-content-center mb-4 align-items-center" id="searchForm">
+        <input type="text" name="search" value="@ViewBag.Search"
+               class="form-control me-2 search-box"
+               placeholder="Nhập mã KCB hoặc mã phẫu thuật..." />
+        <button type="submit" class="btn btn-danger me-2">
+            🔍 Tìm kiếm
+        </button>
+        <button type="button" class="btn btn-outline-light"
+                onclick="deleteSelected()">
+            🗑️ Xóa các dòng đã chọn
+        </button>
+    </form>
+
+    <form id="deleteForm" method="post" asp-action="DeleteSelected">
+        <table class="table table-bordered table-hover compact-table shadow-sm text-center align-middle">
+            <thead class="table-header-red text-white">
+                <tr>
+
+                    <th style="white-space: nowrap;">Mã KCB</th>
+                    <th style="white-space: nowrap;">Mã phẫu thuật</th>
+                    <th style="white-space: nowrap;">Ngày bắt đầu</th>
+                    <th style="white-space: nowrap;">Ngày kết thúc</th>
+                    <th style="white-space: nowrap;">Chẩn đoán trước mổ</th>
+                    <th style="white-space: nowrap;">Bác sĩ</th>
+                    <th style="white-space: nowrap;">Đã ký</th>
+                    <th style="width: 40px;">✔</th>
+
+
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+
+                            <td>@item.makcb</td>
+                            <td>@item.maphauthuat</td>
+                            <td>@(item.ngaybatdaumo?.ToString("dd/MM/yyyy HH:mm") ?? "-")</td>
+                            <td>@(item.ngayketthucmo?.ToString("dd/MM/yyyy HH:mm") ?? "-")</td>
+
+                            <td class="text-start">@item.chandoantruocmo</td>
+                            <td>@item.ailam</td>
+
+
+                            <td>
+                                @if (!string.IsNullOrEmpty(item.daky))
+                                {
+                                    <span class="badge bg-success">Đã ký</span>
+                                }
+                                else
+                                {
+                                    <span class="badge bg-secondary">Chưa ký</span>
+                                }
+                            </td>
+                            <td>
+                                <input type="checkbox" name="selectedIds" value="@item.maphauthuat" />
+                            </td>
+
+
+
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr><td colspan="8" class="text-muted text-center">Không có dữ liệu</td></tr>
+                }
+            </tbody>
+        </table>
+    </form>
+</div>
+
+
+<script>function deleteSelected() {
+        const selected = document.querySelectorAll('input[name="selectedIds"]:checked');
+        if (selected.length === 0) {
+            alert("⚠️ Vui lòng chọn ít nhất một dòng để xóa!");
+            return;
+        }
+
+        if (confirm("Bạn có chắc chắn muốn xóa các dòng đã chọn không?")) {
+            document.getElementById('deleteForm').submit();
+        }
+    }</script>
+
+<style>
+    body {
+        background-color: #fff5f7;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .table-header-red {
+        background-color: #e91e63 !important;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .table th, .table td {
+        font-size: 13px;
+        border: 1px solid #f3b8c5;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #fff0f3 !important;
+    }
+
+    .search-box {
+        max-width: 260px;
+        border: 1px solid #e91e63;
+        border-radius: 6px;
+        height: 34px;
+    }
+
+    .btn-danger {
+        background-color: #e91e63 !important;
+        border: none;
+        color: #fff !important;
+        font-weight: 600;
+    }
+
+    .btn-outline-light {
+        background-color: #fff !important;
+        border: 1px solid #e91e63 !important;
+        color: #e91e63 !important;
+        font-weight: 600;
+    }
+
+        .btn-outline-light:hover {
+            background-color: #e91e63 !important;
+            color: #fff !important;
+        }
+</style>

@@ -1,5 +1,11 @@
+/Users/buiducthang/Projects/APP/APP/bin/Debug/net6.0/publish/web.config
 /Users/buiducthang/Projects/APP/APP/bin/Debug/net6.0/appsettings.Development.json
 /Users/buiducthang/Projects/APP/APP/bin/Debug/net6.0/appsettings.json
+/Users/buiducthang/Projects/APP/APP/bin/Debug/net6.0/global.json
+/Users/buiducthang/Projects/APP/APP/bin/Debug/net6.0/publish/APP.deps.json
+/Users/buiducthang/Projects/APP/APP/bin/Debug/net6.0/publish/APP.runtimeconfig.json
+/Users/buiducthang/Projects/APP/APP/bin/Debug/net6.0/publish/appsettings.Development.json
+/Users/buiducthang/Projects/APP/APP/bin/Debug/net6.0/publish/appsettings.json
 /Users/buiducthang/Projects/APP/APP/bin/Debug/net6.0/APP.staticwebassets.runtime.json
 /Users/buiducthang/Projects/APP/APP/bin/Debug/net6.0/APP
 /Users/buiducthang/Projects/APP/APP/bin/Debug/net6.0/APP.deps.json
@@ -50,11 +56,6 @@
 /Users/buiducthang/Projects/APP/APP/obj/Debug/net6.0/APP.MvcApplicationPartsAssemblyInfo.cache
 /Users/buiducthang/Projects/APP/APP/obj/Debug/net6.0/APP.RazorAssemblyInfo.cache
 /Users/buiducthang/Projects/APP/APP/obj/Debug/net6.0/APP.RazorAssemblyInfo.cs
-/Users/buiducthang/Projects/APP/APP/obj/Debug/net6.0/staticwebassets/msbuild.APP.Microsoft.AspNetCore.StaticWebAssets.props
-/Users/buiducthang/Projects/APP/APP/obj/Debug/net6.0/staticwebassets/msbuild.build.APP.props
-/Users/buiducthang/Projects/APP/APP/obj/Debug/net6.0/staticwebassets/msbuild.buildMultiTargeting.APP.props
-/Users/buiducthang/Projects/APP/APP/obj/Debug/net6.0/staticwebassets/msbuild.buildTransitive.APP.props
-/Users/buiducthang/Projects/APP/APP/obj/Debug/net6.0/staticwebassets.pack.json
 /Users/buiducthang/Projects/APP/APP/obj/Debug/net6.0/staticwebassets.build.json
 /Users/buiducthang/Projects/APP/APP/obj/Debug/net6.0/staticwebassets.development.json
 /Users/buiducthang/Projects/APP/APP/obj/Debug/net6.0/scopedcss/Views/Shared/_Layout.cshtml.rz.scp.css
@@ -66,3 +67,9 @@
 /Users/buiducthang/Projects/APP/APP/obj/Debug/net6.0/APP.pdb
 /Users/buiducthang/Projects/APP/APP/obj/Debug/net6.0/APP.genruntimeconfig.cache
 /Users/buiducthang/Projects/APP/APP/obj/Debug/net6.0/ref/APP.dll
+/Users/buiducthang/Projects/APP/APP/bin/Debug/net6.0/publish/publish/web.config
+/Users/buiducthang/Projects/APP/APP/bin/Debug/net6.0/publish/global.json
+/Users/buiducthang/Projects/APP/APP/bin/Debug/net6.0/publish/publish/APP.deps.json
+/Users/buiducthang/Projects/APP/APP/bin/Debug/net6.0/publish/publish/APP.runtimeconfig.json
+/Users/buiducthang/Projects/APP/APP/bin/Debug/net6.0/publish/publish/appsettings.Development.json
+/Users/buiducthang/Projects/APP/APP/bin/Debug/net6.0/publish/publish/appsettings.json
