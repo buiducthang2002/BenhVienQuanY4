@@ -1,0 +1,86 @@
+﻿@model APP.Models.PhauThuatThuThuat
+
+<div class="container mt-5" style="max-width: 900px;">
+    <h3 class="fw-bold text-danger mb-4">✏️ Chỉnh sửa phẫu thuật/thủ thuật</h3>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <form asp-action="Edit" method="post" class="row g-3">
+        @Html.AntiForgeryToken()
+
+        <div asp-validation-summary="All" class="alert alert-warning"></div>
+
+        <input type="hidden" asp-for="makcb" />
+        <input type="hidden" asp-for="maphauthuat" />
+
+        <div class="col-md-6">
+            <label class="form-label">Mã KCB</label>
+            <input class="form-control" value="@Model.makcb" readonly />
+        </div>
+        <div class="col-md-6">
+            <label class="form-label">Mã phẫu thuật</label>
+            <input class="form-control" value="@Model.maphauthuat" readonly />
+        </div>
+
+        <div class="col-md-12">
+            <label asp-for="ailam" class="form-label"> Ai làm</label>
+            <input asp-for="ailam" class="form-control" />
+        </div>
+
+        <div class="col-md-6">
+            <label asp-for="ngaybatdaumo" class="form-label">Ngày bắt đầu mổ</label>
+            <input asp-for="ngaybatdaumo" class="form-control" type="datetime-local" />
+        </div>
+        <div class="col-md-6">
+            <label asp-for="ngayketthucmo" class="form-label">Ngày kết thúc mổ</label>
+            <input asp-for="ngayketthucmo" class="form-control" type="datetime-local" />
+        </div>
+
+        <div class="col-md-12">
+            <label asp-for="chandoantruocmo" class="form-label">Chẩn đoán trước mổ</label>
+            <textarea asp-for="chandoantruocmo" class="form-control" rows="3"></textarea>
+        </div>
+
+        <div class="col-md-12">
+            <label asp-for="chandoansaumo" class="form-label">Chuẩn đoán sau mổ</label>
+            <textarea asp-for="chandoansaumo" class="form-control" rows="3"></textarea>
+        </div>
+
+        <div class="col-md-12">
+            <label asp-for="dienbien" class="form-label"> Diễn biến </label>
+            <textarea asp-for="dienbien" class="form-control" rows="4"></textarea>
+        </div>
+
+        <div class="col-md-6">
+            <label asp-for="bac" class="form-label">Bác sĩ</label>
+            <input asp-for="bac" class="form-control" />
+            <span asp-validation-for="bac" class="text-danger"></span>
+        </div>
+
+
+        <div class="col-12 d-flex gap-2 mt-3">
+            <button type="submit" class="btn btn-danger">💾 Lưu</button>
+            <a asp-action="Index" class="btn btn-outline-secondary">↩️ Quay lại</a>
+        </div>
+    </form>
+</div>
+
+<style>
+    .form-label { font-weight: 600; }
+    .btn-danger { background-color: #e91e63 !important; border: none; }
+    .btn-outline-secondary { border: 1px solid #ccc; }
+</style>
+

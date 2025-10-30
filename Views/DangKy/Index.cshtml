@@ -1,0 +1,228 @@
+﻿@model IEnumerable<APP.Models.DangKyViewModel>
+
+<div class="container mt-5 text-center">
+    <h3 class="fw-bold text-danger mb-4">
+        <i class="bi bi-person-vcard"></i> DANH SÁCH ĐĂNG KÝ KHÁM BỆNH
+    </h3>
+
+    <form method="get" asp-action="Index" class="d-flex justify-content-center mb-4">
+        <input type="text" name="search" value="@ViewBag.Search"
+               class="form-control me-2 search-box"
+               placeholder="Nhập mã KCB hoặc họ tên..." />
+        <button type="submit" class="btn btn-danger me-2">🔍 Tìm kiếm</button>
+
+        <button type="submit" formaction="/DangKy/DeleteSelected" formmethod="post"
+                class="btn btn-outline-light"
+                onclick="return confirm('Bạn có chắc muốn xóa các dòng đã chọn không?');">
+            🗑️ Xóa đã chọn
+        </button>
+    </form>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success">@TempData["Success"]</div>
+    }
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-warning">@TempData["Error"]</div>
+    }
+
+    <div class="table-responsive shadow-sm">
+        <table class="table table-bordered table-hover compact-table align-middle text-center">
+            <thead class="table-header-red text-white">
+                <tr>
+                    <th>Mã KCB</th>
+                    <th>Họ tên</th>
+                    <th>Ngày ĐK</th>
+                    <th>Ngày sinh</th>
+                    <th>Giới tính</th>
+                    <th>Số CCCD</th>
+                    <th>Phòng</th>
+                    <th>Khoa</th>
+                    <th>Nhân viên</th>
+                    <th>Chức vụ</th>
+                    <th>Cấp bậc</th>
+                    <th>Đơn vị</th>
+                    <th>Nơi làm việc</th>
+                    <th>Số nhà</th>
+                    <th>Thôn/phố</th>
+                    <th>Xã</th>
+
+                    <th>Tỉnh</th>
+                    <th>Điện thoại</th>
+                    <th>BHXH</th>
+                    <th>Loại hình KCB</th>
+                    <th>Hình thức đến</th>
+                    <th>Lý do vào viện</th>
+
+                    <th>Thao tác</th>
+                    <th>Chọn</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.makcb</td>
+                        <td class="text-start">@item.hoten</td>
+                        <td>@(item.ngaydk?.ToString("dd/MM/yyyy") ?? "-")</td>
+                        <td>@(item.ngaysinh?.ToString("dd/MM/yyyy") ?? "-")</td>
+                        <td>@(item.maphai == 1 ? "Nam" : item.maphai == 2 ? "Nữ" : "-")</td>
+                        <td>@item.socmnd</td>
+                        <td>@item.tenphong</td>
+                        <td>@item.tenkk</td>
+                        <td>@item.manv</td>
+                        <td>@item.tenchucvu</td>
+                        <td>@item.tencapbac</td>
+                        <td>@item.madonvi</td>
+                        <td class="text-start">@item.noilamviec</td>
+                        <td class="text-start">@item.sonha</td>
+                        <td class="text-start">@item.thonpho</td>
+                        <td class="text-start">@item.viettat</td>
+
+                        <td class="text-start">@item.tentinh</td>
+                        <td>@item.dienthoai</td>
+                        <td>@item.sobhxh</td>
+                        <td>@item.diengiai</td>
+                        <td>@item.tenhtd</td>
+                        <td class="text-start">
+                            @{
+                                var fullLyDo = item.lydovv130 ?? "";
+                                var shortLyDo = fullLyDo.Length > 40 ? fullLyDo.Substring(0, 40) + "..." : fullLyDo;
+                            }
+                            <span class="clickable-text" data-bs-toggle="modal"
+                                  data-bs-target="#detailModal"
+                                  data-title="Lý do vào viện"
+                                  data-content="@fullLyDo">
+                                @shortLyDo
+                            </span>
+                        </td>
+                        <td>
+                            <a asp-action="Edit" asp-route-makcb="@item.makcb" class="btn btn-info btn-sm">✏️ Sửa</a>
+                        </td>
+                        <td>
+                            <input type="checkbox" name="selectedIds" value="@item.makcb" />
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
+
+    <div class="modal fade" id="detailModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-danger text-white">
+                    <h5 class="modal-title fw-bold" id="modalTitle">Chi tiết</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body text-start" id="modalContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        body {
+            background-color: #fff5f7;
+            font-family: 'Segoe UI', sans-serif;
+        }
+
+        h3 {
+            color: #e91e63;
+            font-weight: 700;
+        }
+
+        .search-box {
+            max-width: 280px;
+            border: 1px solid #e91e63;
+            border-radius: 6px;
+            font-size: 14px;
+            height: 36px;
+        }
+
+        .btn-danger {
+            background-color: #e91e63 !important;
+            border-color: #e91e63 !important;
+            color: #fff !important;
+            font-weight: 600;
+        }
+
+        .btn-outline-light {
+            background-color: white !important;
+            border: 1px solid #e91e63 !important;
+            color: #e91e63 !important;
+            font-weight: 600;
+        }
+
+            .btn-outline-light:hover {
+                background-color: #e91e63 !important;
+                color: #fff !important;
+            }
+
+        .btn-info {
+            background-color: #e91e63 !important;
+            color: #fff !important;
+            font-weight: 600;
+        }
+
+        .table-header-red {
+            background-color: #e91e63 !important;
+            color: #fff !important;
+            text-transform: uppercase;
+        }
+
+        .table.compact-table th,
+        .table.compact-table td {
+            padding: 6px 8px !important;
+            font-size: 13px;
+            vertical-align: middle;
+        }
+
+        .table-hover tbody tr:hover {
+            background-color: #fff0f3 !important;
+        }
+
+        .table th, .table td {
+            white-space: nowrap !important;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            max-width: 180px;
+            vertical-align: middle !important;
+        }
+
+
+        .clickable-text {
+            color: #e91e63;
+            cursor: pointer;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            display: inline-block;
+            max-width: 250px;
+        }
+
+            .clickable-text:hover {
+                text-decoration: underline;
+            }
+
+        .daky-inline {
+            display: inline-block;
+            max-width: 250px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            color: #e91e63;
+            cursor: pointer;
+        }
+    </style>
+
+
+    <script>const modal = document.getElementById('detailModal');
+        modal.addEventListener('show.bs.modal', event => {
+            const button = event.relatedTarget;
+            const title = button.getAttribute('data-title');
+            const content = button.getAttribute('data-content');
+            modal.querySelector('#modalTitle').textContent = title;
+            modal.querySelector('#modalContent').textContent = content || "Không có thông tin.";
+        });</script>

@@ -1,0 +1,199 @@
+﻿@model IEnumerable<APP.Models.CanLamSang>
+<div class="container mt-5 text-center">
+    <h3 class="fw-bold text-danger mb-4">
+        <i class="bi bi-heart-pulse"></i> 🧬 DANH SÁCH CẬN LÂM SÀNG
+    </h3>
+
+    @* Hiển thị thông báo *@
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="bi bi-check-circle"></i> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-triangle"></i> @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+    @if (TempData["WarningMessage"] != null)
+    {
+        <div class="alert alert-warning alert-dismissible fade show" role="alert">
+            <i class="bi bi-exclamation-circle"></i> @TempData["WarningMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <form asp-action="Search" method="post" class="d-flex justify-content-center mb-4 align-items-center">
+        <input type="text" name="makcb" class="form-control me-2 search-box"
+               placeholder="Nhập mã KCB..." />
+        <button type="submit" class="btn btn-danger me-2">
+            <i class="bi bi-search"></i> 🔍 Tìm kiếm
+        </button>
+        <button type="submit" form="deleteForm" class="btn btn-outline-light"
+                onclick="return confirm('Bạn có chắc muốn xóa các dòng đã chọn không?');">
+            <i class="bi bi-trash"></i> 🗑️ Xóa các dòng đã chọn
+        </button>
+    </form>
+
+    <form asp-action="DeleteSelected" method="post" id="deleteForm">
+        <table class="table table-bordered table-hover compact-table shadow-sm text-center align-middle">
+        <thead class="table-header-red text-white">
+            <tr>
+                <th>Mã HH</th>
+                <th>Tên dịch vụ</th>
+                <th>Mã KCB</th>
+                <th>Họ tên</th>
+                <th>Barcode</th>
+                <th>Người làm</th>
+                <th>Kết luận</th>
+                <th>Đã ký</th>
+                <th>Chọn</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.mahh</td>
+                    <td class="text-start tendichvu-cell">@item.tendichvu</td>
+                    <td>@item.makcb</td>
+                    <td>@item.hoten </td>
+                    <td>@item.barcode</td>
+                    <td>@item.manvlam</td>
+                    <td class="text-start ketluan-cell">@item.ketluan</td>
+                    <td>
+                        @if (!string.IsNullOrEmpty(item.daky))
+                        {
+                            <span class="badge bg-success">Đã ký</span>
+                        }
+                        else
+                        {
+                            <span class="badge bg-secondary">Chưa ký</span>
+                        }
+                    </td>
+                    <td>
+                        <input type="checkbox" name="selectedItems" value="@($"{item.makcb}|{item.mahh}|{item.barcode}")" />
+                    </td>
+                </tr>
+            }
+        </tbody>
+        </table>
+    </form>
+</div>
+
+
+<style>
+    body {
+        background-color: #fff5f7;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    h3 {
+        font-weight: 700;
+        color: #e91e63;
+    }
+
+    .search-box {
+        max-width: 240px;
+        border: 1px solid #e91e63;
+        border-radius: 5px;
+        font-size: 14px;
+        height: 34px;
+    }
+
+
+    .btn-danger {
+        background-color: #e91e63 !important;
+        border-color: #e91e63 !important;
+        font-weight: 600;
+        font-size: 14px;
+        padding: 5px 12px;
+    }
+
+    .btn-outline-light {
+        background-color: white !important;
+        border: 1px solid #e91e63 !important;
+        color: #e91e63 !important;
+        font-weight: 600;
+        font-size: 14px;
+        padding: 5px 12px;
+    }
+
+        .btn-outline-light:hover {
+            background-color: #e91e63 !important;
+            color: #fff !important;
+        }
+
+
+    .table-header-red {
+        background-color: #e91e63 !important;
+        color: #fff !important;
+        text-transform: uppercase;
+    }
+
+    .table.compact-table th,
+    .table.compact-table td {
+        padding: 6px 8px !important;
+        font-size: 13px;
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #fff0f3 !important;
+    }
+
+    .table td, .table th {
+        border: 1px solid #f3b8c5;
+    }
+
+    .shadow-sm {
+        box-shadow: 0 3px 6px rgba(233, 30, 99, 0.1);
+    }
+    .ketluan-cell {
+        text-align: left !important;
+        padding-left: 10px !important;
+        font-weight: 500;
+        color: #333;
+    }
+    .tendichvu-cell {
+        text-align: left !important;
+        padding-left: 10px !important;
+        font-weight: 500;
+        color: #333;
+    }
+
+    /* Style cho thông báo */
+    .alert {
+        border-radius: 8px;
+        font-weight: 500;
+        margin-bottom: 20px;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .alert-success {
+        background-color: #d4edda;
+        border-color: #c3e6cb;
+        color: #155724;
+    }
+
+    .alert-danger {
+        background-color: #f8d7da;
+        border-color: #f5c6cb;
+        color: #721c24;
+    }
+
+    .alert-warning {
+        background-color: #fff3cd;
+        border-color: #ffeaa7;
+        color: #856404;
+    }
+
+    .alert .btn-close {
+        padding: 0.75rem 1rem;
+    }
+</style>

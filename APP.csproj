@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Views\Account\" />
+    <None Remove="Views\CanLamSang\" />
+    <None Remove="Views\KySo\" />
+    <None Remove="Views\ThanhToan\" />
+    <None Remove="Views\BenhAn\" />
+    <None Remove="Data\" />
+    <None Remove="Views\RaVien\" />
+    <None Remove="Views\PhauThuatThuThuat\" />
+    <None Remove="Views\Khám bệnh\" />
+    <None Remove="Views\DangKy\" />
+    <None Remove="publish\logs\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Views\Account\" />
+    <Folder Include="Views\CanLamSang\" />
+    <Folder Include="Views\KySo\" />
+    <Folder Include="Views\ThanhToan\" />
+    <Folder Include="Views\BenhAn\" />
+    <Folder Include="wwwroot\images\" />
+    <Folder Include="Data\" />
+    <Folder Include="Views\Khám bệnh\" />
+    <Folder Include="Views\DangKy\" />
+    <Folder Include="publish\logs\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Remove="wwwroot\images\" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.25" />
+<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.25" />
+<PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="6.0.25" />
+  </ItemGroup>
+</Project>

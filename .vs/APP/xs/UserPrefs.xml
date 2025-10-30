@@ -1,0 +1,30 @@
+﻿<Properties StartupConfiguration="{68DD1CB3-FA83-494E-B238-6717476B440E}|Default">
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.ItemProperties.APP PreferredExecutionTarget="/Applications/Google Chrome.app" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="publish/APP.runtimeconfig.json">
+    <Files>
+      <File FileName="APP.csproj" Line="1" Column="1" />
+      <File FileName="publish/APP.deps.json" Line="20" Column="21" />
+      <File FileName="publish/APP.runtimeconfig.json" Line="19" Column="6" />
+      <File FileName="publish/web.config" Line="12" Column="57" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="APP">
+            <Node name="APP">
+              <Node name="publish" expanded="True">
+                <Node name="APP.runtimeconfig.json" selected="True" />
+              </Node>
+            </Node>
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+</Properties>
