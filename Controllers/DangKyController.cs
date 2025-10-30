@@ -144,14 +144,12 @@ namespace APP.Controllers
         {
             if (selectedIds != null && selectedIds.Any())
             {
-                var items = await _context.DangKy
-                    .Where(p => selectedIds.Contains(p.makcb))
-                    .ToListAsync();
+                foreach (var id in selectedIds)
+                {
+                    await _context.Database.ExecuteSqlRawAsync("EXEC xoabenhnhan @p0", id);
+                }
 
-                _context.DangKy.RemoveRange(items);
-                await _context.SaveChangesAsync();
-
-                TempData["Success"] = $"{items.Count} bản ghi đã được xóa.";
+                TempData["Success"] = $"{selectedIds.Length} bệnh nhân đã được xóa.";
             }
             else
             {
@@ -160,5 +158,6 @@ namespace APP.Controllers
 
             return RedirectToAction("Index");
         }
+
     }
 }

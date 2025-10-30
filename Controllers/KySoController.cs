@@ -68,7 +68,7 @@ namespace APP.Controllers
                 if (successCount > 0)
                 {
                     await _context.SaveChangesAsync();
-                    TempData["Success"] = $"✅ Đã hủy ký thành công {successCount} bệnh án!";
+                    TempData["Success"] = $"✅ Đã hủy ký số thành công {successCount} !";
                     TempData["Debug"] = string.Join(", ", updatedRecords);
                 }
                 else
