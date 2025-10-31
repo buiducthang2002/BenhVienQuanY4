@@ -137,6 +137,23 @@
     </div>
 </div>
 
+@if (TempData["Success"] != null)
+{
+    <div id="successToast" class="center-toast">
+        @TempData["Success"]
+    </div>
+    <script>
+        setTimeout(function () {
+            var toast = document.getElementById('successToast');
+            if (toast) {
+                toast.style.transition = 'opacity 300ms ease';
+                toast.style.opacity = '0';
+                setTimeout(function () { toast.remove(); }, 350);
+            }
+        }, 3500);
+    </script>
+}
+
 <style>
     body {
         background-color: #fff5f7;
@@ -259,4 +276,20 @@
         .clickable-text:hover {
             text-decoration: underline;
         }
+    .center-toast {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1080;
+        min-width: 280px;
+        max-width: 80vw;
+        background: rgba(33, 37, 41, 0.95);
+        color: #fff;
+        padding: 14px 18px;
+        border-radius: 8px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        text-align: center;
+        font-weight: 600;
+    }
 </style>

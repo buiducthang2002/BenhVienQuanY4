@@ -7,42 +7,20 @@
 <div class="container mt-4">
     <h4 class="page-title text-center mb-4"> 📋 DANH SÁCH  BỆNH NHÂN</h4>
     
-    @if (TempData["Success"] != null)
-    {
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            @TempData["Success"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    }
+    @* Success alert removed; using centered toast instead *@
     
-    @if (TempData["Error"] != null)
-    {
-        <div class="alert alert-danger alert-dismissible fade show" role="alert">
-            @TempData["Error"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    }
-    
-    @if (TempData["Debug"] != null)
-    {
-        <div class="alert alert-info alert-dismissible fade show" role="alert">
-            <strong>Debug:</strong> @TempData["Debug"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    }
+    @* Inline top alerts removed; will show top-right toasts instead *@
 
     <form asp-action="Search" method="post" class="d-flex justify-content-center align-items-center mb-3">
         <input type="text" name="makcb" class="form-control search-box me-2" placeholder="Nhập Mã KCB..." />
         <button type="submit" class="btn btn-danger me-2">🔍 Tìm kiếm</button>
+        <button type="submit" form="cancelForm" class="btn btn-outline-light border-danger text-danger"
+                onclick="return confirm('Bạn có chắc muốn hủy các bệnh án đã chọn không?');">
+            ❌ Hủy ký
+        </button>
     </form>
 
     <form asp-action="CancelSign" method="post" id="cancelForm">
-        <div class="d-flex justify-content-center mb-3">
-            <button type="submit" class="btn btn-outline-light border-danger text-danger"
-                    onclick="return confirm('Bạn có chắc muốn hủy các bệnh án đã chọn không?');">
-                ❌ Hủy ký
-            </button>
-        </div>
 
         <div class="table-responsive shadow-sm rounded">
             <table class="table table-bordered table-hover compact-table text-center">
@@ -126,6 +104,45 @@
     </div>
 </div>
 
+@* Top-right toasts for Error/Debug *@
+@if (TempData["Error"] != null)
+{
+    <div class="corner-toast toast-error" id="toastError">@TempData["Error"]</div>
+    <script>
+        setTimeout(function(){
+            var t = document.getElementById('toastError');
+            if(t){ t.style.transition='opacity 300ms'; t.style.opacity='0'; setTimeout(function(){ t.remove(); }, 350); }
+        }, 3500);
+    </script>
+}
+@if (TempData["Debug"] != null)
+{
+    <div class="corner-toast toast-info" id="toastInfo">Debug: @TempData["Debug"]</div>
+    <script>
+        setTimeout(function(){
+            var t = document.getElementById('toastInfo');
+            if(t){ t.style.transition='opacity 300ms'; t.style.opacity='0'; setTimeout(function(){ t.remove(); }, 350); }
+        }, 3500);
+    </script>
+}
+
+@if (TempData["Success"] != null)
+{
+    <div id="successToast" class="center-toast">
+        @TempData["Success"]
+    </div>
+    <script>
+        setTimeout(function () {
+            var toast = document.getElementById('successToast');
+            if (toast) {
+                toast.style.transition = 'opacity 300ms ease';
+                toast.style.opacity = '0';
+                setTimeout(function () { toast.remove(); }, 350);
+            }
+        }, 1800);
+    </script>
+}
+
 <style>
     body {
         background-color: #fff5f7;
@@ -167,6 +184,39 @@
             background-color: #e91e63 !important;
             color: #fff !important;
         }
+
+    .center-toast {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1080;
+        min-width: 280px;
+        max-width: 80vw;
+        background: rgba(33, 37, 41, 0.95);
+        color: #fff;
+        padding: 14px 18px;
+        border-radius: 8px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        text-align: center;
+        font-weight: 600;
+    }
+
+    .corner-toast {
+        position: fixed;
+        top: 18px;
+        right: 18px;
+        z-index: 1080;
+        min-width: 240px;
+        max-width: 50vw;
+        padding: 8px 12px;
+        border-radius: 8px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        font-weight: 500;
+        font-size: 13px;
+    }
+    .toast-error { background: #dc3545; }
+    .toast-info { background: #ffffff; color: #000000; border: 1px solid #e5e7eb; }
 
     .table.compact-table th,
     .table.compact-table td {

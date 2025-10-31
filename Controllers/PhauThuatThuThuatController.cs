@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using APP.Data;
 using APP.Models;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Threading.Tasks;
 using System.Linq;
 
@@ -18,23 +19,31 @@ namespace APP.Controllers
 
   
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteSelected(long[] selectedIds)
         {
             if (selectedIds != null && selectedIds.Any())
             {
-                var items = await _context.PhauThuatThuThuat
-                    .Where(p => selectedIds.Contains(p.maphauthuat))
-                    .ToListAsync();
+                try
+                {
+                    var items = await _context.PhauThuatThuThuat
+                        .Where(p => selectedIds.Contains(p.maphauthuat))
+                        .ToListAsync();
 
-                if (items.Any())
-                {
-                    _context.PhauThuatThuThuat.RemoveRange(items);
-                    await _context.SaveChangesAsync();
-                    TempData["Success"] = $"{items.Count} bản ghi đã được xóa.";
+                    if (items.Any())
+                    {
+                        _context.PhauThuatThuThuat.RemoveRange(items);
+                        await _context.SaveChangesAsync();
+                        TempData["Success"] = $"{items.Count} bản ghi đã được xóa.";
+                    }
+                    else
+                    {
+                        TempData["Error"] = "Không tìm thấy bản ghi nào để xóa.";
+                    }
                 }
-                else
+                catch (Exception ex)
                 {
-                    TempData["Error"] = "Không tìm thấy bản ghi nào để xóa.";
+                    TempData["Error"] = $"Lỗi khi xóa dữ liệu: {ex.Message}";
                 }
             }
             else
@@ -50,10 +59,17 @@ namespace APP.Controllers
         {
             var query = from pt in _context.PhauThuatThuThuat
                         join dk in _context.DangKy on pt.makcb equals dk.makcb
+                        join k in _context.DmKhoa on pt.makk equals k.makk into khoaGroup
+                        from khoa in khoaGroup.DefaultIfEmpty()
+                        join p in _context.DmPhong on pt.maphong equals p.maphong into phongGroup
+                        from phong in phongGroup.DefaultIfEmpty()
                         select new PhauThuatThuThuat
                         {
                             makcb = pt.makcb,
                             maphauthuat = pt.maphauthuat,
+                            makk = pt.makk,
+                            maphong = pt.maphong,
+                            mathanhtoan = pt.mathanhtoan,
                             ngaybatdaumo = pt.ngaybatdaumo,
                             ngayketthucmo = pt.ngayketthucmo,
                             chandoantruocmo = pt.chandoantruocmo,
@@ -62,7 +78,9 @@ namespace APP.Controllers
                             ailam = pt.ailam,
                             bac = pt.bac,
                             daky = pt.daky,
-                            hoten = dk.hoten 
+                            hoten = dk.hoten,
+                            tenkk = khoa.tenkk,
+                            tenphong = phong.tenphong
                         };
 
       
@@ -75,6 +93,7 @@ namespace APP.Controllers
             }
 
             var list = await query
+                .AsNoTracking()
                 .OrderByDescending(p => p.ngaybatdaumo)
                 .Take(2000)
                 .ToListAsync();
@@ -111,6 +130,9 @@ namespace APP.Controllers
                     }
 
                     // ✅ Cập nhật các trường cần thiết
+                    originalItem.makk = model.makk;
+                    originalItem.maphong = model.maphong;
+                    originalItem.mathanhtoan = model.mathanhtoan;
                     originalItem.ngaybatdaumo = model.ngaybatdaumo;
                     originalItem.ngayketthucmo = model.ngayketthucmo;
                     originalItem.chandoantruocmo = model.chandoantruocmo;
@@ -129,15 +151,21 @@ namespace APP.Controllers
                 catch (DbUpdateConcurrencyException)
                 {
                     TempData["Error"] = "Lỗi đồng thời khi cập nhật dữ liệu.";
+                    ViewBag.KhoaList = new SelectList(await _context.DmKhoa.ToListAsync(), "makk", "tenkk");
+                    ViewBag.PhongList = new SelectList(await _context.DmPhong.ToListAsync(), "maphong", "tenphong");
                     return View(model);
                 }
                 catch (Exception ex)
                 {
                     TempData["Error"] = $"Lỗi khi lưu dữ liệu: {ex.Message}";
+                    ViewBag.KhoaList = new SelectList(await _context.DmKhoa.ToListAsync(), "makk", "tenkk");
+                    ViewBag.PhongList = new SelectList(await _context.DmPhong.ToListAsync(), "maphong", "tenphong");
                     return View(model);
                 }
             }
 
+            ViewBag.KhoaList = new SelectList(await _context.DmKhoa.ToListAsync(), "makk", "tenkk");
+            ViewBag.PhongList = new SelectList(await _context.DmPhong.ToListAsync(), "maphong", "tenphong");
             return View(model);
         }
 
@@ -157,6 +185,8 @@ namespace APP.Controllers
                 return NotFound();
             }
 
+            ViewBag.KhoaList = new SelectList(await _context.DmKhoa.ToListAsync(), "makk", "tenkk");
+            ViewBag.PhongList = new SelectList(await _context.DmPhong.ToListAsync(), "maphong", "tenphong");
             return View(item);
         }
 

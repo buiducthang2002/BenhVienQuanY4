@@ -36,6 +36,26 @@
         </div>
 
         <div class="col-md-12">
+            <label class="form-label">Họ tên</label>
+            <input class="form-control" value="@Model.hoten" readonly />
+        </div>
+
+        <div class="col-md-6">
+            <label asp-for="makk" class="form-label">Khoa</label>
+            <select asp-for="makk" class="form-select" asp-items="ViewBag.KhoaList">
+                <option value="">-- Chọn khoa --</option>
+            </select>
+            <span asp-validation-for="makk" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="maphong" class="form-label">Phòng</label>
+            <select asp-for="maphong" class="form-select" asp-items="ViewBag.PhongList">
+                <option value="">-- Chọn phòng --</option>
+            </select>
+            <span asp-validation-for="maphong" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-12">
             <label asp-for="ailam" class="form-label"> Ai làm</label>
             <input asp-for="ailam" class="form-control" />
         </div>
@@ -68,6 +88,18 @@
             <label asp-for="bac" class="form-label">Bác sĩ</label>
             <input asp-for="bac" class="form-control" />
             <span asp-validation-for="bac" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-12">
+            <label asp-for="daky" class="form-label">Đã ký</label>
+            <textarea asp-for="daky" class="form-control" rows="4"></textarea>
+            <span asp-validation-for="daky" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6">
+            <label asp-for="mathanhtoan" class="form-label">Mã thanh toán</label>
+            <input asp-for="mathanhtoan" class="form-control" />
+            <span asp-validation-for="mathanhtoan" class="text-danger"></span>
         </div>
 
 

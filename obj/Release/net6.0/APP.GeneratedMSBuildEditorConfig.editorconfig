@@ -1,0 +1,88 @@
+is_global = true
+build_property.TargetFramework = net6.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = true
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = 
+build_property.PlatformNeutralAssembly = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = APP
+build_property.RootNamespace = APP
+build_property.ProjectDir = /Users/buiducthang/Projects/APP/APP/
+build_property.RazorLangVersion = 6.0
+build_property.SupportLocalizedComponentNames = 
+build_property.GenerateRazorMetadataSourceChecksumAttributes = 
+build_property.MSBuildProjectDirectory = /Users/buiducthang/Projects/APP/APP
+build_property._RazorSourceGeneratorDebug = 
+
+[/Users/buiducthang/Projects/APP/APP/Views/Account/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWNjb3VudC9Mb2dpbi5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/buiducthang/Projects/APP/APP/Views/BenhAn/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQmVuaEFuL0luZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/buiducthang/Projects/APP/APP/Views/CanLamSang/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQ2FuTGFtU2FuZy9JbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/buiducthang/Projects/APP/APP/Views/DangKy/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRGFuZ0t5L0VkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/buiducthang/Projects/APP/APP/Views/DangKy/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRGFuZ0t5L0luZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/buiducthang/Projects/APP/APP/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9JbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/buiducthang/Projects/APP/APP/Views/Home/Privacy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9Qcml2YWN5LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/buiducthang/Projects/APP/APP/Views/Khám bệnh/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvS2jDoW0gYuG7h25oL0luZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/buiducthang/Projects/APP/APP/Views/KySo/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvS3lTby9JbmRleC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/buiducthang/Projects/APP/APP/Views/PhauThuatThuThuat/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUGhhdVRodWF0VGh1VGh1YXQvSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/buiducthang/Projects/APP/APP/Views/RaVien/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUmFWaWVuL0VkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/buiducthang/Projects/APP/APP/Views/RaVien/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUmFWaWVuL0luZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/buiducthang/Projects/APP/APP/Views/Shared/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL0Vycm9yLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/buiducthang/Projects/APP/APP/Views/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/buiducthang/Projects/APP/APP/Views/ThanhToan/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVGhhbmhUb2FuL0luZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/buiducthang/Projects/APP/APP/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvX1ZpZXdJbXBvcnRzLmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/buiducthang/Projects/APP/APP/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvX1ZpZXdTdGFydC5jc2h0bWw=
+build_metadata.AdditionalFiles.CssScope = 
+
+[/Users/buiducthang/Projects/APP/APP/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-pgw9zcxo0u

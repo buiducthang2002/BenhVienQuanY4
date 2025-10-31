@@ -26,7 +26,7 @@ namespace APP.Data
                     return;
                 }
             }
-            optionsBuilder.UseSqlServer("Server=192.168.0.26;Database=QY42026V6;User Id=sa;Password=123@vtt;TrustServerCertificate=True;");
+            optionsBuilder.UseSqlServer("Server=171.254.95.46,11433;Database=TEST2025V6;User Id=sa;Password=123@vtt;TrustServerCertificate=True;");
         }
 
 

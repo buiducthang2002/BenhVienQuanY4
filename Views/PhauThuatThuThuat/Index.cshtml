@@ -5,13 +5,7 @@
         <i class="bi bi-scissors"></i>🔍  DANH SÁCH PHẪU THUẬT / THỦ THUẬT
     </h3>
 
-    @if (TempData["Success"] != null)
-    {
-        <div class="alert alert-success alert-dismissible fade show text-start" role="alert">
-            @TempData["Success"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    }
+    @* Success alert removed; using centered toast instead *@
     @if (TempData["Error"] != null)
     {
         <div class="alert alert-danger alert-dismissible fade show text-start" role="alert">
@@ -40,6 +34,9 @@
                     <th style="white-space: nowrap;">Mã KCB</th>
                     <th style="white-space: nowrap;">Họ và tên</th>
                     <th style="white-space: nowrap;">Mã phẫu thuật</th>
+                    <th style="white-space: nowrap;">Khoa</th>
+                    <th style="white-space: nowrap;">Phòng</th>
+                    <th style="white-space: nowrap;">Mã thanh toán</th>
                      <th style="white-space: nowrap;">Bác sĩ</th>
                     <th style="white-space: nowrap;">Ngày bắt đầu</th>
                     <th style="white-space: nowrap;">Ngày kết thúc</th>
@@ -60,6 +57,9 @@
                             <td>@item.makcb</td>
                             <td class="text-nowrap">@item.hoten</td>
                             <td>@item.maphauthuat</td>
+                            <td class="text-nowrap">@item.tenkk</td>
+                            <td class="text-nowrap">@item.tenphong</td>
+                            <td>@item.mathanhtoan</td>
                             <td>@item.ailam</td>
                             <td class="text-nowrap">@(item.ngaybatdaumo?.ToString("dd/MM/yyyy HH:mm") ?? "-")</td>
                             <td>@(item.ngayketthucmo?.ToString("dd/MM/yyyy HH:mm") ?? "-")</td>
@@ -105,6 +105,23 @@
         </table>
     </form>
 </div>
+
+@if (TempData["Success"] != null)
+{
+    <div id="successToast" class="center-toast">
+        @TempData["Success"]
+    </div>
+    <script>
+        setTimeout(function () {
+            var toast = document.getElementById('successToast');
+            if (toast) {
+                toast.style.transition = 'opacity 300ms ease';
+                toast.style.opacity = '0';
+                setTimeout(function () { toast.remove(); }, 350);
+            }
+        }, 3500);
+    </script>
+}
 
 <script>function deleteSelected() {
         const selected = document.querySelectorAll('input[name="selectedIds"]:checked');
@@ -187,4 +204,21 @@
             background-color: #e91e63 !important;
             color: #fff !important;
         }
+
+    .center-toast {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1080;
+        min-width: 280px;
+        max-width: 80vw;
+        background: rgba(33, 37, 41, 0.95);
+        color: #fff;
+        padding: 14px 18px;
+        border-radius: 8px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        text-align: center;
+        font-weight: 600;
+    }
 </style>

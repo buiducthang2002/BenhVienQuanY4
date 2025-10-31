@@ -30,7 +30,7 @@ namespace APP.Controllers
             if (result == null)
             {
                 ViewBag.Message = "Không tìm thấy bệnh án với Mã KCB này.";
-                return View("Index");
+                return View("Index", new List<BenhAn>());
             }
 
             return View("Index", new List<BenhAn> { result });

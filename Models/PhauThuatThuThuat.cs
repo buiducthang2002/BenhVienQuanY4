@@ -13,10 +13,18 @@ namespace APP.Models
 
         [NotMapped]
         public string? hoten { get; set; }
+        [NotMapped]
+        public string? tenkk { get; set; }
+        [NotMapped]
+        public string? tenphong { get; set; }
 
         [Key, Column(Order = 1)]
         public long maphauthuat { get; set; }
         public string? bac { get; set; }
+        public int makk{get;set;}
+        public int maphong{get;set;}
+        public int mathanhtoan{get;set;}
+        
 
         
 

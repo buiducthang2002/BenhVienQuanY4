@@ -47,18 +47,18 @@ namespace APP.Controllers
 
                 select new DangKyViewModel
                 {
-                    makcb = dk.makcb,
-                    hoten = dk.hoten,
+                    makcb = dk.makcb ?? string.Empty,
+                    hoten = dk.hoten ?? string.Empty,
                     ngaydk = dk.ngaydk,
                     ngaysinh = dk.ngaysinh,
                     maphai = dk.maphai,
-                    socmnd = dk.socmnd,
-                    dienthoai = dk.dienthoai,
-                    sobhxh = dk.sobhxh,
-                    lydovv130 = dk.lydovv130,
-                    noilamviec = dk.noilamviec,
-                    sonha = dk.sonha,
-                    thonpho = dk.thonpho,
+                    socmnd = dk.socmnd ?? string.Empty,
+                    dienthoai = dk.dienthoai ?? string.Empty,
+                    sobhxh = dk.sobhxh ?? string.Empty,
+                    lydovv130 = dk.lydovv130 ?? string.Empty,
+                    noilamviec = dk.noilamviec ?? string.Empty,
+                    sonha = dk.sonha ?? string.Empty,
+                    thonpho = dk.thonpho ?? string.Empty,
                     mahinhthucden = dk.mahtd,
                     idloaihinhkcb = dk.idloaihinhkcb,
                     tenphong = phong.tenphong,
@@ -74,8 +74,8 @@ namespace APP.Controllers
             if (!string.IsNullOrEmpty(search))
             {
                 query = query.Where(x =>
-                    x.makcb.Contains(search) ||
-                    x.hoten.Contains(search));
+                    (x.makcb ?? string.Empty).Contains(search) ||
+                    (x.hoten ?? string.Empty).Contains(search));
             }
 
             var list = await query
@@ -114,7 +114,17 @@ namespace APP.Controllers
         public async Task<IActionResult> Edit(DangKy model)
         {
             if (!ModelState.IsValid)
+            {
+                ViewBag.PhongList = new SelectList(await _context.DmPhong.ToListAsync(), "maphong", "tenphong");
+                ViewBag.KhoaList = new SelectList(await _context.DmKhoa.ToListAsync(), "makk", "tenkk");
+                ViewBag.ChucVuList = new SelectList(await _context.DmChucvu.ToListAsync(), "machucvu", "tenchucvu");
+                ViewBag.CapBacList = new SelectList(await _context.DmCapbac.ToListAsync(), "macapbac", "tencapbac");
+                ViewBag.TinhList = new SelectList(await _context.DmTt.ToListAsync(), "matt", "tentinh");
+                ViewBag.PhuongList = new SelectList(await _context.DmPhuongxa.ToListAsync(), "mapx", "viettat");
+                ViewBag.LoaiHinhList = new SelectList(await _context.DmDangkyloaihinhkcb.ToListAsync(), "idloaihinhkcb", "diengiai");
+                ViewBag.HinhThucList = new SelectList(await _context.DmHinhthucdenkham.ToListAsync(), "mahtd", "tenhtd");
                 return View(model);
+            }
 
             var existing = await _context.DangKy.FirstOrDefaultAsync(x => x.makcb == model.makcb);
             if (existing == null)
@@ -130,12 +140,26 @@ namespace APP.Controllers
             existing.mahtd = model.mahtd;
             existing.idloaihinhkcb = model.idloaihinhkcb;
             existing.lydovv130 = model.lydovv130;
-            existing.idloaihinhkcb = model.idloaihinhkcb;
-            existing.mahtd = model.mahtd;
             existing.noilamviec = model.noilamviec;
             existing.sonha = model.sonha;
             existing.thonpho = model.thonpho;
-            await _context.SaveChangesAsync();
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = $"Lỗi khi lưu dữ liệu: {ex.Message}";
+                ViewBag.PhongList = new SelectList(await _context.DmPhong.ToListAsync(), "maphong", "tenphong");
+                ViewBag.KhoaList = new SelectList(await _context.DmKhoa.ToListAsync(), "makk", "tenkk");
+                ViewBag.ChucVuList = new SelectList(await _context.DmChucvu.ToListAsync(), "machucvu", "tenchucvu");
+                ViewBag.CapBacList = new SelectList(await _context.DmCapbac.ToListAsync(), "macapbac", "tencapbac");
+                ViewBag.TinhList = new SelectList(await _context.DmTt.ToListAsync(), "matt", "tentinh");
+                ViewBag.PhuongList = new SelectList(await _context.DmPhuongxa.ToListAsync(), "mapx", "viettat");
+                ViewBag.LoaiHinhList = new SelectList(await _context.DmDangkyloaihinhkcb.ToListAsync(), "idloaihinhkcb", "diengiai");
+                ViewBag.HinhThucList = new SelectList(await _context.DmHinhthucdenkham.ToListAsync(), "mahtd", "tenhtd");
+                return View(model);
+            }
             TempData["Success"] = "Cập nhật thông tin thành công!";
             return RedirectToAction("Index");
         }

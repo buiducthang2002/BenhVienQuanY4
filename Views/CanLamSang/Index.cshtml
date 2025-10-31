@@ -4,14 +4,7 @@
         <i class="bi bi-heart-pulse"></i> 🧬 DANH SÁCH CẬN LÂM SÀNG
     </h3>
 
-    @* Hiển thị thông báo *@
-    @if (TempData["SuccessMessage"] != null)
-    {
-        <div class="alert alert-success alert-dismissible fade show" role="alert">
-            <i class="bi bi-check-circle"></i> @TempData["SuccessMessage"]
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
-    }
+    @* Success alert removed; using centered toast instead *@
     @if (TempData["ErrorMessage"] != null)
     {
         <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -84,6 +77,23 @@
         </table>
     </form>
 </div>
+
+@if (TempData["SuccessMessage"] != null)
+{
+    <div id="successToast" class="center-toast">
+        <i class="bi bi-check-circle"></i> @TempData["SuccessMessage"]
+    </div>
+    <script>
+        setTimeout(function () {
+            var toast = document.getElementById('successToast');
+            if (toast) {
+                toast.style.transition = 'opacity 300ms ease';
+                toast.style.opacity = '0';
+                setTimeout(function () { toast.remove(); }, 350);
+            }
+        }, 3500);
+    </script>
+}
 
 
 <style>
@@ -195,5 +205,22 @@
 
     .alert .btn-close {
         padding: 0.75rem 1rem;
+    }
+
+    .center-toast {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1080;
+        min-width: 280px;
+        max-width: 80vw;
+        background: rgba(33, 37, 41, 0.95);
+        color: #fff;
+        padding: 14px 18px;
+        border-radius: 8px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        text-align: center;
+        font-weight: 600;
     }
 </style>
