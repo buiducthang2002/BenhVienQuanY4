@@ -26,9 +26,9 @@ namespace APP.Models
         public string? tenkk { get; set; }
         public string? tenchucvu { get; set; }
         public string? tencapbac { get; set; }
-        public string? viettat { get; set; }
+        public string? tenxa { get; set; }
         public string? tentinh { get; set; }
         public string? diengiai { get; set; }
         public string? tenhtd { get; set; }
+        }
     }
-}

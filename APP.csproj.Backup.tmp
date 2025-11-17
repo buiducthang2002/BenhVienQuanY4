@@ -7,13 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Views\Khám bệnh\**" />
-    <Content Remove="Views\Khám bệnh\**" />
-    <EmbeddedResource Remove="Views\Khám bệnh\**" />
-    <None Remove="Views\Khám bệnh\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove="Views\Account\" />
     <None Remove="Views\CanLamSang\" />
     <None Remove="Views\KySo\" />
@@ -30,7 +23,6 @@
     <Folder Include="Views\Account\" />
     <Folder Include="Views\CanLamSang\" />
     <Folder Include="Views\KySo\" />
-    <Folder Include="Views\ThanhToan\" />
     <Folder Include="Views\BenhAn\" />
     <Folder Include="wwwroot\images\" />
     <Folder Include="Data\" />

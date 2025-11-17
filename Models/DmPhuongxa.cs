@@ -7,7 +7,7 @@ namespace APP.Models
     public class DmPhuongxa
 	{
         public int? mapx { get; set; }
-        public string viettat { set; get; }
+        public string tenxa { set; get; } 
 		
 	}
 }

@@ -8,81 +8,69 @@ build_property.PlatformNeutralAssembly =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = APP
 build_property.RootNamespace = APP
-build_property.ProjectDir = C:\Users\HH\BenhVienQuanY4\
+build_property.ProjectDir = C:\Users\HH\Source\Repos\BenhVienQuanY4\
 build_property.RazorLangVersion = 6.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = C:\Users\HH\BenhVienQuanY4
+build_property.MSBuildProjectDirectory = C:\Users\HH\Source\Repos\BenhVienQuanY4
 build_property._RazorSourceGeneratorDebug = 
 
-[C:/Users/HH/BenhVienQuanY4/Views/Account/Login.cshtml]
+[C:/Users/HH/Source/Repos/BenhVienQuanY4/Views/Account/Login.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxMb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HH/BenhVienQuanY4/Views/BenhAn/Index.cshtml]
+[C:/Users/HH/Source/Repos/BenhVienQuanY4/Views/BenhAn/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmVuaEFuXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HH/BenhVienQuanY4/Views/CanLamSang/Index.cshtml]
+[C:/Users/HH/Source/Repos/BenhVienQuanY4/Views/CanLamSang/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FuTGFtU2FuZ1xJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HH/BenhVienQuanY4/Views/DangKy/Edit.cshtml]
+[C:/Users/HH/Source/Repos/BenhVienQuanY4/Views/DangKy/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFuZ0t5XEVkaXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HH/BenhVienQuanY4/Views/DangKy/Index.cshtml]
+[C:/Users/HH/Source/Repos/BenhVienQuanY4/Views/DangKy/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFuZ0t5XEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HH/BenhVienQuanY4/Views/Home/Index.cshtml]
+[C:/Users/HH/Source/Repos/BenhVienQuanY4/Views/Home/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HH/BenhVienQuanY4/Views/Home/Privacy.cshtml]
+[C:/Users/HH/Source/Repos/BenhVienQuanY4/Views/Home/Privacy.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HH/BenhVienQuanY4/Views/Khám bệnh/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS2jDoW0gYuG7h25oXEluZGV4LmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/HH/BenhVienQuanY4/Views/KySo/Index.cshtml]
+[C:/Users/HH/Source/Repos/BenhVienQuanY4/Views/KySo/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS3lTb1xJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HH/BenhVienQuanY4/Views/PhauThuatThuThuat/Edit.cshtml]
+[C:/Users/HH/Source/Repos/BenhVienQuanY4/Views/PhauThuatThuThuat/Edit.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGhhdVRodWF0VGh1VGh1YXRcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HH/BenhVienQuanY4/Views/PhauThuatThuThuat/Index.cshtml]
+[C:/Users/HH/Source/Repos/BenhVienQuanY4/Views/PhauThuatThuThuat/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGhhdVRodWF0VGh1VGh1YXRcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HH/BenhVienQuanY4/Views/Shared/Error.cshtml]
+[C:/Users/HH/Source/Repos/BenhVienQuanY4/Views/Shared/Error.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HH/BenhVienQuanY4/Views/Shared/_ValidationScriptsPartial.cshtml]
+[C:/Users/HH/Source/Repos/BenhVienQuanY4/Views/Shared/_ValidationScriptsPartial.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HH/BenhVienQuanY4/Views/ThanhToan/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcVGhhbmhUb2FuXEluZGV4LmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/HH/BenhVienQuanY4/Views/Xóa bệnh nhân/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3NcWMOzYSBi4buHbmggbmjDom5cSW5kZXguY3NodG1s
-build_metadata.AdditionalFiles.CssScope = 
-
-[C:/Users/HH/BenhVienQuanY4/Views/_ViewImports.cshtml]
+[C:/Users/HH/Source/Repos/BenhVienQuanY4/Views/_ViewImports.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HH/BenhVienQuanY4/Views/_ViewStart.cshtml]
+[C:/Users/HH/Source/Repos/BenhVienQuanY4/Views/_ViewStart.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[C:/Users/HH/BenhVienQuanY4/Views/Shared/_Layout.cshtml]
+[C:/Users/HH/Source/Repos/BenhVienQuanY4/Views/Shared/_Layout.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = b-sara90ikyu

@@ -28,6 +28,7 @@ namespace APP.Models
         public int? mapx { get; set; }
         public int? maqh { get; set; }
         public int? matt { get; set; }
+        public string? tenxa { get; set; }
 
         public int? idloaihinhkcb { get; set; }
      

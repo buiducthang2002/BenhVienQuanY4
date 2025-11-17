@@ -6,8 +6,17 @@
         <i class="bi bi-person-vcard-fill"></i> ✏️ CẬP NHẬT THÔNG TIN ĐĂNG KÝ KHÁM
     </h3>
 
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Lỗi!</strong> @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
     <form asp-action="Edit" method="post" class="p-4 shadow-sm rounded" style="background-color: #fff5f7;">
         @Html.AntiForgeryToken()
+        <div asp-validation-summary="All" class="text-danger mb-3"></div>
         <div class="row g-3">
 
             <div class="col-md-6">
@@ -33,12 +42,13 @@
                 </div>
 
                 <div class="form-group mb-3">
-                    <label class="fw-bold">Giới tính</label>
+                    <label class="fw-bold">Giới tính <span class="text-danger">*</span></label>
                     <select asp-for="maphai" class="form-select">
                         <option value="">-- Chọn giới tính --</option>
                         <option value="1">Nam</option>
                         <option value="2">Nữ</option>
                     </select>
+                    <span asp-validation-for="maphai" class="text-danger"></span>
                 </div>
 
                 <div class="form-group mb-3">
@@ -54,6 +64,7 @@
                     <select asp-for="maphong" class="form-select" asp-items="ViewBag.PhongList">
                         <option value="">-- Chọn phòng --</option>
                     </select>
+                    <span asp-validation-for="maphong" class="text-danger"></span>
                 </div>
 
                 <div class="form-group mb-3">
@@ -89,6 +100,7 @@
                     <select asp-for="mapx" class="form-select" asp-items="ViewBag.PhuongList">
                         <option value="">-- Chọn xã/phường --</option>
                     </select>
+                   
                 </div>
 
                 <div class="form-group mb-3">

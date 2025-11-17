@@ -26,7 +26,8 @@ namespace APP.Data
                     return;
                 }
             }
-            optionsBuilder.UseSqlServer("Server=171.254.95.46,11433;Database=TEST2025V6;User Id=sa;Password=123@vtt;TrustServerCertificate=True;");
+           optionsBuilder.UseSqlServer("Server=192.168.0.26;Database=QY42026V6;User Id=sa;Password=123@vtt;TrustServerCertificate=True;");
+
         }
 
 
@@ -34,9 +35,13 @@ namespace APP.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
-            modelBuilder.Entity<DangKy>()
-                .ToTable("dangky")
-                .HasKey(d => d.makcb);
+            modelBuilder.Entity<DangKy>(entity =>
+            {
+                entity.ToTable("dangky");
+                entity.HasKey(d => d.makcb);
+                // Ignore tenxa vì bảng dangky không có cột này, chỉ có mapx (foreign key)
+                entity.Ignore(e => e.tenxa);
+            });
 
                 
 
@@ -62,6 +67,14 @@ namespace APP.Data
                 entity.Property(e => e.makk).HasColumnName("makk");
                 entity.Property(e => e.tenkk).HasColumnName("tenkk");
                 entity.Ignore(e => e.maphong); 
+            });
+
+            modelBuilder.Entity<DmPhuongxa>(entity =>
+            {
+                entity.ToTable("dmphuongxa");
+                entity.HasNoKey();
+                entity.Property(e => e.mapx).HasColumnName("mapx");
+                entity.Property(e => e.tenxa).HasColumnName("tenxa");
             });
 
 
