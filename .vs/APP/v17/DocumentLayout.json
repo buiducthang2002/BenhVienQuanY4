@@ -3,8 +3,28 @@
   "WorkspaceRootPath": "C:\\Users\\HH\\source\\repos\\BenhVienQuanY4\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{68DD1CB3-FA83-494E-B238-6717476B440E}|APP.csproj|c:\\users\\hh\\source\\repos\\benhvienquany4\\.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}",
-      "RelativeMoniker": "D:0:0:{68DD1CB3-FA83-494E-B238-6717476B440E}|APP.csproj|solutionrelative:.gitignore||{3B902123-F8A7-4915-9F01-361F908088D0}"
+      "AbsoluteMoniker": "D:0:0:{68DD1CB3-FA83-494E-B238-6717476B440E}|APP.csproj|c:\\users\\hh\\source\\repos\\benhvienquany4\\data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{68DD1CB3-FA83-494E-B238-6717476B440E}|APP.csproj|solutionrelative:data\\appdbcontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{68DD1CB3-FA83-494E-B238-6717476B440E}|APP.csproj|c:\\users\\hh\\source\\repos\\benhvienquany4\\models\\dangkyviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{68DD1CB3-FA83-494E-B238-6717476B440E}|APP.csproj|solutionrelative:models\\dangkyviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{68DD1CB3-FA83-494E-B238-6717476B440E}|APP.csproj|c:\\users\\hh\\source\\repos\\benhvienquany4\\models\\dangky.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{68DD1CB3-FA83-494E-B238-6717476B440E}|APP.csproj|solutionrelative:models\\dangky.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{68DD1CB3-FA83-494E-B238-6717476B440E}|APP.csproj|c:\\users\\hh\\source\\repos\\benhvienquany4\\models\\dmphong.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{68DD1CB3-FA83-494E-B238-6717476B440E}|APP.csproj|solutionrelative:models\\dmphong.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{68DD1CB3-FA83-494E-B238-6717476B440E}|APP.csproj|c:\\users\\hh\\source\\repos\\benhvienquany4\\controllers\\khambenhcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{68DD1CB3-FA83-494E-B238-6717476B440E}|APP.csproj|solutionrelative:controllers\\khambenhcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{68DD1CB3-FA83-494E-B238-6717476B440E}|APP.csproj|c:\\users\\hh\\source\\repos\\benhvienquany4\\models\\huychuyenphongmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{68DD1CB3-FA83-494E-B238-6717476B440E}|APP.csproj|solutionrelative:models\\huychuyenphongmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -14,19 +34,81 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 0,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "HuyChuyenPhongModel.cs",
+              "DocumentMoniker": "C:\\Users\\HH\\source\\repos\\BenhVienQuanY4\\Models\\HuyChuyenPhongModel.cs",
+              "RelativeDocumentMoniker": "Models\\HuyChuyenPhongModel.cs",
+              "ToolTip": "C:\\Users\\HH\\source\\repos\\BenhVienQuanY4\\Models\\HuyChuyenPhongModel.cs",
+              "RelativeToolTip": "Models\\HuyChuyenPhongModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAqwBEAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-16T06:50:13.657Z",
+              "IsPinned": true
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "KhamBenhController.cs",
+              "DocumentMoniker": "C:\\Users\\HH\\source\\repos\\BenhVienQuanY4\\Controllers\\KhamBenhController.cs",
+              "RelativeDocumentMoniker": "Controllers\\KhamBenhController.cs",
+              "ToolTip": "C:\\Users\\HH\\source\\repos\\BenhVienQuanY4\\Controllers\\KhamBenhController.cs",
+              "RelativeToolTip": "Controllers\\KhamBenhController.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-16T06:57:57.632Z",
+              "IsPinned": true
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "DangKyViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\HH\\source\\repos\\BenhVienQuanY4\\Models\\DangKyViewModel.cs",
+              "RelativeDocumentMoniker": "Models\\DangKyViewModel.cs",
+              "ToolTip": "C:\\Users\\HH\\source\\repos\\BenhVienQuanY4\\Models\\DangKyViewModel.cs",
+              "RelativeToolTip": "Models\\DangKyViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-30T06:50:39.242Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "DangKy.cs",
+              "DocumentMoniker": "C:\\Users\\HH\\source\\repos\\BenhVienQuanY4\\Models\\DangKy.cs",
+              "RelativeDocumentMoniker": "Models\\DangKy.cs",
+              "ToolTip": "C:\\Users\\HH\\source\\repos\\BenhVienQuanY4\\Models\\DangKy.cs",
+              "RelativeToolTip": "Models\\DangKy.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-30T06:50:28.684Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "DmPhong.cs",
+              "DocumentMoniker": "C:\\Users\\HH\\source\\repos\\BenhVienQuanY4\\Models\\DmPhong.cs",
+              "RelativeDocumentMoniker": "Models\\DmPhong.cs",
+              "ToolTip": "C:\\Users\\HH\\source\\repos\\BenhVienQuanY4\\Models\\DmPhong.cs",
+              "RelativeToolTip": "Models\\DmPhong.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAADAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-29T00:20:55.482Z"
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 0,
-              "Title": ".gitignore",
-              "DocumentMoniker": "C:\\Users\\HH\\source\\repos\\BenhVienQuanY4\\.gitignore",
-              "RelativeDocumentMoniker": ".gitignore",
-              "ToolTip": "C:\\Users\\HH\\source\\repos\\BenhVienQuanY4\\.gitignore",
-              "RelativeToolTip": ".gitignore",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAEAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2025-11-17T08:24:53.873Z",
+              "Title": "AppDbContext.cs",
+              "DocumentMoniker": "C:\\Users\\HH\\source\\repos\\BenhVienQuanY4\\Data\\AppDbContext.cs",
+              "RelativeDocumentMoniker": "Data\\AppDbContext.cs",
+              "ToolTip": "C:\\Users\\HH\\source\\repos\\BenhVienQuanY4\\Data\\AppDbContext.cs",
+              "RelativeToolTip": "Data\\AppDbContext.cs",
+              "ViewState": "AgIAACAAAAAAAAAAAAAUwDcAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2025-12-16T06:55:03.928Z",
               "EditorCaption": ""
             }
           ]

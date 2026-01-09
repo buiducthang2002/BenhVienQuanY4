@@ -26,8 +26,7 @@ namespace APP.Data
                     return;
                 }
             }
-           optionsBuilder.UseSqlServer("Server=192.168.0.26;Database=QY42026V6;User Id=sa;Password=123@vtt;TrustServerCertificate=True;");
-
+            optionsBuilder.UseSqlServer("Server=192.168.0.26;Database=QY42026V6;User Id=sa;Password=123@vtt;TrustServerCertificate=True;");
         }
 
 
@@ -41,6 +40,20 @@ namespace APP.Data
                 entity.HasKey(d => d.makcb);
                 // Ignore tenxa vì bảng dangky không có cột này, chỉ có mapx (foreign key)
                 entity.Ignore(e => e.tenxa);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
             });
 
                 
@@ -55,7 +68,7 @@ namespace APP.Data
             modelBuilder.Entity<DmCapbac>().HasNoKey();
             modelBuilder.Entity<DmChucvu>().HasNoKey();
             modelBuilder.Entity<DmKhoa>().HasNoKey();
-            modelBuilder.Entity<DmPhong>().HasNoKey();
+            // DmPhong có khóa chính là maphong
             modelBuilder.Entity<DmPhuongxa>().HasNoKey();
             modelBuilder.Entity<DmTt>().HasNoKey();
             modelBuilder.Entity<DmDangkyloaihinhkcb>().HasNoKey();
@@ -94,6 +107,11 @@ namespace APP.Data
         public DbSet<DangKy> DangKy { get; set; }
         public DbSet<KySo> KySo { get; set; }
         
+        // Bảng nghiệp vụ
+        public DbSet<ChuyenKhoa> chuyenkhoa { get; set; }
+        public DbSet<ThanhToan> thanhtoan { get; set; }
+        
+        // Danh mục
         public DbSet<DmKhoa> DmKhoa { get; set; }
         public DbSet<DmChucvu> DmChucvu { get; set; }
         public DbSet<DmCapbac> DmCapbac { get; set; }

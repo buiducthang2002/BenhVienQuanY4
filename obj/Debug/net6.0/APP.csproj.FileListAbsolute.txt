@@ -292,9 +292,9 @@ C:\Users\HH\Source\Repos\BenhVienQuanY4\obj\Debug\net6.0\staticwebassets.develop
 C:\Users\HH\Source\Repos\BenhVienQuanY4\obj\Debug\net6.0\scopedcss\Views\Shared\_Layout.cshtml.rz.scp.css
 C:\Users\HH\Source\Repos\BenhVienQuanY4\obj\Debug\net6.0\scopedcss\bundle\APP.styles.css
 C:\Users\HH\Source\Repos\BenhVienQuanY4\obj\Debug\net6.0\scopedcss\projectbundle\APP.bundle.scp.css
-C:\Users\HH\Source\Repos\BenhVienQuanY4\obj\Debug\net6.0\APP.csproj.Up2Date
 C:\Users\HH\Source\Repos\BenhVienQuanY4\obj\Debug\net6.0\APP.dll
 C:\Users\HH\Source\Repos\BenhVienQuanY4\obj\Debug\net6.0\refint\APP.dll
 C:\Users\HH\Source\Repos\BenhVienQuanY4\obj\Debug\net6.0\APP.pdb
 C:\Users\HH\Source\Repos\BenhVienQuanY4\obj\Debug\net6.0\APP.genruntimeconfig.cache
 C:\Users\HH\Source\Repos\BenhVienQuanY4\obj\Debug\net6.0\ref\APP.dll
+c:\Users\HH\source\repos\BenhVienQuanY4\obj\Debug\net6.0\APP.csproj.CopyComplete

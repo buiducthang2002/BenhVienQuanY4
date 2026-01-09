@@ -63,7 +63,7 @@
 
                             @if (!isEmpty)
                             {
-                                var fullDaky = dakyValue.Trim();
+                                var fullDaky = dakyValue!.Trim();
                                 var shortDaky = fullDaky.Length > 40 ? fullDaky.Substring(0, 40) + "..." : fullDaky;
 
                                 <span class="clickable-text"

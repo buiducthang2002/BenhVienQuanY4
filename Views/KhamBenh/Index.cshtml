@@ -1,0 +1,117 @@
+@model List<HuyChuyenPhongModel>
+
+<h3>HUỶ CHUYỂN PHÒNG</h3>
+
+@if (ViewBag.ErrorMessage != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <strong>Lỗi!</strong> @ViewBag.ErrorMessage
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
+<div class="card mb-3">
+    <div class="card-body">
+        <form method="get" asp-action="Index" class="row g-3">
+            <div class="col-md-4">
+                <label for="makcb" class="form-label"><strong>Mã KCB:</strong></label>
+                <input type="number" class="form-control" id="makcb" name="makcb" 
+                       value="@ViewBag.MaKCB" placeholder="VD: 2500036240" 
+                       autofocus />
+            </div>
+            <div class="col-md-3 d-flex align-items-end">
+                <button type="submit" class="btn btn-primary w-100">
+                    <i class="bi bi-search"></i> Tìm kiếm
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+@if (ViewBag.MaKCB != null && Model.Count == 0)
+{
+    <div class="alert alert-warning" role="alert">
+        <i class="bi bi-exclamation-triangle"></i> 
+        Không tìm thấy bệnh nhân có mã KCB <strong>@ViewBag.MaKCB</strong> hoặc bệnh nhân chưa chuyển phòng.
+    </div>
+}
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Mã KCB</th>
+            <th>Họ tên</th>
+            <th>Phòng gốc</th>
+            <th>Phòng đã chuyển</th>
+            <th>Ngày chuyển</th>
+            <th>Trạng thái</th>
+            <th>Chi phí (VNĐ)</th>
+            <th>Thao tác</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model)
+{
+    <tr>
+        <td>@item.makcb</td>
+        <td><strong>@item.hoten</strong></td>
+        <td>
+            <span class="badge bg-primary">@item.makk</span><br/>
+            <small>@item.tenphonggoc</small>
+        </td>
+        <td>
+            <span class="badge bg-warning text-dark">@item.makkc</span><br/>
+            <small>@item.tenphongchuyen</small>
+        </td>
+        <td>@(item.ngaychuyen?.ToString("dd/MM/yyyy HH:mm") ?? "")</td>
+        <td>
+            @if (item.tinhtrang == "1" || item.tinhtrang == "true")
+            {
+                <span class="badge bg-success">Đã tiếp nhận</span>
+            }
+            else
+            {
+                <span class="badge bg-secondary">Chưa tiếp nhận</span>
+            }
+        </td>
+        <td class="text-end">
+            <strong>@item.tongchiphi.ToString("N0")</strong>
+        </td>
+        <td>
+            <button class="btn btn-danger btn-sm"
+                onclick="huy('@item.makcb','@item.madieutri','@item.makk','@item.makkc','@item.tongchiphi.ToString("N0")')">
+                <i class="bi bi-x-circle"></i> Huỷ
+            </button>
+        </td>
+    </tr>
+}
+    </tbody>
+</table>
+
+<script>
+function huy(makcb, madieutri, makk, makkc, tongchiphi) {
+    const message = `HỦY CHUYỂN PHÒNG\n\n` +
+                   `Mã KCB: ${makcb}\n` +
+                   `Phòng: ${makkc} → ${makk}\n` +
+                   `Chi phí sẽ đẩy về: ${tongchiphi} VNĐ\n\n` +
+                   `Bạn có chắc chắn muốn hủy?`;
+    
+    if (!confirm(message))
+        return;
+
+    fetch('/KhamBenh/HuyChuyenPhong', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `makcb=${makcb}&madieutri=${madieutri}&makk=${makk}&makkc=${makkc}`
+    })
+    .then(r => r.text())
+    .then(msg => {
+        alert(msg);
+        location.reload();
+    })
+    .catch(err => {
+        alert('Lỗi: ' + err);
+    });
+}
+</script>
+
