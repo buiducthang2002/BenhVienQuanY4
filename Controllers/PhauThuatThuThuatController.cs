@@ -55,9 +55,14 @@ namespace APP.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> Index(string? search)
+        public async Task<IActionResult> Index(string? search, int page = 1, int pageSize = 50)
         {
-            var query = from pt in _context.PhauThuatThuThuat
+            // Validate page parameters
+            if (page < 1) page = 1;
+            if (pageSize < 10) pageSize = 10;
+            if (pageSize > 100) pageSize = 100;
+
+            var query = from pt in _context.PhauThuatThuThuat.AsNoTracking()
                         join dk in _context.DangKy on pt.makcb equals dk.makcb
                         join k in _context.DmKhoa on pt.makk equals k.makk into khoaGroup
                         from khoa in khoaGroup.DefaultIfEmpty()
@@ -83,7 +88,6 @@ namespace APP.Controllers
                             tenphong = phong.tenphong
                         };
 
-      
             if (!string.IsNullOrEmpty(search))
             {
                 query = query.Where(p =>
@@ -92,13 +96,21 @@ namespace APP.Controllers
                 );
             }
 
+            var totalRecords = await query.CountAsync();
+            var totalPages = (int)Math.Ceiling(totalRecords / (double)pageSize);
+
             var list = await query
-                .AsNoTracking()
                 .OrderByDescending(p => p.ngaybatdaumo)
-                .Take(2000)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
 
             ViewBag.Search = search;
+            ViewBag.CurrentPage = page;
+            ViewBag.PageSize = pageSize;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.TotalRecords = totalRecords;
+
             return View("Index", list);
         }
 
@@ -151,21 +163,18 @@ namespace APP.Controllers
                 catch (DbUpdateConcurrencyException)
                 {
                     TempData["Error"] = "Lỗi đồng thời khi cập nhật dữ liệu.";
-                    ViewBag.KhoaList = new SelectList(await _context.DmKhoa.ToListAsync(), "makk", "tenkk");
-                    ViewBag.PhongList = new SelectList(await _context.DmPhong.ToListAsync(), "maphong", "tenphong");
+                    await LoadDropdownListsAsync();
                     return View(model);
                 }
                 catch (Exception ex)
                 {
                     TempData["Error"] = $"Lỗi khi lưu dữ liệu: {ex.Message}";
-                    ViewBag.KhoaList = new SelectList(await _context.DmKhoa.ToListAsync(), "makk", "tenkk");
-                    ViewBag.PhongList = new SelectList(await _context.DmPhong.ToListAsync(), "maphong", "tenphong");
+                    await LoadDropdownListsAsync();
                     return View(model);
                 }
             }
 
-            ViewBag.KhoaList = new SelectList(await _context.DmKhoa.ToListAsync(), "makk", "tenkk");
-            ViewBag.PhongList = new SelectList(await _context.DmPhong.ToListAsync(), "maphong", "tenphong");
+            await LoadDropdownListsAsync();
             return View(model);
         }
 
@@ -178,6 +187,7 @@ namespace APP.Controllers
             }
 
             var item = await _context.PhauThuatThuThuat
+                .AsNoTracking()
                 .FirstOrDefaultAsync(p => p.makcb == makcb && p.maphauthuat == maphauthuat);
 
             if (item == null)
@@ -185,9 +195,18 @@ namespace APP.Controllers
                 return NotFound();
             }
 
-            ViewBag.KhoaList = new SelectList(await _context.DmKhoa.ToListAsync(), "makk", "tenkk");
-            ViewBag.PhongList = new SelectList(await _context.DmPhong.ToListAsync(), "maphong", "tenphong");
+            await LoadDropdownListsAsync();
             return View(item);
+        }
+
+        private async Task LoadDropdownListsAsync()
+        {
+            var khoaTask = _context.DmKhoa.AsNoTracking().ToListAsync();
+            var phongTask = _context.DmPhong.AsNoTracking().ToListAsync();
+            await Task.WhenAll(khoaTask, phongTask);
+
+            ViewBag.KhoaList = new SelectList(khoaTask.Result, "makk", "tenkk");
+            ViewBag.PhongList = new SelectList(phongTask.Result, "maphong", "tenphong");
         }
 
     }

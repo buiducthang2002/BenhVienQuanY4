@@ -5,16 +5,57 @@
         <i class="bi bi-person-vcard"></i> DANH SÁCH ĐĂNG KÝ KHÁM BỆNH
     </h3>
 
-    <form method="get" asp-action="Index" class="d-flex justify-content-center mb-4">
+    <form method="get" asp-action="Index" class="d-flex justify-content-center mb-4 align-items-center">
         <input type="text" name="search" value="@ViewBag.Search"
                class="form-control me-2 search-box"
                placeholder="Nhập mã KCB hoặc họ tên..." />
+        <select name="pageSize" class="form-select me-2" style="max-width: 120px;">
+            <option value="25" selected="@(ViewBag.PageSize == 25)">25 dòng</option>
+            <option value="50" selected="@(ViewBag.PageSize == 50)">50 dòng</option>
+            <option value="100" selected="@(ViewBag.PageSize == 100)">100 dòng</option>
+        </select>
         <button type="submit" class="btn btn-danger me-2">🔍 Tìm kiếm</button>
         <button type="submit" form="deleteForm" class="btn btn-outline-danger"
                 onclick="return confirm('Bạn có chắc muốn xóa các dòng đã chọn không?');">
             🗑️ Xóa đã chọn
         </button>
     </form>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <div class="text-muted">
+            Hiển thị @Model.Count() / @ViewBag.TotalRecords bản ghi
+        </div>
+        <nav aria-label="Pagination">
+            <ul class="pagination mb-0">
+                @if (ViewBag.CurrentPage > 1)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="?search=@ViewBag.Search&page=1&pageSize=@ViewBag.PageSize">Đầu</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?search=@ViewBag.Search&page=@(ViewBag.CurrentPage - 1)&pageSize=@ViewBag.PageSize">‹</a>
+                    </li>
+                }
+
+                @for (int i = Math.Max(1, ViewBag.CurrentPage - 2); i <= Math.Min(ViewBag.TotalPages, ViewBag.CurrentPage + 2); i++)
+                {
+                    <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                        <a class="page-link" href="?search=@ViewBag.Search&page=@i&pageSize=@ViewBag.PageSize">@i</a>
+                    </li>
+                }
+
+                @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                {
+                    <li class="page-item">
+                        <a class="page-link" href="?search=@ViewBag.Search&page=@(ViewBag.CurrentPage + 1)&pageSize=@ViewBag.PageSize">›</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="?search=@ViewBag.Search&page=@ViewBag.TotalPages&pageSize=@ViewBag.PageSize">Cuối</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    </div>
 
     <form asp-action="DeleteSelected" method="post" id="deleteForm"
           onsubmit="return confirm('Bạn có chắc muốn xóa các dòng đã chọn không?');">
@@ -246,6 +287,22 @@
             text-overflow: ellipsis;
             color: #e91e63;
             cursor: pointer;
+        }
+
+        .pagination .page-link {
+            color: #e91e63;
+            border-color: #e91e63;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: #e91e63;
+            border-color: #e91e63;
+            color: white;
+        }
+
+        .pagination .page-link:hover {
+            background-color: #fff0f3;
+            border-color: #e91e63;
         }
     </style>
 

@@ -37,7 +37,7 @@ namespace APP.Controllers
                 // QUERY TỐI ƯU - Gộp tất cả vào 1 query duy nhất
                 _logger.LogInformation($"Tìm kiếm trong bảng chuyenkhoa với makcb = {makcb.Value}");
 
-                var data = (from ck in _db.chuyenkhoa
+                var data = (from ck in _db.chuyenkhoa.AsNoTracking()
                             join dk in _db.DangKy on ck.makcb.ToString() equals dk.makcb into dkLeft
                             from dk in dkLeft.DefaultIfEmpty()
                             join pg in _db.DmPhong on ck.makk equals pg.maphong into pgLeft

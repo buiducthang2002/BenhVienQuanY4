@@ -19,24 +19,41 @@ namespace APP.Controllers
 
    
         [HttpGet]
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1, int pageSize = 50)
         {
-            var list = await (
-                from kq in _context.KetQuaCLS
-                join dv in _context.DMDichVu on kq.mahh equals dv.mahh
-                join dk in _context.DangKy on kq.makcb equals dk.makcb      
-                select new CanLamSang
-                {
-                    mahh = kq.mahh,
-                    tendichvu = dv.tendichvu ?? "",
-                    makcb = kq.makcb ?? "",
-                    hoten = dk.hoten?? "",
-                    barcode = kq.barcode ?? "",
-                    manvlam = kq.manvlam ?? 0,
-                    ketluan = kq.ketluan ?? "",
-                    daky = kq.daky ?? ""
-                }
-            ).Take(100).ToListAsync(); 
+            // Validate page parameters
+            if (page < 1) page = 1;
+            if (pageSize < 10) pageSize = 10;
+            if (pageSize > 100) pageSize = 100;
+
+            var query = from kq in _context.KetQuaCLS.AsNoTracking()
+                        join dv in _context.DMDichVu on kq.mahh equals dv.mahh
+                        join dk in _context.DangKy on kq.makcb equals dk.makcb      
+                        select new CanLamSang
+                        {
+                            mahh = kq.mahh,
+                            tendichvu = dv.tendichvu ?? "",
+                            makcb = kq.makcb ?? "",
+                            hoten = dk.hoten?? "",
+                            barcode = kq.barcode ?? "",
+                            manvlam = kq.manvlam ?? 0,
+                            ketluan = kq.ketluan ?? "",
+                            daky = kq.daky ?? ""
+                        };
+
+            var totalRecords = await query.CountAsync();
+            var totalPages = (int)Math.Ceiling(totalRecords / (double)pageSize);
+
+            var list = await query
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToListAsync();
+
+            ViewBag.CurrentPage = page;
+            ViewBag.PageSize = pageSize;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.TotalRecords = totalRecords;
+
             return View(list);
         }
 
@@ -45,7 +62,7 @@ namespace APP.Controllers
         public async Task<IActionResult> Search(string makcb)
         {
             var list = await (
-                from kq in _context.KetQuaCLS
+                from kq in _context.KetQuaCLS.AsNoTracking()
                 join dv in _context.DMDichVu on kq.mahh equals dv.mahh
                 join dk in _context.DangKy on kq.makcb equals dk.makcb
                 where kq.makcb == makcb
@@ -61,6 +78,11 @@ namespace APP.Controllers
                     daky = kq.daky ?? ""
                 }
             ).ToListAsync();
+
+            ViewBag.TotalRecords = list.Count;
+            ViewBag.CurrentPage = 1;
+            ViewBag.TotalPages = 1;
+            ViewBag.PageSize = list.Count;
 
             return View("Index", list); 
         }

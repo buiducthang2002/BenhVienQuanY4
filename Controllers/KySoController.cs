@@ -25,15 +25,21 @@ namespace APP.Controllers
         public async Task<IActionResult> Search(string makcb)
         {
             var result = await _context.KySo
+                .AsNoTracking()
                 .Where(b => b.makcb == makcb)
                 .FirstOrDefaultAsync();
 
             if (result == null)
             {
                 ViewBag.Message = "Không tìm thấy bệnh án với Mã KCB này !!!";
-                return View("Index");
+                ViewBag.TotalRecords = 0;
+                return View("Index", new List<KySo>());
             }
 
+            ViewBag.TotalRecords = 1;
+            ViewBag.CurrentPage = 1;
+            ViewBag.TotalPages = 1;
+            ViewBag.PageSize = 1;
             return View("Index", new List<KySo> { result });
         }
 
@@ -84,13 +90,33 @@ namespace APP.Controllers
 
             return RedirectToAction("Index", new { t = DateTime.Now.Ticks });
         }
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(int page = 1, int pageSize = 50)
         {
             try
             {
-                var list = await _context.KySo
-                    .Where(k => !string.IsNullOrEmpty(k.daky)) // Chỉ hiển thị những record đã ký
+                // Validate page parameters
+                if (page < 1) page = 1;
+                if (pageSize < 10) pageSize = 10;
+                if (pageSize > 100) pageSize = 100;
+
+                var query = _context.KySo
+                    .AsNoTracking()
+                    .Where(k => !string.IsNullOrEmpty(k.daky)); // Chỉ hiển thị những record đã ký
+
+                var totalRecords = await query.CountAsync();
+                var totalPages = (int)Math.Ceiling(totalRecords / (double)pageSize);
+
+                var list = await query
+                    .OrderByDescending(k => k.makcb)
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
                     .ToListAsync();
+
+                ViewBag.CurrentPage = page;
+                ViewBag.PageSize = pageSize;
+                ViewBag.TotalPages = totalPages;
+                ViewBag.TotalRecords = totalRecords;
+
                 return View(list);
             }
             catch (Exception ex)

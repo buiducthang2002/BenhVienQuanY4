@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using APP.Data;
 using APP.Models;
+using APP.Services;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -12,16 +13,23 @@ namespace APP.Controllers
     public class DangKyController : Controller
     {
         private readonly AppDbContext _context;
+        private readonly CacheService _cache;
 
-        public DangKyController(AppDbContext context)
+        public DangKyController(AppDbContext context, CacheService cache)
         {
             _context = context;
+            _cache = cache;
         }
         [HttpGet]
-        public async Task<IActionResult> Index(string? search)
+        public async Task<IActionResult> Index(string? search, int page = 1, int pageSize = 50)
         {
+            // Validate page parameters
+            if (page < 1) page = 1;
+            if (pageSize < 10) pageSize = 10;
+            if (pageSize > 100) pageSize = 100;
+
             var query =
-                from dk in _context.DangKy
+                from dk in _context.DangKy.AsNoTracking()
                 join p in _context.DmPhong on dk.maphong equals p.maphong into phongGroup
                 from phong in phongGroup.DefaultIfEmpty()
 
@@ -64,6 +72,8 @@ namespace APP.Controllers
                     thonpho = dk.thonpho ?? string.Empty,
                     mahinhthucden = dk.mahtd,
                     idloaihinhkcb = dk.idloaihinhkcb,
+                    manv = dk.manv,
+                    madonvi = dk.madonvi,
                     tenphong = phong.tenphong,
                     tenkk = khoa.tenkk,
                     tenchucvu = chucvu.tenchucvu,
@@ -81,12 +91,22 @@ namespace APP.Controllers
                     (x.hoten ?? string.Empty).Contains(search));
             }
 
+            // Get total count for pagination
+            var totalRecords = await query.CountAsync();
+            var totalPages = (int)Math.Ceiling(totalRecords / (double)pageSize);
+
             var list = await query
                 .OrderByDescending(x => x.ngaydk)
-                .Take(500)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
                 .ToListAsync();
 
             ViewBag.Search = search;
+            ViewBag.CurrentPage = page;
+            ViewBag.PageSize = pageSize;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.TotalRecords = totalRecords;
+            
             return View(list);
         }
 
@@ -100,19 +120,26 @@ namespace APP.Controllers
             if (record == null)
                 return NotFound();
 
-            // Load danh sách phường/xã và đảm bảo tenxa không null
-            var phuongList = await _context.DmPhuongxa
-                .Where(p => p.tenxa != null && !string.IsNullOrWhiteSpace(p.tenxa))
-                .ToListAsync();
+            // Load all dropdown lists from cache for better performance
+            var phuongTask = _cache.GetPhuongListAsync();
+            var phongTask = _cache.GetPhongListAsync();
+            var khoaTask = _cache.GetKhoaListAsync();
+            var chucvuTask = _cache.GetChucVuListAsync();
+            var capbacTask = _cache.GetCapBacListAsync();
+            var tinhTask = _cache.GetTinhListAsync();
+            var loaiHinhTask = _cache.GetLoaiHinhListAsync();
+            var hinhThucTask = _cache.GetHinhThucListAsync();
 
-            ViewBag.PhongList = new SelectList(await _context.DmPhong.ToListAsync(), "maphong", "tenphong", record.maphong);
-            ViewBag.KhoaList = new SelectList(await _context.DmKhoa.ToListAsync(), "makk", "tenkk", record.makk);
-            ViewBag.ChucVuList = new SelectList(await _context.DmChucvu.ToListAsync(), "machucvu", "tenchucvu", record.machucvu);
-            ViewBag.CapBacList = new SelectList(await _context.DmCapbac.ToListAsync(), "macapbac", "tencapbac", record.macapbac);
-            ViewBag.TinhList = new SelectList(await _context.DmTt.ToListAsync(), "matt", "tentinh", record.matt);
-            ViewBag.PhuongList = new SelectList(phuongList, "mapx", "tenxa", record.mapx);
-            ViewBag.LoaiHinhList = new SelectList(await _context.DmDangkyloaihinhkcb.ToListAsync(), "idloaihinhkcb", "diengiai", record.idloaihinhkcb);
-            ViewBag.HinhThucList = new SelectList(await _context.DmHinhthucdenkham.ToListAsync(), "mahtd", "tenhtd", record.mahtd);
+            await Task.WhenAll(phuongTask, phongTask, khoaTask, chucvuTask, capbacTask, tinhTask, loaiHinhTask, hinhThucTask);
+
+            ViewBag.PhongList = new SelectList(phongTask.Result, "maphong", "tenphong", record.maphong);
+            ViewBag.KhoaList = new SelectList(khoaTask.Result, "makk", "tenkk", record.makk);
+            ViewBag.ChucVuList = new SelectList(chucvuTask.Result, "machucvu", "tenchucvu", record.machucvu);
+            ViewBag.CapBacList = new SelectList(capbacTask.Result, "macapbac", "tencapbac", record.macapbac);
+            ViewBag.TinhList = new SelectList(tinhTask.Result, "matt", "tentinh", record.matt);
+            ViewBag.PhuongList = new SelectList(phuongTask.Result, "mapx", "tenxa", record.mapx);
+            ViewBag.LoaiHinhList = new SelectList(loaiHinhTask.Result, "idloaihinhkcb", "diengiai", record.idloaihinhkcb);
+            ViewBag.HinhThucList = new SelectList(hinhThucTask.Result, "mahtd", "tenhtd", record.mahtd);
             return View(record);
 
         }
@@ -128,20 +155,7 @@ namespace APP.Controllers
                 return RedirectToAction("Index");
             }
 
-            // Load danh sách phường/xã và đảm bảo tenxa không null
-            var phuongList = await _context.DmPhuongxa
-                .Where(p => p.tenxa != null && !string.IsNullOrWhiteSpace(p.tenxa))
-                .ToListAsync();
-
-            // Load ViewBag data với selected value
-            ViewBag.PhongList = new SelectList(await _context.DmPhong.ToListAsync(), "maphong", "tenphong", model.maphong);
-            ViewBag.KhoaList = new SelectList(await _context.DmKhoa.ToListAsync(), "makk", "tenkk", model.makk);
-            ViewBag.ChucVuList = new SelectList(await _context.DmChucvu.ToListAsync(), "machucvu", "tenchucvu", model.machucvu);
-            ViewBag.CapBacList = new SelectList(await _context.DmCapbac.ToListAsync(), "macapbac", "tencapbac", model.macapbac);
-            ViewBag.TinhList = new SelectList(await _context.DmTt.ToListAsync(), "matt", "tentinh", model.matt);
-            ViewBag.PhuongList = new SelectList(phuongList, "mapx", "tenxa", model.mapx);
-            ViewBag.LoaiHinhList = new SelectList(await _context.DmDangkyloaihinhkcb.ToListAsync(), "idloaihinhkcb", "diengiai", model.idloaihinhkcb);
-            ViewBag.HinhThucList = new SelectList(await _context.DmHinhthucdenkham.ToListAsync(), "mahtd", "tenhtd", model.mahtd);
+            await LoadDropdownListsAsync(model.maphong, model.makk, model.machucvu, model.macapbac, model.matt, model.mapx, model.idloaihinhkcb, model.mahtd);
 
             // Xóa lỗi validation cho tenxa vì nó không được lưu vào database (đã Ignore trong DbContext)
             ModelState.Remove("tenxa");
@@ -338,18 +352,7 @@ namespace APP.Controllers
                 }
                 
                 TempData["Error"] = $"Lỗi khi lưu dữ liệu: {errorMessage}";
-                // Load danh sách phường/xã và đảm bảo tenxa không null
-                var phuongListError = await _context.DmPhuongxa
-                    .Where(p => p.tenxa != null && !string.IsNullOrWhiteSpace(p.tenxa))
-                    .ToListAsync();
-                ViewBag.PhongList = new SelectList(await _context.DmPhong.ToListAsync(), "maphong", "tenphong", model.maphong);
-                ViewBag.KhoaList = new SelectList(await _context.DmKhoa.ToListAsync(), "makk", "tenkk", model.makk);
-                ViewBag.ChucVuList = new SelectList(await _context.DmChucvu.ToListAsync(), "machucvu", "tenchucvu", model.machucvu);
-                ViewBag.CapBacList = new SelectList(await _context.DmCapbac.ToListAsync(), "macapbac", "tencapbac", model.macapbac);
-                ViewBag.TinhList = new SelectList(await _context.DmTt.ToListAsync(), "matt", "tentinh", model.matt);
-                ViewBag.PhuongList = new SelectList(phuongListError, "mapx", "tenxa", model.mapx);
-                ViewBag.LoaiHinhList = new SelectList(await _context.DmDangkyloaihinhkcb.ToListAsync(), "idloaihinhkcb", "diengiai", model.idloaihinhkcb);
-                ViewBag.HinhThucList = new SelectList(await _context.DmHinhthucdenkham.ToListAsync(), "mahtd", "tenhtd", model.mahtd);
+                await LoadDropdownListsAsync(model.maphong, model.makk, model.machucvu, model.macapbac, model.matt, model.mapx, model.idloaihinhkcb, model.mahtd);
                 return View(model);
             }
             catch (Exception ex)
@@ -360,23 +363,36 @@ namespace APP.Controllers
                     errorMessage += $" | Chi tiết: {ex.InnerException.Message}";
                 }
                 TempData["Error"] = $"Lỗi khi lưu dữ liệu: {errorMessage}";
-                // Load danh sách phường/xã và đảm bảo tenxa không null
-                var phuongListError2 = await _context.DmPhuongxa
-                    .Where(p => p.tenxa != null && !string.IsNullOrWhiteSpace(p.tenxa))
-                    .ToListAsync();
-                ViewBag.PhongList = new SelectList(await _context.DmPhong.ToListAsync(), "maphong", "tenphong", model.maphong);
-                ViewBag.KhoaList = new SelectList(await _context.DmKhoa.ToListAsync(), "makk", "tenkk", model.makk);
-                ViewBag.ChucVuList = new SelectList(await _context.DmChucvu.ToListAsync(), "machucvu", "tenchucvu", model.machucvu);
-                ViewBag.CapBacList = new SelectList(await _context.DmCapbac.ToListAsync(), "macapbac", "tencapbac", model.macapbac);
-                ViewBag.TinhList = new SelectList(await _context.DmTt.ToListAsync(), "matt", "tentinh", model.matt);
-                ViewBag.PhuongList = new SelectList(phuongListError2, "mapx", "tenxa", model.mapx);
-                ViewBag.LoaiHinhList = new SelectList(await _context.DmDangkyloaihinhkcb.ToListAsync(), "idloaihinhkcb", "diengiai", model.idloaihinhkcb);
-                ViewBag.HinhThucList = new SelectList(await _context.DmHinhthucdenkham.ToListAsync(), "mahtd", "tenhtd", model.mahtd);
+                await LoadDropdownListsAsync(model.maphong, model.makk, model.machucvu, model.macapbac, model.matt, model.mapx, model.idloaihinhkcb, model.mahtd);
                 return View(model);
             }
             TempData["Success"] = "Cập nhật thông tin thành công!";
             return RedirectToAction("Index");
         }
+
+        private async Task LoadDropdownListsAsync(int? maphong = null, int? makk = null, int? machucvu = null, int? macapbac = null, int? matt = null, int? mapx = null, int? idloaihinhkcb = null, int? mahtd = null)
+        {
+            var phuongTask = _cache.GetPhuongListAsync();
+            var phongTask = _cache.GetPhongListAsync();
+            var khoaTask = _cache.GetKhoaListAsync();
+            var chucvuTask = _cache.GetChucVuListAsync();
+            var capbacTask = _cache.GetCapBacListAsync();
+            var tinhTask = _cache.GetTinhListAsync();
+            var loaiHinhTask = _cache.GetLoaiHinhListAsync();
+            var hinhThucTask = _cache.GetHinhThucListAsync();
+
+            await Task.WhenAll(phuongTask, phongTask, khoaTask, chucvuTask, capbacTask, tinhTask, loaiHinhTask, hinhThucTask);
+
+            ViewBag.PhongList = new SelectList(phongTask.Result, "maphong", "tenphong", maphong);
+            ViewBag.KhoaList = new SelectList(khoaTask.Result, "makk", "tenkk", makk);
+            ViewBag.ChucVuList = new SelectList(chucvuTask.Result, "machucvu", "tenchucvu", machucvu);
+            ViewBag.CapBacList = new SelectList(capbacTask.Result, "macapbac", "tencapbac", macapbac);
+            ViewBag.TinhList = new SelectList(tinhTask.Result, "matt", "tentinh", matt);
+            ViewBag.PhuongList = new SelectList(phuongTask.Result, "mapx", "tenxa", mapx);
+            ViewBag.LoaiHinhList = new SelectList(loaiHinhTask.Result, "idloaihinhkcb", "diengiai", idloaihinhkcb);
+            ViewBag.HinhThucList = new SelectList(hinhThucTask.Result, "mahtd", "tenhtd", mahtd);
+        }
+
         [HttpPost]
         public async Task<IActionResult> DeleteSelected(string[] selectedIds)
         {
