@@ -1,0 +1,12 @@
+
+{
+  "name": "somee",
+  "host": "k",
+  "username": "thangbui",
+ "password": "Th@ng2@@21234",
+  "remotePath": "/www.benhvienqy4Tool.somee.com",
+  "protocol": "ftp",
+  "port": 21,
+  "secure": false,
+  "passive": true
+}

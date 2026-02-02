@@ -8,7 +8,7 @@ namespace APP.Models
     public class ChuyenKhoa
     {
         [Key]
-        public int ct { get; set; }
+        public int ct { get; set; } 
         public int? machuyen { get; set; }            // mã chuyển (số)
         public long makcb { get; set; }               // mã KCB (bigint)
         public string? madieutri { get; set; }
@@ -23,6 +23,13 @@ namespace APP.Models
         public int? madonnguyen { get; set; }
         public int? manv { get; set; }
         public string? daky { get; set; }
+
+        // Navigation Properties
+        [ForeignKey("makk")]
+        public virtual DmPhong? PhongGoc { get; set; }
+
+        [ForeignKey("makkc")]
+        public virtual DmPhong? PhongChuyen { get; set; }
     }
 }
 

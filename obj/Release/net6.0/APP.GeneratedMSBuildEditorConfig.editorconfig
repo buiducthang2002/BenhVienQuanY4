@@ -8,81 +8,73 @@ build_property.PlatformNeutralAssembly =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = APP
 build_property.RootNamespace = APP
-build_property.ProjectDir = /Users/buiducthang/Projects/APP/APP/
+build_property.ProjectDir = C:\Users\HH\source\repos\BenhVienQuanY4\
 build_property.RazorLangVersion = 6.0
 build_property.SupportLocalizedComponentNames = 
 build_property.GenerateRazorMetadataSourceChecksumAttributes = 
-build_property.MSBuildProjectDirectory = /Users/buiducthang/Projects/APP/APP
+build_property.MSBuildProjectDirectory = C:\Users\HH\source\repos\BenhVienQuanY4
 build_property._RazorSourceGeneratorDebug = 
 
-[/Users/buiducthang/Projects/APP/APP/Views/Account/Login.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQWNjb3VudC9Mb2dpbi5jc2h0bWw=
+[C:/Users/HH/source/repos/BenhVienQuanY4/Views/Account/Login.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxMb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/buiducthang/Projects/APP/APP/Views/BenhAn/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQmVuaEFuL0luZGV4LmNzaHRtbA==
+[C:/Users/HH/source/repos/BenhVienQuanY4/Views/BenhAn/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmVuaEFuXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/buiducthang/Projects/APP/APP/Views/CanLamSang/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvQ2FuTGFtU2FuZy9JbmRleC5jc2h0bWw=
+[C:/Users/HH/source/repos/BenhVienQuanY4/Views/CanLamSang/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQ2FuTGFtU2FuZ1xJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/buiducthang/Projects/APP/APP/Views/DangKy/Edit.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRGFuZ0t5L0VkaXQuY3NodG1s
+[C:/Users/HH/source/repos/BenhVienQuanY4/Views/DangKy/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFuZ0t5XEVkaXQuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/buiducthang/Projects/APP/APP/Views/DangKy/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvRGFuZ0t5L0luZGV4LmNzaHRtbA==
+[C:/Users/HH/source/repos/BenhVienQuanY4/Views/DangKy/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRGFuZ0t5XEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/buiducthang/Projects/APP/APP/Views/Home/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9JbmRleC5jc2h0bWw=
+[C:/Users/HH/source/repos/BenhVienQuanY4/Views/Home/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/buiducthang/Projects/APP/APP/Views/Home/Privacy.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvSG9tZS9Qcml2YWN5LmNzaHRtbA==
+[C:/Users/HH/source/repos/BenhVienQuanY4/Views/Home/Privacy.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9tZVxQcml2YWN5LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/buiducthang/Projects/APP/APP/Views/Khám bệnh/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvS2jDoW0gYuG7h25oL0luZGV4LmNzaHRtbA==
+[C:/Users/HH/source/repos/BenhVienQuanY4/Views/HuyChuyenPhong/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSHV5Q2h1eWVuUGhvbmdcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/buiducthang/Projects/APP/APP/Views/KySo/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvS3lTby9JbmRleC5jc2h0bWw=
+[C:/Users/HH/source/repos/BenhVienQuanY4/Views/KySo/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcS3lTb1xJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/buiducthang/Projects/APP/APP/Views/PhauThuatThuThuat/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUGhhdVRodWF0VGh1VGh1YXQvSW5kZXguY3NodG1s
+[C:/Users/HH/source/repos/BenhVienQuanY4/Views/PhauThuatThuThuat/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGhhdVRodWF0VGh1VGh1YXRcRWRpdC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/buiducthang/Projects/APP/APP/Views/RaVien/Edit.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUmFWaWVuL0VkaXQuY3NodG1s
+[C:/Users/HH/source/repos/BenhVienQuanY4/Views/PhauThuatThuThuat/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcUGhhdVRodWF0VGh1VGh1YXRcSW5kZXguY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/buiducthang/Projects/APP/APP/Views/RaVien/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvUmFWaWVuL0luZGV4LmNzaHRtbA==
+[C:/Users/HH/source/repos/BenhVienQuanY4/Views/Shared/Error.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXEVycm9yLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/buiducthang/Projects/APP/APP/Views/Shared/Error.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL0Vycm9yLmNzaHRtbA==
+[C:/Users/HH/source/repos/BenhVienQuanY4/Views/Shared/_ValidationScriptsPartial.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/buiducthang/Projects/APP/APP/Views/Shared/_ValidationScriptsPartial.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19WYWxpZGF0aW9uU2NyaXB0c1BhcnRpYWwuY3NodG1s
+[C:/Users/HH/source/repos/BenhVienQuanY4/Views/_ViewImports.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdJbXBvcnRzLmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/buiducthang/Projects/APP/APP/Views/ThanhToan/Index.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvVGhhbmhUb2FuL0luZGV4LmNzaHRtbA==
+[C:/Users/HH/source/repos/BenhVienQuanY4/Views/_ViewStart.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcX1ZpZXdTdGFydC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
-[/Users/buiducthang/Projects/APP/APP/Views/_ViewImports.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvX1ZpZXdJbXBvcnRzLmNzaHRtbA==
-build_metadata.AdditionalFiles.CssScope = 
-
-[/Users/buiducthang/Projects/APP/APP/Views/_ViewStart.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvX1ZpZXdTdGFydC5jc2h0bWw=
-build_metadata.AdditionalFiles.CssScope = 
-
-[/Users/buiducthang/Projects/APP/APP/Views/Shared/_Layout.cshtml]
-build_metadata.AdditionalFiles.TargetPath = Vmlld3MvU2hhcmVkL19MYXlvdXQuY3NodG1s
-build_metadata.AdditionalFiles.CssScope = b-pgw9zcxo0u
+[C:/Users/HH/source/repos/BenhVienQuanY4/Views/Shared/_Layout.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcU2hhcmVkXF9MYXlvdXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = b-sara90ikyu

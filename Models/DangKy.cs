@@ -14,6 +14,9 @@ namespace APP.Models
         public DateTime? ngaysinh { get; set; }
         public int? maphai { get; set; }
         public string? socmnd { get; set; }
+        public int manghenghiep { get; set; }
+        public int madoituong { get; set; }
+        
 
         public int? maphong { get; set; }
         public int? makk { get; set; }

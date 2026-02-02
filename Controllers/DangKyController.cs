@@ -54,6 +54,8 @@ namespace APP.Controllers
                     ngaysinh = dk.ngaysinh,
                     maphai = dk.maphai,
                     socmnd = dk.socmnd ?? string.Empty,
+                    manghenghiep = dk.manghenghiep,
+                    madoituong = dk.madoituong,
                     dienthoai = dk.dienthoai ?? string.Empty,
                     sobhxh = dk.sobhxh ?? string.Empty,
                     lydovv130 = dk.lydovv130 ?? string.Empty,
@@ -176,6 +178,8 @@ namespace APP.Controllers
             existing.maphai = model.maphai.Value;
             
             existing.socmnd = model.socmnd;
+            existing.manghenghiep = model.manghenghiep;
+            existing.madoituong = model.madoituong;
             
             // Xử lý các trường int? - chuyển 0 hoặc null thành null và validate foreign key
             if (model.maphong.HasValue && model.maphong.Value > 0)

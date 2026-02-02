@@ -35,6 +35,8 @@
                     <th>Ngày sinh</th>
                     <th>Giới tính</th>
                     <th>Số CCCD</th>
+                    <th>Mã nghề nghiệp</th>
+                    <th>Mã đối tượng</th>
                     <th>Phòng</th>
                     <th>Khoa</th>
                     <th>Nhân viên</th>
@@ -65,6 +67,8 @@
                         <td>@(item.ngaysinh?.ToString("dd/MM/yyyy") ?? "-")</td>
                         <td>@(item.maphai == 1 ? "Nam" : item.maphai == 2 ? "Nữ" : "-")</td>
                         <td>@item.socmnd</td>
+                        <td>@(item.manghenghiep == 0 ? "-" : item.manghenghiep)</td>
+                        <td>@(item.madoituong == 0 ? "-" : item.madoituong)</td>
                         <td>@item.tenphong</td>
                         <td>@item.tenkk</td>
                         <td>@item.manv</td>
