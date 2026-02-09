@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -90,6 +90,66 @@ namespace APP.Controllers
 
             return RedirectToAction("Index", new { t = DateTime.Now.Ticks });
         }
+
+        [HttpPost]
+        public async Task<IActionResult> CancelSingleSign(string makcb, int signIndex)
+        {
+            try
+            {
+                var record = await _context.KySo.FirstOrDefaultAsync(k => k.makcb == makcb);
+                if (record == null)
+                {
+                    TempData["Error"] = $"Không tìm thấy bệnh án {makcb}!";
+                    return RedirectToAction("Index");
+                }
+
+                if (string.IsNullOrEmpty(record.daky))
+                {
+                    TempData["Error"] = "Bệnh án chưa có chữ ký nào!";
+                    return RedirectToAction("Index");
+                }
+
+                // Parse danh sách chữ ký
+                var dakyContent = record.daky.Trim('(', ')');
+                var signatures = dakyContent.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
+                                             .Select(s => s.Trim())
+                                             .ToList();
+
+                if (signIndex < 0 || signIndex >= signatures.Count)
+                {
+                    TempData["Error"] = "Chữ ký không tồn tại!";
+                    return RedirectToAction("Index");
+                }
+
+                // Lấy thông tin chữ ký sẽ xóa
+                var signToRemove = signatures[signIndex];
+                var signParts = signToRemove.Split('|');
+                var signUser = signParts.Length > 1 ? signParts[1] : "Unknown";
+
+                // Xóa chữ ký theo index
+                signatures.RemoveAt(signIndex);
+
+                // Cập nhật lại chuỗi daky
+                if (signatures.Count == 0)
+                {
+                    record.daky = null;
+                }
+                else
+                {
+                    record.daky = "(" + string.Join(";", signatures) + ";)";
+                }
+
+                await _context.SaveChangesAsync();
+                TempData["Success"] = $"✅ Đã hủy chữ ký #{signIndex + 1} ({signUser}) của bệnh án {makcb}!";
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = $"Lỗi khi hủy chữ ký: {ex.Message}";
+            }
+
+            return RedirectToAction("Index", new { t = DateTime.Now.Ticks });
+        }
+
         public async Task<IActionResult> Index(int page = 1, int pageSize = 50)
         {
             try

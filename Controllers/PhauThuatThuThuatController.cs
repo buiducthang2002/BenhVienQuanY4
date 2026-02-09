@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using APP.Data;
 using APP.Models;
@@ -113,12 +113,6 @@ namespace APP.Controllers
 
             return View("Index", list);
         }
-
-        public IActionResult Default()
-        {
-            return RedirectToAction("Index");
-        }
-      
 
 
 

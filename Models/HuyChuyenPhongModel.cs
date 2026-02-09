@@ -12,6 +12,5 @@
     
     public DateTime? ngaychuyen { get; set; }  // Ngày chuyển phòng
     public string tinhtrang { get; set; }      // Trạng thái tiếp nhận
-    public decimal tongchiphi { get; set; }    // Tổng chi phí tại phòng chuyển
 
 }

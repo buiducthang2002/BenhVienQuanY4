@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -68,55 +68,6 @@ namespace APP.Controllers
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Login");
-        }  
-        [HttpGet]
-        public IActionResult Connect()
-        {
-            return View();
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Connect(ConnectionViewModel model)
-        {
-            if (!ModelState.IsValid)
-                return View(model);           
-            string connectionString = $"Server={model.Server};Database={model.Database};User Id={model.UserId};Password={model.Password};TrustServerCertificate=True;";
-
-            try
-            {
-                using (var conn = new Microsoft.Data.SqlClient.SqlConnection(connectionString))
-                {
-                    conn.Open();
-                }
-
-                HttpContext.Session.SetString("DynamicConnection", connectionString);
-                TempData["Success"] = "Kết nối thành công!";
-                return RedirectToAction("Login");
-            }
-            catch (Exception ex)
-            {
-                TempData["Error"] = "Kết nối thất bại: " + ex.Message;
-                return View(model);
-            }
-        }        
-        public IActionResult TestConnection([FromBody] ConnectionViewModel model)
-        {
-            string conn = $"Server={model.Server};Database={model.Database};User Id={model.UserId};Password={model.Password};TrustServerCertificate=True;";
-            try
-            {
-                using (var sql = new Microsoft.Data.SqlClient.SqlConnection(conn))
-                {
-                    sql.Open();
-                }
-
-                HttpContext.Session.SetString("DynamicConnection", conn);
-
-                return Json(new { success = true });
-            }
-            catch (Exception ex)
-            {
-                return Json(new { success = false, message = ex.Message });
-            }
         }
     }
 }

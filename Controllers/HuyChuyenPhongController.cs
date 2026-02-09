@@ -55,13 +55,7 @@ namespace APP.Controllers
                                 ck.tinhtrang,
                                 hoten = dk != null ? dk.hoten : "N/A",
                                 tenphonggoc = pg != null ? pg.tenphong : ck.makk.ToString(),
-                                tenphongchuyen = pc != null ? pc.tenphong : ck.makkc.ToString(),
-                                // Tính tổng chi phí trong cùng 1 query
-                                tongchiphi = _db.thanhtoan
-                                    .Where(tt => tt.makcb == ck.makcb
-                                              && tt.madieutri == ck.madieutri
-                                              && tt.maphong == ck.makkc)
-                                    .Sum(tt => (decimal?)tt.thanhtoanke) ?? 0
+                                tenphongchuyen = pc != null ? pc.tenphong : ck.makkc.ToString()
                             })
                             .ToList()
                             .Select(x => new HuyChuyenPhongModel
@@ -74,8 +68,7 @@ namespace APP.Controllers
                                 makkc = x.makkc,
                                 tenphongchuyen = x.tenphongchuyen ?? "",
                                 ngaychuyen = x.ngay,
-                                tinhtrang = x.tinhtrang?.ToString(),
-                                tongchiphi = x.tongchiphi
+                                tinhtrang = x.tinhtrang?.ToString()
                             })
                             .ToList();
 
@@ -128,32 +121,8 @@ namespace APP.Controllers
                     return BadRequest("Phòng gốc và phòng chuyển không được trùng nhau");
                 }
 
-                // 1. Đẩy chi phí về phòng gốc
+                // 1. Xoá lịch sử chuyển phòng
                 var rowsAffected1 = _db.Database.ExecuteSqlRaw(@"
-                    UPDATE thanhtoan
-                    SET maphong = @makk
-                    WHERE makcb = @makcb
-                      AND madieutri = @madieutri
-                      AND maphong = @makkc",
-                    new SqlParameter("@makk", makk),
-                    new SqlParameter("@makcb", makcb),
-                    new SqlParameter("@madieutri", madieutri),
-                    new SqlParameter("@makkc", makkc));
-                _logger.LogInformation($"Đã cập nhật {rowsAffected1} dòng trong bảng thanhtoan");
-
-                // 2. Xoá xếp phòng giường của phòng chuyển đến
-                var rowsAffected2 = _db.Database.ExecuteSqlRaw(@"
-                    DELETE FROM xepphonggiuong
-                    WHERE makcb = @makcb
-                      AND madieutri = @madieutri
-                      AND maphong = @makkc",
-                    new SqlParameter("@makcb", makcb),
-                    new SqlParameter("@madieutri", madieutri),
-                    new SqlParameter("@makkc", makkc));
-                _logger.LogInformation($"Đã xóa {rowsAffected2} dòng trong bảng xepphonggiuong");
-
-                // 3. Xoá lịch sử chuyển phòng
-                var rowsAffected3 = _db.Database.ExecuteSqlRaw(@"
                     DELETE FROM chuyenkhoa
                     WHERE makcb = @makcb
                       AND madieutri = @madieutri
@@ -161,7 +130,22 @@ namespace APP.Controllers
                     new SqlParameter("@makcb", makcb),
                     new SqlParameter("@madieutri", madieutri),
                     new SqlParameter("@makkc", makkc));
-                _logger.LogInformation($"Đã xóa {rowsAffected3} dòng trong bảng chuyenkhoa");
+                _logger.LogInformation($"Đã xóa {rowsAffected1} dòng trong bảng chuyenkhoa");
+
+                // 2. Xoá bảng chuyenphong
+                var rowsAffected2 = _db.Database.ExecuteSqlRaw(@"
+                    DELETE FROM chuyenphong
+                    WHERE makcb = @makcb",
+                    new SqlParameter("@makcb", makcb));
+                _logger.LogInformation($"Đã xóa {rowsAffected2} dòng trong bảng chuyenphong");
+
+                // 3. Xoá bảng khambenh với nhokham = 1
+                var rowsAffected3 = _db.Database.ExecuteSqlRaw(@"
+                    DELETE FROM khambenh
+                    WHERE makcb = @makcb
+                      AND nhokham = 1",
+                    new SqlParameter("@makcb", makcb));
+                _logger.LogInformation($"Đã xóa {rowsAffected3} dòng trong bảng khambenh (nhokham=1)");
 
                 tran.Commit();
                 _logger.LogInformation("Hủy chuyển phòng thành công");

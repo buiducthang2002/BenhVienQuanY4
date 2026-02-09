@@ -51,16 +51,13 @@
                         <td class="text-start">
                             @if (!string.IsNullOrEmpty(item.daky))
                             {
-                                var fullDaky = item.daky.Trim();
-                                var shortDaky = fullDaky.Length > 90 ? fullDaky.Substring(0, 90) + "..." : fullDaky;
-
-                                <span class="clickable-text"
-                                      data-bs-toggle="modal"
-                                      data-bs-target="#detailModal"
-                                      data-title="Thông tin đã ký"
-                                      data-content="@fullDaky">
-                                    @shortDaky
-                                </span>
+                                <button type="button" class="btn btn-sm btn-outline-info"
+                                        data-bs-toggle="modal"
+                                        data-bs-target="#signatureModal"
+                                        data-makcb="@item.makcb"
+                                        data-daky="@item.daky">
+                                    📝 Xem chi tiết (@(item.daky.Count(c => c == ';')) chữ ký)
+                                </button>
                             }
                             else
                             {
@@ -72,37 +69,76 @@
                         </td>
                     </tr>
                 }
-                <script>document.addEventListener("DOMContentLoaded", function () {
-                        const modal = document.getElementById("detailModal");
-                        const modalTitle = document.getElementById("detailModalLabel");
-                        const modalBody = document.getElementById("detailModalBody");
-
-                        document.querySelectorAll(".clickable-text").forEach(el => {
-                            el.addEventListener("click", () => {
-                                modalTitle.textContent = el.getAttribute("data-title");
-                                modalBody.textContent = el.getAttribute("data-content");
-                            });
-                        });
-                    });</script>
             </tbody>
             </table>
         </div>
     </form>
-    <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
+
+    <!-- Modal chi tiết chữ ký -->
+    <div class="modal fade" id="signatureModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
             <div class="modal-content">
                 <div class="modal-header" style="background-color:#e91e63; color:white;">
-                    <h5 class="modal-title" id="detailModalLabel"></h5>
+                    <h5 class="modal-title">📝 Danh sách chữ ký - Mã KCB: <span id="modalMaKCB"></span></h5>
                     <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
                 </div>
-                <div class="modal-body" id="detailModalBody" style="white-space: pre-wrap; font-family: monospace;"></div>
+                <div class="modal-body">
+                    <div id="signatureList"></div>
+                </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const signatureModal = document.getElementById('signatureModal');
+    
+    signatureModal.addEventListener('show.bs.modal', function(event) {
+        const button = event.relatedTarget;
+        const makcb = button.getAttribute('data-makcb');
+        const dakyRaw = button.getAttribute('data-daky');
+        
+        document.getElementById('modalMaKCB').textContent = makcb;
+        
+        // Parse signatures
+        const dakyContent = dakyRaw.trim().replace(/^\(|\)$/g, '');
+        const signatures = dakyContent.split(';').filter(s => s.trim());
+        
+        let html = '<table class="table table-bordered table-hover"><thead class="table-light"><tr><th>#</th><th>Người ký</th><th>Mã NV</th><th>Thời gian</th><th>Hành động</th></tr></thead><tbody>';
+        
+        signatures.forEach((sig, index) => {
+            const parts = sig.trim().split('|');
+            if (parts.length >= 5) {
+                const user = parts[1];
+                const manv = parts[2];
+                const datetime = parts[4];
+                
+                html += `<tr>
+                    <td><strong>${index + 1}</strong></td>
+                    <td>${user}</td>
+                    <td>${manv}</td>
+                    <td>${datetime}</td>
+                    <td>
+                        <form method="post" action="/KySo/CancelSingleSign" style="display:inline;" 
+                              onsubmit="return confirm('Bạn có chắc muốn hủy chữ ký #${index + 1} (${user})?');">
+                            <input type="hidden" name="makcb" value="${makcb}" />
+                            <input type="hidden" name="signIndex" value="${index}" />
+                            <button type="submit" class="btn btn-sm btn-danger">❌ Hủy</button>
+                        </form>
+                    </td>
+                </tr>`;
+            }
+        });
+        
+        html += '</tbody></table>';
+        document.getElementById('signatureList').innerHTML = html;
+    });
+});
+</script>
 
 @* Top-right toasts for Error/Debug *@
 @if (TempData["Error"] != null)

@@ -57,7 +57,6 @@
                 <th>Phòng đã chuyển</th>
                 <th>Ngày chuyển</th>
                 <th>Trạng thái</th>
-                <th>Chi phí (VNĐ)</th>
                 <th>Thao tác</th>
             </tr>
         </thead>
@@ -86,16 +85,12 @@
                 <span class="badge bg-secondary">Chưa tiếp nhận</span>
             }
         </td>
-        <td class="text-end">
-            <strong>@item.tongchiphi.ToString("N0")</strong>
-        </td>
         <td>
             <button class="btn btn-danger btn-sm btn-huy"
                 data-makcb="@item.makcb"
                 data-madieutri="@item.madieutri"
                 data-makk="@item.makk"
-                data-makkc="@item.makkc"
-                data-chiphi="@item.tongchiphi.ToString("N0")">
+                data-makkc="@item.makkc">
                 <i class="bi bi-x-circle"></i> Huỷ
             </button>
         </td>
@@ -141,12 +136,10 @@ document.querySelectorAll('.btn-huy').forEach(btn => {
         const madieutri = this.dataset.madieutri;
         const makk = this.dataset.makk;
         const makkc = this.dataset.makkc;
-        const chiphi = this.dataset.chiphi;
 
         const message = `HỦY CHUYỂN PHÒNG\n\n` +
                        `Mã KCB: ${makcb}\n` +
-                       `Phòng: ${makkc} → ${makk}\n` +
-                       `Chi phí sẽ đẩy về: ${chiphi} VNĐ\n\n` +
+                       `Phòng: ${makkc} → ${makk}\n\n` +
                        `Bạn có chắc chắn muốn hủy?`;
 
         if (!confirm(message)) {
