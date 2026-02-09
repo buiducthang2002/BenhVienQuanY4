@@ -109,8 +109,8 @@ namespace APP.Controllers
                     return RedirectToAction("Index");
                 }
 
-                // Parse danh sách chữ ký
-                var dakyContent = record.daky.Trim('(', ')');
+                // Parse danh sách chữ ký: format 1|user|...|;2|user|...|;
+                var dakyContent = record.daky.Trim();
                 var signatures = dakyContent.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
                                              .Select(s => s.Trim())
                                              .ToList();
@@ -136,7 +136,8 @@ namespace APP.Controllers
                 }
                 else
                 {
-                    record.daky = "(" + string.Join(";", signatures) + ";)";
+                    // Join lại: 1|...|;2|...|;3|...| (không có ngoặc, không có ; cuối)
+                    record.daky = string.Join(";", signatures);
                 }
 
                 await _context.SaveChangesAsync();

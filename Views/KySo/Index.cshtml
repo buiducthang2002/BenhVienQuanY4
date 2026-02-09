@@ -104,8 +104,8 @@ document.addEventListener('DOMContentLoaded', function() {
         
         document.getElementById('modalMaKCB').textContent = makcb;
         
-        // Parse signatures
-        const dakyContent = dakyRaw.trim().replace(/^\(|\)$/g, '');
+        // Parse signatures: 1|user|...|;2|...
+        const dakyContent = dakyRaw.trim();
         const signatures = dakyContent.split(';').filter(s => s.trim());
         
         let html = '<table class="table table-bordered table-hover"><thead class="table-light"><tr><th>#</th><th>Người ký</th><th>Mã NV</th><th>Thời gian</th><th>Hành động</th></tr></thead><tbody>';
