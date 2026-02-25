@@ -2,7 +2,16 @@
   "permissions": {
     "allow": [
       "Bash(git mv:*)",
-      "Bash(del ControllersKhamBenhController.cs)"
+      "Bash(del ControllersKhamBenhController.cs)",
+      "Bash(dotnet build:*)",
+      "Bash(dir:*)",
+      "Bash(dotnet clean:*)",
+      "Bash(taskkill:*)",
+      "Bash(dotnet watch run:*)",
+      "Bash(timeout:*)",
+      "Bash(powershell -Command \"Start-Sleep -Seconds 3\")",
+      "Bash(tasklist:*)",
+      "Bash(findstr:*)"
     ]
   }
 }

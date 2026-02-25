@@ -8,13 +8,9 @@
 
   <ItemGroup>
     <Compile Remove="Views\Khám bệnh\**" />
-    <Compile Remove="Views\ThanhToan\**" />
     <Content Remove="Views\Khám bệnh\**" />
-    <Content Remove="Views\ThanhToan\**" />
     <EmbeddedResource Remove="Views\Khám bệnh\**" />
-    <EmbeddedResource Remove="Views\ThanhToan\**" />
     <None Remove="Views\Khám bệnh\**" />
-    <None Remove="Views\ThanhToan\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,6 +30,7 @@
     <Folder Include="Views\Account\" />
     <Folder Include="Views\CanLamSang\" />
     <Folder Include="Views\KySo\" />
+    <Folder Include="Views\ThanhToan\" />
     <Folder Include="Views\BenhAn\" />
     <Folder Include="wwwroot\images\" />
     <Folder Include="Data\" />

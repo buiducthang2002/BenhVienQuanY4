@@ -9,7 +9,6 @@ namespace APP.Models
     {
         [Key]
         public string? makcb { get; set; }
-        public DateTime? ngaydk { get; set; }
         public string? hoten { get; set; }
         public DateTime? ngaysinh { get; set; }
         public int? maphai { get; set; }

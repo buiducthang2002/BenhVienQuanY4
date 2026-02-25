@@ -1,0 +1,411 @@
+@model IEnumerable<APP.Models.ThanhToan>
+
+@{
+    ViewData["Title"] = "Chỉ Định";
+    var currentPage = ViewBag.CurrentPage ?? 1;
+    var totalPages = ViewBag.TotalPages ?? 1;
+    var totalRecords = ViewBag.TotalRecords ?? 0;
+    var pageSize = ViewBag.PageSize ?? 50;
+    var searchTerm = ViewBag.SearchTerm ?? "";
+    var fromDate = ViewBag.FromDate ?? "";
+    var toDate = ViewBag.ToDate ?? "";
+}
+
+<style>
+    .page-header-custom {
+        padding: 20px 0;
+        margin-bottom: 25px;
+    }
+
+    .page-header-custom h2 {
+        color: #e91e63;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin: 0;
+    }
+
+    .search-card-custom {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .search-card-custom .card-header {
+        background: linear-gradient(135deg, #00bcd4 0%, #0097a7 100%);
+        border-radius: 10px 10px 0 0 !important;
+        padding: 15px 20px;
+    }
+
+    .btn-search-custom {
+        background: linear-gradient(135deg, #e91e63 0%, #d81b60 100%);
+        border: none;
+        color: white;
+        font-weight: 600;
+        padding: 10px 20px;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+        box-shadow: 0 3px 6px rgba(233, 30, 99, 0.3);
+    }
+
+    .btn-search-custom:hover {
+        background: linear-gradient(135deg, #d81b60 0%, #c2185b 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 10px rgba(233, 30, 99, 0.4);
+    }
+
+    .data-table-custom {
+        border: none;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+    }
+
+    .data-table-custom .card-header {
+        background: linear-gradient(135deg, #e91e63 0%, #d81b60 100%);
+        border: none;
+        padding: 18px 20px;
+    }
+
+    .table-custom {
+        margin-bottom: 0;
+        font-size: 14px;
+    }
+
+    .table-custom thead {
+        background: linear-gradient(135deg, #e91e63 0%, #d81b60 100%);
+    }
+
+    .table-custom thead th {
+        color: white;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 12px;
+        letter-spacing: 0.5px;
+        border: none;
+        padding: 15px 10px;
+        vertical-align: middle;
+    }
+
+    .table-custom tbody tr {
+        transition: all 0.2s ease;
+    }
+
+    .table-custom tbody tr:hover {
+        background-color: #fff3f8 !important;
+        transform: scale(1.002);
+    }
+
+    .table-custom tbody td {
+        vertical-align: middle;
+        padding: 12px 10px;
+        border-color: #ffe4f0;
+    }
+
+    .badge-custom-success {
+        background: linear-gradient(135deg, #4caf50 0%, #43a047 100%);
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 11px;
+    }
+
+    .badge-custom-secondary {
+        background: linear-gradient(135deg, #9e9e9e 0%, #757575 100%);
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 11px;
+    }
+
+    .pagination-custom .page-link {
+        color: #e91e63;
+        border: 1px solid #f8bbd0;
+        margin: 0 3px;
+        border-radius: 6px;
+        font-weight: 600;
+    }
+
+    .pagination-custom .page-link:hover {
+        background-color: #fce4ec;
+        border-color: #f48fb1;
+        color: #c2185b;
+    }
+
+    .pagination-custom .page-item.active .page-link {
+        background: linear-gradient(135deg, #e91e63 0%, #d81b60 100%);
+        border-color: #e91e63;
+        color: white;
+        box-shadow: 0 3px 6px rgba(233, 30, 99, 0.3);
+    }
+
+    .pagination-custom .page-item.disabled .page-link {
+        background-color: #fafafa;
+        border-color: #e0e0e0;
+        color: #bdbdbd;
+    }
+
+    .form-control:focus {
+        border-color: #f48fb1;
+        box-shadow: 0 0 0 0.2rem rgba(233, 30, 99, 0.25);
+    }
+
+    .input-custom {
+        border: 2px solid #f8bbd0;
+        border-radius: 6px;
+        padding: 10px 15px;
+        transition: all 0.3s ease;
+    }
+
+    .input-custom:focus {
+        border-color: #e91e63;
+        box-shadow: 0 0 0 0.2rem rgba(233, 30, 99, 0.15);
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="page-header-custom text-center">
+        <h2>
+            📋 DANH SÁCH CHỈ ĐỊNH
+        </h2>
+    </div>
+
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>Lỗi!</strong> @ViewBag.ErrorMessage
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>✅ Thành công!</strong> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>❌ Lỗi!</strong> @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- Form tìm kiếm và lọc -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card search-card-custom">
+                <div class="card-header text-white">
+                    <h6 class="mb-0 fw-bold">🔍 TÌM KIẾM & LỌC DỮ LIỆU</h6>
+                </div>
+                <div class="card-body">
+                    <form method="get" asp-action="Index" class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold">Tìm kiếm (Số phiếu / Mã KCB)</label>
+                            <input type="text" name="searchTerm" class="form-control input-custom" placeholder="Nhập số phiếu hoặc mã KCB..." value="@searchTerm" />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-semibold">Từ ngày</label>
+                            <input type="date" name="fromDate" class="form-control input-custom" value="@fromDate" />
+                        </div>
+                        <div class="col-md-3">
+                            <label class="form-label fw-semibold">Đến ngày</label>
+                            <input type="date" name="toDate" class="form-control input-custom" value="@toDate" />
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button type="submit" class="btn btn-search-custom w-100">
+                                🔍 Tìm kiếm
+                            </button>
+                        </div>
+                    </form>
+                    @if (!string.IsNullOrEmpty(searchTerm) || !string.IsNullOrEmpty(fromDate) || !string.IsNullOrEmpty(toDate))
+                    {
+                        <div class="mt-3">
+                            <a asp-action="Index" class="btn btn-sm btn-outline-secondary" style="border-radius: 6px;">
+                                ❌ Xóa bộ lọc
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-12">
+            <div class="card data-table-custom">
+               
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover table-bordered table-custom mb-0">
+                            <thead>
+                                <tr>
+                                    <th class="text-center" style="width: 50px;">STT</th>
+                                    <th class="text-center" style="width: 100px;">Mã TT</th>
+                                    <th class="text-center" style="width: 120px;">Mã KCB</th>
+                                    <th class="text-center" style="width: 120px;">Số Phiếu</th>
+                                    <th class="text-center" style="width: 140px;">Ngày</th>
+                                    <th class="text-center" style="width: 80px;">Mã NV</th>
+
+                                    <th class="text-center">Ai Làm</th>
+                                    <th class="text-center" style="width: 90px;">Số Ngày</th>
+                                    <th class="text-center" style="width: 110px;">Trạng Thái</th>
+                                    <th class="text-center" style="width: 90px;">Mã Ai Làm</th>
+                                    <th class="text-center" style="width: 140px;">Ngày Thực Hiện</th>
+                                    <th class="text-center" style="width: 80px;">Thao Tác</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if (Model != null && Model.Any())
+                                {
+                                    int stt = ((currentPage - 1) * pageSize) + 1;
+                                    foreach (var item in Model)
+                                    {
+                                        <tr>
+                                            <td class="text-center">@stt</td>
+                                            <td class="text-center">@item.mathanhtoan</td>
+                                            <td>@item.makcb</td>
+                                            <td>@item.sophieu</td>
+                                            <td class="text-center">@item.ngay.ToString("dd/MM/yyyy HH:mm")</td>
+                                            <td class="text-center">@(item.manv?.ToString() ?? "-")</td>
+
+                                            <td>@(item.ailam ?? "-")</td>
+                                            <td class="text-center">@item.songaydungdon</td>
+                                            <td class="text-center">
+                                                @if (!string.IsNullOrEmpty(item.daky))
+                                                {
+                                                    <span class="badge badge-custom-success">✓ Đã ký</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="badge badge-custom-secondary">⏳ Chưa ký</span>
+                                                }
+                                            </td>
+                                            <td class="text-center">@(item.maailam?.ToString() ?? "-")</td>
+                                            <td class="text-center">@(item.ngaythyl?.ToString("dd/MM/yyyy HH:mm") ?? "-")</td>
+                                            <td class="text-center">
+                                                <div class="d-flex justify-content-center align-items-center gap-1">
+                                                    <a asp-action="Edit" asp-route-id="@item.mathanhtoan" class="btn btn-sm btn-warning" style="border-radius: 6px;">
+                                                        ✏️
+                                                    </a>
+                                                    <form asp-action="Delete" asp-route-id="@item.mathanhtoan" method="post" class="m-0" onsubmit="return confirm('Bạn có chắc chắn muốn xóa bản ghi này không?');">
+                                                        @Html.AntiForgeryToken()
+                                                        <button type="submit" class="btn btn-sm btn-danger" style="border-radius: 6px;">
+                                                            🗑️
+                                                        </button>
+                                                    </form>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        stt++;
+                                    }
+                                }
+                                else
+                                {
+                                    <tr>
+                                        <td colspan="12" class="text-center text-muted py-4">
+                                            <i class="bi bi-inbox"></i> Không có dữ liệu
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Phân trang -->
+                @if (totalPages > 1)
+                {
+                    <div class="card-footer" style="background-color: #fafafa; border-top: 2px solid #f8bbd0;">
+                        <nav aria-label="Page navigation">
+                            <ul class="pagination pagination-custom justify-content-center mb-0">
+                                <!-- First Page -->
+                                <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                                    <a class="page-link" asp-action="Index" asp-route-page="1"
+                                       asp-route-searchTerm="@searchTerm"
+                                       asp-route-fromDate="@fromDate"
+                                       asp-route-toDate="@toDate">
+                                        <i class="bi bi-chevron-double-left"></i>
+                                    </a>
+                                </li>
+
+                                <!-- Previous Page -->
+                                <li class="page-item @(currentPage == 1 ? "disabled" : "")">
+                                    <a class="page-link" asp-action="Index" asp-route-page="@(currentPage - 1)"
+                                       asp-route-searchTerm="@searchTerm"
+                                       asp-route-fromDate="@fromDate"
+                                       asp-route-toDate="@toDate">
+                                        <i class="bi bi-chevron-left"></i>
+                                    </a>
+                                </li>
+
+                                <!-- Page Numbers -->
+                                @{
+                                    int startPage = Math.Max(1, currentPage - 2);
+                                    int endPage = Math.Min(totalPages, currentPage + 2);
+
+                                    for (int i = startPage; i <= endPage; i++)
+                                    {
+                                        <li class="page-item @(i == currentPage ? "active" : "")">
+                                            <a class="page-link" asp-action="Index" asp-route-page="@i"
+                                               asp-route-searchTerm="@searchTerm"
+                                               asp-route-fromDate="@fromDate"
+                                               asp-route-toDate="@toDate">
+                                                @i
+                                            </a>
+                                        </li>
+                                    }
+                                }
+
+                                <!-- Next Page -->
+                                <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                                    <a class="page-link" asp-action="Index" asp-route-page="@(currentPage + 1)"
+                                       asp-route-searchTerm="@searchTerm"
+                                       asp-route-fromDate="@fromDate"
+                                       asp-route-toDate="@toDate">
+                                        <i class="bi bi-chevron-right"></i>
+                                    </a>
+                                </li>
+
+                                <!-- Last Page -->
+                                <li class="page-item @(currentPage == totalPages ? "disabled" : "")">
+                                    <a class="page-link" asp-action="Index" asp-route-page="@totalPages"
+                                       asp-route-searchTerm="@searchTerm"
+                                       asp-route-fromDate="@fromDate"
+                                       asp-route-toDate="@toDate">
+                                        <i class="bi bi-chevron-double-right"></i>
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                        <div class="text-center mt-3">
+                            <span class="badge" style="background: linear-gradient(135deg, #f8bbd0 0%, #f48fb1 100%); color: #880e4f; font-size: 13px; padding: 8px 16px; border-radius: 20px;">
+                                📄 Hiển thị @((currentPage - 1) * pageSize + 1) - @Math.Min(currentPage * pageSize, totalRecords) trong tổng số @totalRecords.ToString("N0") bản ghi
+                            </span>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Auto submit form khi chọn ngày
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.querySelector('form');
+            const dateInputs = form.querySelectorAll('input[type="date"]');
+
+            dateInputs.forEach(input => {
+                input.addEventListener('change', function() {
+                    // Có thể tự động submit hoặc để người dùng bấm nút
+                    // form.submit();
+                });
+            });
+        });
+    </script>
+}

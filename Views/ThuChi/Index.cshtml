@@ -1,0 +1,194 @@
+@model List<APP.Models.ThanhToanViewModel>
+@{
+    ViewData["Title"] = "Thu Chi";
+}
+
+<div class="container-fluid mt-4">
+    <div class="card shadow">
+        <div class="card-header text-white" style="background-color:#e91e63;">
+            <h4 class="mb-0">THU CHI - XÓA CHI TIẾT THANH TOÁN</h4>
+        </div>
+
+        <div class="card-body">
+
+            <form asp-controller="ThuChi" asp-action="Search" method="post" class="mb-4">
+                <div class="row g-3 align-items-end">
+                    <div class="col-md-6">
+                        <label class="form-label fw-bold">Số phiếu:</label>
+                        <input type="text"
+                               name="sophieu"
+                               class="form-control form-control-lg"
+                               placeholder="Nhập số phiếu..."
+                               value="@ViewBag.SoPhieu"
+                               required
+                               autofocus />
+                    </div>
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-primary btn-lg w-100">
+                            Tìm kiếm
+                        </button>
+                    </div>
+                    <div class="col-md-3">
+                        <a asp-action="Index" class="btn btn-secondary btn-lg w-100">
+                            Làm mới
+                        </a>
+                    </div>
+                </div>
+            </form>
+
+            <!-- Thông báo -->
+            @if (ViewBag.Success != null)
+            {
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    @Html.Raw(ViewBag.Success)
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+            @if (ViewBag.Error != null)
+            {
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    @Html.Raw(ViewBag.Error)
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+            }
+
+            <!-- Kết quả tìm kiếm -->
+            @if (Model != null && Model.Count > 0)
+            {
+                var firstItem = Model.First();
+
+                <!-- Thông tin phiếu -->
+                <div class="alert alert-info mb-3">
+                    <h5 class="mb-2">Thông tin phiếu</h5>
+                    <table class="table table-sm table-borderless mb-0">
+                        <tr>
+                            <td style="width:200px;"><strong>Số phiếu:</strong></td>
+                            <td>@firstItem.sophieu</td>
+                            <td style="width:200px;"><strong>Mã KCB:</strong></td>
+                            <td>@firstItem.makcb</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Ngày thanh toán:</strong></td>
+                            <td>@(firstItem.ngay?.ToString("dd/MM/yyyy HH:mm"))</td>
+                            <td><strong>Mã thanh toán:</strong></td>
+                            <td>@firstItem.mathanhtoan</td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- Form xóa: user chọn 1 bản ghi rồi nhấn Xóa -->
+                <form asp-controller="ThuChi" asp-action="Delete" method="post" id="deleteForm">
+                    <input type="hidden" name="mathanhtoan" value="@firstItem.mathanhtoan" />
+                    <input type="hidden" name="sophieu" value="@firstItem.sophieu" />
+                    <input type="hidden" name="mathanhtoanct" id="selectedMathanhtoanct" value="" />
+
+                    <div class="table-responsive">
+                        <table class="table table-striped table-hover table-bordered">
+                            <thead class="table-dark">
+                                <tr class="text-center">
+                                    <th style="width:50px;">Chọn</th>
+                                    <th>STT</th>
+                                    <th>Mã thanh toán chi tiết</th>
+                                    <th>Mã thanh toán</th>
+                                    <th>Số phiếu</th>
+                                    <th>Mã KCB</th>
+                                    <th>Ngày</th>
+                                    <th>Thành tiền</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @for (int i = 0; i < Model.Count; i++)
+                                {
+                                    <tr class="selectable-row" data-id="@Model[i].mathanhtoanct" style="cursor:pointer;">
+                                        <td class="text-center">
+                                            <input type="radio"
+                                                   name="radioSelect"
+                                                   class="form-check-input row-radio"
+                                                   value="@Model[i].mathanhtoanct" />
+                                        </td>
+                                        <td class="text-center">@(i + 1)</td>
+                                        <td class="text-center"><strong>@Model[i].mathanhtoanct</strong></td>
+                                        <td class="text-center">@Model[i].mathanhtoan</td>
+                                        <td>@Model[i].sophieu</td>
+                                        <td>@Model[i].makcb</td>
+                                        <td class="text-center">@Model[i].ngay?.ToString("dd/MM/yyyy")</td>
+                                        <td class="text-end">@Model[i].thanhtien?.ToString("N0")</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="mt-3">
+                        <button type="button"
+                                class="btn btn-danger btn-lg"
+                                id="btnDelete"
+                                disabled
+                                onclick="confirmDelete()">
+                            Xóa bản ghi đã chọn
+                        </button>
+                        <span class="ms-3 text-muted" id="selectedInfo"></span>
+                    </div>
+                </form>
+            }
+            else if (ViewBag.Success == null && ViewBag.Error == null)
+            {
+                <div class="text-center text-muted py-5">
+                    <p class="mt-3">Nhập số phiếu để tra cứu danh sách chi tiết thanh toán</p>
+                </div>
+            }
+
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        // Click vào hàng để chọn radio
+        document.querySelectorAll('.selectable-row').forEach(function (row) {
+            row.addEventListener('click', function () {
+                var radio = this.querySelector('.row-radio');
+                if (radio) {
+                    radio.checked = true;
+                    updateSelection(radio.value);
+                }
+                document.querySelectorAll('.selectable-row').forEach(r => r.classList.remove('table-warning'));
+                this.classList.add('table-warning');
+            });
+        });
+
+        // Click radio trực tiếp
+        document.querySelectorAll('.row-radio').forEach(function (radio) {
+            radio.addEventListener('change', function () {
+                updateSelection(this.value);
+                document.querySelectorAll('.selectable-row').forEach(r => r.classList.remove('table-warning'));
+                this.closest('tr').classList.add('table-warning');
+            });
+        });
+
+        function updateSelection(value) {
+            document.getElementById('selectedMathanhtoanct').value = value;
+            document.getElementById('btnDelete').disabled = false;
+            document.getElementById('selectedInfo').textContent = 'Đã chọn mã chi tiết: ' + value;
+        }
+
+        function confirmDelete() {
+            var val = document.getElementById('selectedMathanhtoanct').value;
+            if (!val) {
+                alert('Vui lòng chọn một bản ghi để xóa!');
+                return;
+            }
+            if (confirm('Bạn có chắc chắn muốn xóa bản ghi có mã chi tiết ' + val + '?\n\nThao tác này sẽ xóa dữ liệu trong thuchict và thanhtoanct.\nKhông thể hoàn tác!')) {
+                document.getElementById('deleteForm').submit();
+            }
+        }
+
+        // Tự tắt alert sau 6 giây
+        setTimeout(function () {
+            document.querySelectorAll('.alert-dismissible').forEach(function (el) {
+                var a = new bootstrap.Alert(el);
+                a.close();
+            });
+        }, 6000);
+    </script>
+}

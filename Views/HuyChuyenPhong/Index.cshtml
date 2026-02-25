@@ -1,184 +1,204 @@
-@model List<HuyChuyenPhongModel>
-
-<h3>HUỶ CHUYỂN PHÒNG</h3>
-
-@if (ViewBag.ErrorMessage != null)
-{
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-        <strong>Lỗi!</strong> @ViewBag.ErrorMessage
-        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    </div>
+@{
+    ViewData["Title"] = "Hủy Chuyển Phòng";
 }
 
-<div class="card mb-3">
-    <div class="card-body">
-        <form method="get" asp-action="Index" class="row g-3" id="searchForm">
-            <div class="col-md-4">
-                <label for="makcb" class="form-label"><strong>Mã KCB:</strong></label>
-                <input type="number" class="form-control" id="makcb" name="makcb"
-                       value="@ViewBag.MaKCB" placeholder="VD: 2500036240"
-                       min="1" required autofocus />
-                <div class="invalid-feedback">
-                    Vui lòng nhập mã KCB hợp lệ (số dương)
+<div class="container mt-4">
+    <h4 class="page-title text-center mb-4">🔄 HỦY CHUYỂN PHÒNG</h4>
+
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm border-0">
+                <div class="card-header">
+                    <h5 class="mb-0">📝 Nhập thông tin</h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Delete" method="post" id="deleteForm">
+                        <div class="mb-3">
+                            <label for="makcb" class="form-label fw-bold">Mã KCB:</label>
+                            <input type="text"
+                                   name="makcb"
+                                   id="makcb"
+                                   class="form-control"
+                                   placeholder="Nhập Mã KCB cần hủy..."
+                                   required
+                                   autofocus />
+                            <div class="form-text">Nhập mã KCB để hủy chuyển phòng và xóa dữ liệu liên quan</div>
+                        </div>
+
+                        <div class="alert alert-warning" role="alert">
+                            <strong>⚠️ Cảnh báo:</strong> Thao tác này sẽ xóa vĩnh viễn dữ liệu và không thể khôi phục!
+                        </div>
+
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                            <button type="submit"
+                                    class="btn btn-danger btn-lg"
+                                    onclick="return confirm('Bạn có chắc chắn muốn hủy chuyển phòng với Mã KCB này không?');">
+                                🔄 Hủy chuyển phòng
+                            </button>
+                        </div>
+                    </form>
                 </div>
             </div>
-            <div class="col-md-3 d-flex align-items-end">
-                <button type="submit" class="btn btn-primary w-100" id="btnSearch">
-                    <i class="bi bi-search"></i> Tìm kiếm
-                </button>
+
+            <div class="mt-4">
+                <div class="info-box">
+                    <h6 class="fw-bold mb-3">ℹ️ Thông tin chi tiết:</h6>
+                    <ul class="mb-0">
+                        <li>Xóa dữ liệu từ bảng <strong>chuyenphong</strong> với điều kiện: <code>makcb = '[Mã KCB]'</code></li>
+                        <li>Xóa dữ liệu từ bảng <strong>khambenh</strong> với điều kiện: <code>makcb = '[Mã KCB]' AND nhokham = 1</code></li>
+                        <li>Thao tác được thực hiện trong transaction để đảm bảo tính toàn vẹn dữ liệu</li>
+                        <li>Nếu xảy ra lỗi, tất cả thay đổi sẽ được rollback tự động</li>
+                    </ul>
+                </div>
             </div>
-        </form>
+        </div>
     </div>
 </div>
 
-<!-- Loading Spinner -->
-<div id="loadingSpinner" class="text-center my-4" style="display: none;">
-    <div class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">Đang tải...</span>
-    </div>
-    <p class="mt-2">Đang tìm kiếm...</p>
-</div>
-
-@if (ViewBag.MaKCB != null && Model.Count == 0)
+@* Success/Error messages *@
+@if (TempData["Success"] != null)
 {
-    <div class="alert alert-warning" role="alert">
-        <i class="bi bi-exclamation-triangle"></i>
-        Không tìm thấy bệnh nhân có mã KCB <strong>@ViewBag.MaKCB</strong> hoặc bệnh nhân chưa chuyển phòng.
+    <div id="successToast" class="center-toast">
+        @TempData["Success"]
     </div>
+    <script>
+        setTimeout(function () {
+            var toast = document.getElementById('successToast');
+            if (toast) {
+                toast.style.transition = 'opacity 300ms ease';
+                toast.style.opacity = '0';
+                setTimeout(function () { toast.remove(); }, 350);
+            }
+        }, 3000);
+    </script>
 }
 
-<div id="resultTable">
-    <table class="table table-bordered table-hover">
-        <thead class="table-light">
-            <tr>
-                <th>Mã KCB</th>
-                <th>Họ tên</th>
-                <th>Phòng gốc</th>
-                <th>Phòng đã chuyển</th>
-                <th>Ngày chuyển</th>
-                <th>Trạng thái</th>
-                <th>Thao tác</th>
-            </tr>
-        </thead>
-        <tbody>
-@foreach (var item in Model)
+@if (TempData["Error"] != null)
 {
-    <tr>
-        <td>@item.makcb</td>
-        <td><strong>@item.hoten</strong></td>
-        <td>
-            <span class="badge bg-primary">@item.makk</span><br/>
-            <small>@item.tenphonggoc</small>
-        </td>
-        <td>
-            <span class="badge bg-warning text-dark">@item.makkc</span><br/>
-            <small>@item.tenphongchuyen</small>
-        </td>
-        <td>@(item.ngaychuyen?.ToString("dd/MM/yyyy HH:mm") ?? "")</td>
-        <td>
-            @if (item.tinhtrang == "1" || item.tinhtrang == "true")
-            {
-                <span class="badge bg-success">Đã tiếp nhận</span>
-            }
-            else
-            {
-                <span class="badge bg-secondary">Chưa tiếp nhận</span>
-            }
-        </td>
-        <td>
-            <button class="btn btn-danger btn-sm btn-huy"
-                data-makcb="@item.makcb"
-                data-madieutri="@item.madieutri"
-                data-makk="@item.makk"
-                data-makkc="@item.makkc">
-                <i class="bi bi-x-circle"></i> Huỷ
-            </button>
-        </td>
-    </tr>
+    <div class="corner-toast toast-error" id="toastError">@TempData["Error"]</div>
+    <script>
+        setTimeout(function(){
+            var t = document.getElementById('toastError');
+            if(t){ t.style.transition='opacity 300ms'; t.style.opacity='0'; setTimeout(function(){ t.remove(); }, 350); }
+        }, 3500);
+    </script>
 }
-        </tbody>
-    </table>
-</div>
 
 <style>
-    .btn-huy:disabled {
-        cursor: not-allowed;
+    body {
+        background-color: #fff5f7;
+        font-family: 'Segoe UI', sans-serif;
     }
-    #loadingSpinner {
-        min-height: 100px;
+
+    .page-title {
+        color: #e91e63;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+    }
+
+    .card {
+        border-radius: 10px;
+        overflow: hidden;
+    }
+
+    .card-header {
+        background-color: #e91e63;
+        color: white;
+        border-bottom: none;
+        padding: 15px 20px;
+    }
+
+    .card-body {
+        padding: 25px;
+    }
+
+    .form-control {
+        border: 2px solid #e91e63;
+        border-radius: 5px;
+        padding: 10px 15px;
+        font-size: 16px;
+    }
+
+    .form-control:focus {
+        border-color: #e91e63;
+        box-shadow: 0 0 0 0.2rem rgba(233, 30, 99, 0.25);
+    }
+
+    .btn-danger {
+        background-color: #e91e63 !important;
+        border-color: #e91e63 !important;
+        font-weight: 600;
+        padding: 12px 30px;
+    }
+
+    .btn-danger:hover {
+        background-color: #d81b60 !important;
+        border-color: #d81b60 !important;
+    }
+
+    .info-box {
+        background-color: #fff;
+        border: 2px solid #e91e63;
+        border-radius: 8px;
+        padding: 20px;
+    }
+
+    .info-box ul {
+        padding-left: 20px;
+    }
+
+    .info-box li {
+        margin-bottom: 10px;
+        line-height: 1.6;
+    }
+
+    .info-box code {
+        background-color: #fff0f3;
+        color: #e91e63;
+        padding: 2px 6px;
+        border-radius: 3px;
+        font-family: 'Courier New', monospace;
+        font-size: 14px;
+    }
+
+    .shadow-sm {
+        box-shadow: 0 3px 10px rgba(233, 30, 99, 0.15);
+    }
+
+    .center-toast {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1080;
+        min-width: 320px;
+        max-width: 80vw;
+        background: rgba(33, 37, 41, 0.95);
+        color: #fff;
+        padding: 16px 20px;
+        border-radius: 8px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        text-align: center;
+        font-weight: 600;
+        font-size: 15px;
+    }
+
+    .corner-toast {
+        position: fixed;
+        top: 18px;
+        right: 18px;
+        z-index: 1080;
+        min-width: 260px;
+        max-width: 50vw;
+        padding: 12px 16px;
+        border-radius: 8px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        font-weight: 500;
+        font-size: 14px;
+    }
+
+    .toast-error {
+        background: #dc3545;
+        color: white;
     }
 </style>
-
-<script>
-// Form validation
-document.getElementById('searchForm').addEventListener('submit', function(e) {
-    const makcbInput = document.getElementById('makcb');
-    const value = parseInt(makcbInput.value);
-
-    if (!value || value <= 0) {
-        e.preventDefault();
-        makcbInput.classList.add('is-invalid');
-        return false;
-    }
-
-    makcbInput.classList.remove('is-invalid');
-
-    // Show loading spinner
-    document.getElementById('loadingSpinner').style.display = 'block';
-    document.getElementById('resultTable').style.opacity = '0.5';
-    document.getElementById('btnSearch').disabled = true;
-});
-
-// Xử lý hủy chuyển phòng
-document.querySelectorAll('.btn-huy').forEach(btn => {
-    btn.addEventListener('click', function() {
-        const makcb = this.dataset.makcb;
-        const madieutri = this.dataset.madieutri;
-        const makk = this.dataset.makk;
-        const makkc = this.dataset.makkc;
-
-        const message = `HỦY CHUYỂN PHÒNG\n\n` +
-                       `Mã KCB: ${makcb}\n` +
-                       `Phòng: ${makkc} → ${makk}\n\n` +
-                       `Bạn có chắc chắn muốn hủy?`;
-
-        if (!confirm(message)) {
-            return;
-        }
-
-        // Disable button và show loading
-        this.disabled = true;
-        this.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Đang xử lý...';
-
-        fetch('/HuyChuyenPhong/HuyChuyenPhong', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-            body: `makcb=${makcb}&madieutri=${encodeURIComponent(madieutri)}&makk=${makk}&makkc=${makkc}`
-        })
-        .then(response => {
-            if (!response.ok) {
-                return response.text().then(text => {
-                    throw new Error(text || 'Lỗi không xác định');
-                });
-            }
-            return response.text();
-        })
-        .then(msg => {
-            alert(msg);
-            location.reload();
-        })
-        .catch(err => {
-            alert('Lỗi: ' + err.message);
-            // Re-enable button
-            this.disabled = false;
-            this.innerHTML = '<i class="bi bi-x-circle"></i> Huỷ';
-        });
-    });
-});
-
-// Remove invalid class on input
-document.getElementById('makcb').addEventListener('input', function() {
-    this.classList.remove('is-invalid');
-});
-</script>
-

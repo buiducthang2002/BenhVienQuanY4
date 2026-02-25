@@ -44,6 +44,7 @@
                 <th>Người làm</th>
                 <th>Kết luận</th>
                 <th>Đã ký</th>
+                <th>Thao tác</th>
                 <th>Chọn</th>
             </tr>
         </thead>
@@ -69,6 +70,34 @@
                         }
                     </td>
                     <td>
+                        <div class="d-flex flex-column gap-1">
+                        <button type="button" class="btn btn-detail btn-sm"
+                                data-bs-toggle="modal" data-bs-target="#detailModal"
+                                data-mathanhtoan="@item.mathanhtoan"
+                                data-daduyet="@(item.daduyet == true ? "Đã duyệt" : "Chưa duyệt")"
+                                data-ngaylam="@item.ngaylam?.ToString("dd/MM/yyyy HH:mm")"
+                                data-ngaykhopbc="@item.ngaykhopBC?.ToString("dd/MM/yyyy HH:mm")"
+                                data-ngaytrakq="@item.ngaytraKQ?.ToString("dd/MM/yyyy HH:mm")"
+                                data-ailam="@item.ailam"
+                                data-datrakq="@(item.datrakq ? "Đã trả" : "Chưa trả")"
+                                data-ngayth="@item.ngayth?.ToString("dd/MM/yyyy HH:mm")"
+                                data-ngayketqualis="@item.ngayketquaLIS?.ToString("dd/MM/yyyy HH:mm")">
+                            <i class="bi bi-info-circle"></i> Chi tiết
+                        </button>
+                        <button type="button" class="btn btn-edit btn-sm"
+                                data-bs-toggle="modal" data-bs-target="#editModal"
+                                data-makcb="@item.makcb"
+                                data-mahh="@item.mahh"
+                                data-ngaylam="@item.ngaylam?.ToString("yyyy-MM-ddTHH:mm")"
+                                data-ngaykhopbc="@item.ngaykhopBC?.ToString("yyyy-MM-ddTHH:mm")"
+                                data-ngaytrakq="@item.ngaytraKQ?.ToString("yyyy-MM-ddTHH:mm")"
+                                data-ngayth="@item.ngayth?.ToString("yyyy-MM-ddTHH:mm")"
+                                data-ngayketqualis="@item.ngayketquaLIS?.ToString("yyyy-MM-ddTHH:mm")">
+                            <i class="bi bi-pencil-square"></i> Sửa
+                        </button>
+                        </div>
+                    </td>
+                    <td>
                         <input type="checkbox" name="selectedItems" value="@($"{item.makcb}|{item.mahh}|{item.barcode}")" />
                     </td>
                 </tr>
@@ -77,6 +106,108 @@
         </table>
     </form>
 </div>
+
+<!-- Modal Chi tiết -->
+<div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="detailModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header text-white" style="background-color:#e91e63;">
+                <h5 class="modal-title" id="detailModalLabel"><i class="bi bi-clipboard2-pulse"></i> Chi tiết kết quả CLS</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <table class="table table-bordered table-sm detail-modal-table">
+                    <tbody>
+                        <tr><th>Mã thanh toán</th><td id="d-mathanhtoan"></td></tr>
+                        <tr><th>Đã duyệt</th><td id="d-daduyet"></td></tr>
+                        <tr><th>Ngày làm</th><td id="d-ngaylam"></td></tr>
+                        <tr><th>Ngày khớp BC</th><td id="d-ngaykhopbc"></td></tr>
+                        <tr><th>Ngày trả KQ</th><td id="d-ngaytrakq"></td></tr>
+                        <tr><th>Ai làm</th><td id="d-ailam"></td></tr>
+                        <tr><th>Đã trả KQ</th><td id="d-datrakq"></td></tr>
+                        <tr><th>Ngày TH</th><td id="d-ngayth"></td></tr>
+                        <tr><th>Ngày KQ LIS</th><td id="d-ngayketqualis"></td></tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal Sửa chi tiết -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-md">
+        <div class="modal-content">
+            <div class="modal-header text-white" style="background-color:#e91e63;">
+                <h5 class="modal-title" id="editModalLabel"><i class="bi bi-pencil-square"></i> Sửa chi tiết kết quả CLS</h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+            <form asp-action="EditDetail" method="post">
+            <div class="modal-body">
+                <input type="hidden" id="e-makcb" name="makcb" />
+                <input type="hidden" id="e-mahh"  name="mahh"  />
+                <table class="table table-bordered table-sm detail-modal-table">
+                    <tbody>
+                        <tr>
+                            <th>Ngày làm</th>
+                            <td><input type="datetime-local" id="e-ngaylam" name="ngaylam" class="form-control form-control-sm" /></td>
+                        </tr>
+                        <tr>
+                            <th>Ngày khớp BC</th>
+                            <td><input type="datetime-local" id="e-ngaykhopbc" name="ngaykhopBC" class="form-control form-control-sm" /></td>
+                        </tr>
+                        <tr>
+                            <th>Ngày trả KQ</th>
+                            <td><input type="datetime-local" id="e-ngaytrakq" name="ngaytraKQ" class="form-control form-control-sm" /></td>
+                        </tr>
+                        <tr>
+                            <th>Ngày thực hiện</th>
+                            <td><input type="datetime-local" id="e-ngayth" name="ngayth" class="form-control form-control-sm" /></td>
+                        </tr>
+                        <tr>
+                            <th>Ngày KQ LIS</th>
+                            <td><input type="datetime-local" id="e-ngayketqualis" name="ngayketquaLIS" class="form-control form-control-sm" /></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                <button type="submit" class="btn btn-save"><i class="bi bi-floppy"></i> Lưu</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('detailModal').addEventListener('show.bs.modal', function (e) {
+        var btn = e.relatedTarget;
+        document.getElementById('d-mathanhtoan').textContent   = btn.dataset.mathanhtoan  || '';
+        document.getElementById('d-daduyet').textContent       = btn.dataset.daduyet       || '';
+        document.getElementById('d-ngaylam').textContent       = btn.dataset.ngaylam       || '';
+        document.getElementById('d-ngaykhopbc').textContent    = btn.dataset.ngaykhopbc    || '';
+        document.getElementById('d-ngaytrakq').textContent     = btn.dataset.ngaytrakq     || '';
+        document.getElementById('d-ailam').textContent         = btn.dataset.ailam         || '';
+        document.getElementById('d-datrakq').textContent       = btn.dataset.datrakq       || '';
+        document.getElementById('d-ngayth').textContent        = btn.dataset.ngayth        || '';
+        document.getElementById('d-ngayketqualis').textContent = btn.dataset.ngayketqualis || '';
+    });
+
+    document.getElementById('editModal').addEventListener('show.bs.modal', function (e) {
+        var btn = e.relatedTarget;
+        document.getElementById('e-makcb').value          = btn.dataset.makcb          || '';
+        document.getElementById('e-mahh').value           = btn.dataset.mahh           || '';
+        document.getElementById('e-ngaylam').value        = btn.dataset.ngaylam        || '';
+        document.getElementById('e-ngaykhopbc').value     = btn.dataset.ngaykhopbc     || '';
+        document.getElementById('e-ngaytrakq').value      = btn.dataset.ngaytrakq      || '';
+        document.getElementById('e-ngayth').value         = btn.dataset.ngayth         || '';
+        document.getElementById('e-ngayketqualis').value  = btn.dataset.ngayketqualis  || '';
+    });
+</script>
 
 @if (TempData["SuccessMessage"] != null)
 {
@@ -205,6 +336,49 @@
 
     .alert .btn-close {
         padding: 0.75rem 1rem;
+    }
+
+    .btn-detail {
+        background-color: #fff0f6 !important;
+        border: 1px solid #e91e63 !important;
+        color: #e91e63 !important;
+        font-size: 12px;
+        padding: 3px 8px;
+        white-space: nowrap;
+    }
+
+        .btn-detail:hover {
+            background-color: #e91e63 !important;
+            color: #fff !important;
+        }
+
+    .btn-edit {
+        background-color: #fff8e1 !important;
+        border: 1px solid #f59e0b !important;
+        color: #b45309 !important;
+        font-size: 12px;
+        padding: 3px 8px;
+        white-space: nowrap;
+    }
+
+        .btn-edit:hover {
+            background-color: #f59e0b !important;
+            color: #fff !important;
+        }
+
+    .btn-save {
+        background-color: #e91e63 !important;
+        border-color: #e91e63 !important;
+        color: #fff !important;
+        font-weight: 600;
+        font-size: 14px;
+    }
+
+    .detail-modal-table th {
+        width: 40%;
+        background-color: #fff5f7;
+        color: #c2185b;
+        font-weight: 600;
     }
 
     .center-toast {

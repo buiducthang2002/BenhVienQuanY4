@@ -97,6 +97,30 @@ namespace APP.Data
 
             modelBuilder.Entity<KetQuaCLS>()
                 .HasKey(k => new { k.makcb, k.mahh });
+
+            modelBuilder.Entity<ThanhToan>(entity =>
+            {
+                entity.ToTable("thanhtoan");
+                entity.HasKey(t => t.mathanhtoan);
+            });
+
+            modelBuilder.Entity<ThanhToanCT>(entity =>
+            {
+                entity.ToTable("thanhtoanct");
+                entity.HasKey(tc => tc.mathanhtoanct);
+            });
+
+            modelBuilder.Entity<ThuChi>(entity =>
+            {
+                entity.ToTable("thuchi");
+                entity.HasKey(t => t.mathuchi);
+            });
+
+            modelBuilder.Entity<ThuChiCT>(entity =>
+            {
+                entity.ToTable("thuchict");
+                entity.HasKey(tc => tc.mathuchict);
+            });
         }
 
         public DbSet<NguoiDung> NguoiDung { get; set; }
@@ -106,10 +130,14 @@ namespace APP.Data
         public DbSet<PhauThuatThuThuat> PhauThuatThuThuat { get; set; }
         public DbSet<DangKy> DangKy { get; set; }
         public DbSet<KySo> KySo { get; set; }
-        
+
         // Bảng nghiệp vụ
         public DbSet<ChuyenKhoa> chuyenkhoa { get; set; }
-        public DbSet<ThanhToan> thanhtoan { get; set; }
+        public DbSet<ThanhToan> ThanhToan { get; set; }
+        public DbSet<ThanhToanCT> ThanhToanCT { get; set; }
+        public DbSet<ThuChi> ThuChi { get; set; }
+        public DbSet<ThuChiCT> ThuChiCT { get; set; }
+       
         
         // Danh mục
         public DbSet<DmKhoa> DmKhoa { get; set; }

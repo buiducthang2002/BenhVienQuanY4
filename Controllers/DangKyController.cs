@@ -58,7 +58,6 @@ namespace APP.Controllers
                 {
                     makcb = dk.makcb ?? string.Empty,
                     hoten = dk.hoten ?? string.Empty,
-                    ngaydk = dk.ngaydk,
                     ngaysinh = dk.ngaysinh,
                     maphai = dk.maphai,
                     socmnd = dk.socmnd ?? string.Empty,
@@ -96,7 +95,7 @@ namespace APP.Controllers
             var totalPages = (int)Math.Ceiling(totalRecords / (double)pageSize);
 
             var list = await query
-                .OrderByDescending(x => x.ngaydk)
+                .OrderByDescending(x => x.makcb)
                 .Skip((page - 1) * pageSize)
                 .Take(pageSize)
                 .ToListAsync();
@@ -180,7 +179,6 @@ namespace APP.Controllers
 
             // Cập nhật tất cả các trường từ form
             existing.hoten = model.hoten;
-            existing.ngaydk = model.ngaydk;
             existing.ngaysinh = model.ngaysinh;
             
             // Xử lý maphai - bắt buộc phải có giá trị (1 hoặc 2)

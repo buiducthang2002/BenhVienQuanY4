@@ -38,7 +38,16 @@ namespace APP.Controllers
                             barcode = kq.barcode ?? "",
                             manvlam = kq.manvlam ?? 0,
                             ketluan = kq.ketluan ?? "",
-                            daky = kq.daky ?? ""
+                            daky = kq.daky ?? "",
+                            mathanhtoan = kq.mathanhtoan,
+                            daduyet = kq.daduyet,
+                            ngaylam = kq.ngaylam,
+                            ngaykhopBC = kq.ngaykhopBC,
+                            ngaytraKQ = kq.ngaytraKQ,
+                            ailam = kq.ailam,
+                            datrakq = kq.datrakq,
+                            ngayth = kq.ngayth,
+                            ngayketquaLIS = kq.ngayketquaLIS
                         };
 
             var totalRecords = await query.CountAsync();
@@ -75,7 +84,16 @@ namespace APP.Controllers
                     barcode = kq.barcode ?? "",
                     manvlam = kq.manvlam ?? 0,
                     ketluan = kq.ketluan ?? "",
-                    daky = kq.daky ?? ""
+                    daky = kq.daky ?? "",
+                    mathanhtoan = kq.mathanhtoan,
+                    daduyet = kq.daduyet,
+                    ngaylam = kq.ngaylam,
+                    ngaykhopBC = kq.ngaykhopBC,
+                    ngaytraKQ = kq.ngaytraKQ,
+                    ailam = kq.ailam,
+                    datrakq = kq.datrakq,
+                    ngayth = kq.ngayth,
+                    ngayketquaLIS = kq.ngayketquaLIS
                 }
             ).ToListAsync();
 
@@ -87,6 +105,24 @@ namespace APP.Controllers
             return View("Index", list); 
         }
 
+
+        [HttpPost]
+        public async Task<IActionResult> EditDetail(string makcb, int mahh,
+            DateTime? ngaylam, DateTime? ngaykhopBC, DateTime? ngaytraKQ,
+            DateTime? ngayth, DateTime? ngayketquaLIS)
+        {
+            await _context.Database.ExecuteSqlInterpolatedAsync(
+                $@"UPDATE ketquacls SET
+                    ngaylam       = {ngaylam},
+                    ngaykhopBC    = {ngaykhopBC},
+                    ngaytraKQ     = {ngaytraKQ},
+                    ngayth        = {ngayth},
+                    ngayketquaLIS = {ngayketquaLIS}
+                   WHERE makcb = {makcb} AND mahh = {mahh}");
+
+            TempData["SuccessMessage"] = "Cập nhật chi tiết thành công!";
+            return RedirectToAction(nameof(Index));
+        }
 
         [HttpPost]
         public async Task<IActionResult> DeleteSelected(string[] selectedItems)
