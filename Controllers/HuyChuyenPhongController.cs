@@ -1,4 +1,7 @@
 using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using APP.Data;
@@ -22,6 +25,59 @@ namespace APP.Controllers
         public IActionResult Index()
         {
             return View();
+        }
+
+        // GET: HuyChuyenPhong/Lookup
+        [HttpGet]
+        public async Task<IActionResult> Lookup(string makcb)
+        {
+            if (string.IsNullOrWhiteSpace(makcb))
+                return Json(new { success = false, message = "Vui lòng nhập Mã KCB" });
+
+            try
+            {
+                // Lấy danh sách phòng
+                var rooms = await _context.DmPhong.ToDictionaryAsync(p => p.maphong, p => p.tenphong ?? "");
+
+                var records = new List<Dictionary<string, string?>>();
+                List<string> columns = new();
+
+                using var conn = _context.Database.GetDbConnection();
+                if (conn.State != ConnectionState.Open)
+                    await conn.OpenAsync();
+
+                using var cmd = conn.CreateCommand();
+                cmd.CommandText = "SELECT * FROM chuyenphong WHERE makcb = @makcb";
+                var param = cmd.CreateParameter();
+                param.ParameterName = "@makcb";
+                param.Value = makcb;
+                cmd.Parameters.Add(param);
+
+                using var reader = await cmd.ExecuteReaderAsync();
+                columns = Enumerable.Range(0, reader.FieldCount)
+                    .Select(i => reader.GetName(i))
+                    .ToList();
+
+                while (await reader.ReadAsync())
+                {
+                    var row = new Dictionary<string, string?>();
+                    foreach (var col in columns)
+                    {
+                        var val = reader[col];
+                        row[col] = val == DBNull.Value ? null : val?.ToString();
+                    }
+                    records.Add(row);
+                }
+
+                if (records.Count == 0)
+                    return Json(new { success = false, message = $"Không tìm thấy dữ liệu chuyển phòng cho Mã KCB: {makcb}" });
+
+                return Json(new { success = true, records, columns, rooms });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
         }
 
         // POST: HuyChuyenPhong/Delete

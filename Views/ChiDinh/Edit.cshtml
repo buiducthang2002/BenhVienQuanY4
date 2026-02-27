@@ -206,16 +206,14 @@
             const ngayInput = document.querySelector('input[name="ngay"]');
             const ngaythylInput = document.querySelector('input[name="ngaythyl"]');
 
-            // Format ngày hiện tại
+            // Chỉ cắt chuỗi để lấy định dạng YYYY-MM-DDTHH:mm, không chuyển sang UTC
             if (ngayInput && ngayInput.value) {
-                const date = new Date(ngayInput.value);
-                ngayInput.value = date.toISOString().slice(0, 16);
+                ngayInput.value = ngayInput.value.slice(0, 16);
             }
 
             // Format ngày thực hiện
             if (ngaythylInput && ngaythylInput.value && ngaythylInput.value !== '0001-01-01T00:00:00') {
-                const date = new Date(ngaythylInput.value);
-                ngaythylInput.value = date.toISOString().slice(0, 16);
+                ngaythylInput.value = ngaythylInput.value.slice(0, 16);
             }
         });
     </script>
