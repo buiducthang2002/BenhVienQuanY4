@@ -77,7 +77,7 @@ namespace APP.Controllers
                     return View("Index", new List<ThanhToanViewModel>());
                 }
 
-                ViewBag.Success = $"Tìm thấy <strong>{result.Count}</strong> bản ghi chi tiết";
+              
                 ViewBag.SoPhieu = sophieu;
                 return View("Index", result);
             }

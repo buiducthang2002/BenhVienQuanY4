@@ -3,116 +3,261 @@
     ViewData["Title"] = "Tra cứu thanh toán";
 }
 
-<div class="container-fluid mt-4">
-    <div class="card shadow">
-        <div class="card-header text-white" style="background-color:#e91e63;">
-            <h4 class="mb-0">
-                <i class="bi bi-receipt"></i> TRA CỨU THANH TOÁN THEO SỐ PHIẾU
-            </h4>
+<style>
+    .page-header-custom {
+        padding: 20px 0;
+        margin-bottom: 25px;
+    }
+
+    .page-header-custom h2 {
+        color: #e91e63;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin: 0;
+    }
+
+    .search-card-custom {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .search-card-custom .card-header {
+        background: linear-gradient(135deg, #00bcd4 0%, #0097a7 100%);
+        border-radius: 10px 10px 0 0 !important;
+        padding: 15px 20px;
+    }
+
+    .btn-search-custom {
+        background: linear-gradient(135deg, #e91e63 0%, #d81b60 100%);
+        border: none;
+        color: white;
+        font-weight: 600;
+        padding: 10px 20px;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+        box-shadow: 0 3px 6px rgba(233, 30, 99, 0.3);
+    }
+
+    .btn-search-custom:hover {
+        background: linear-gradient(135deg, #d81b60 0%, #c2185b 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 10px rgba(233, 30, 99, 0.4);
+        color: white;
+    }
+
+    .data-table-custom {
+        border: none;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+    }
+
+    .table-custom {
+        margin-bottom: 0;
+        font-size: 14px;
+    }
+
+    .table-custom thead {
+        background: linear-gradient(135deg, #e91e63 0%, #d81b60 100%);
+    }
+
+    .table-custom thead th {
+        color: white;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 12px;
+        letter-spacing: 0.5px;
+        border: none;
+        padding: 15px 10px;
+        vertical-align: middle;
+    }
+
+    .table-custom tbody tr {
+        transition: all 0.2s ease;
+    }
+
+    .table-custom tbody tr:hover {
+        background-color: #fff3f8 !important;
+        transform: scale(1.002);
+    }
+
+    .table-custom tbody td {
+        vertical-align: middle;
+        padding: 12px 10px;
+        border-color: #ffe4f0;
+    }
+
+    .form-control:focus {
+        border-color: #f48fb1;
+        box-shadow: 0 0 0 0.2rem rgba(233, 30, 99, 0.25);
+    }
+
+    .input-custom {
+        border: 2px solid #f8bbd0;
+        border-radius: 6px;
+        padding: 10px 15px;
+        transition: all 0.3s ease;
+    }
+
+    .input-custom:focus {
+        border-color: #e91e63;
+        box-shadow: 0 0 0 0.2rem rgba(233, 30, 99, 0.15);
+    }
+
+    .info-card-custom {
+        border: none;
+        border-radius: 10px;
+        background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+        box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="page-header-custom text-center">
+        <h2>
+            🧾 TRA CỨU THANH TOÁN THEO SỐ PHIẾU
+        </h2>
+    </div>
+
+    @if (TempData["SuccessMessage"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>✅ Thành công!</strong> @TempData["SuccessMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>
+    }
 
-        <div class="card-body">
-            <!-- Form tìm kiếm -->
-            <form asp-controller="ThanhToan" asp-action="Search" method="post" class="mb-4">
-                <div class="row g-3 align-items-end">
-                    <div class="col-md-6">
-                        <label class="form-label fw-bold">Số phiếu thanh toán:</label>
-                        <input type="text"
-                               name="sophieu"
-                               class="form-control form-control-lg"
-                               placeholder="Nhập số phiếu..."
-                               value="@ViewBag.SoPhieuTimKiem"
-                               required
-                               autofocus />
-                    </div>
-                    <div class="col-md-3">
-                        <button type="submit" class="btn btn-primary btn-lg w-100">
-                            <i class="bi bi-search"></i> Tìm kiếm
-                        </button>
-                    </div>
-                    <div class="col-md-3">
-                        <a asp-action="Index" class="btn btn-secondary btn-lg w-100">
-                            <i class="bi bi-arrow-clockwise"></i> Làm mới
-                        </a>
-                    </div>
+    @if (TempData["ErrorMessage"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>❌ Lỗi!</strong> @TempData["ErrorMessage"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    }
+
+    <!-- Form tìm kiếm -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card search-card-custom">
+                <div class="card-header text-white">
+                    <h6 class="mb-0 fw-bold">🔍 TÌM KIẾM THEO SỐ PHIẾU</h6>
                 </div>
-            </form>
-
-            <!-- Thông báo -->
-            @if (ViewBag.Message != null)
-            {
-                <div class="alert alert-@(ViewBag.MessageType ?? "info") alert-dismissible fade show" role="alert">
-                    @Html.Raw(ViewBag.Message)
-                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                <div class="card-body">
+                    <form asp-controller="ThanhToan" asp-action="Search" method="post" class="row g-3 align-items-end">
+                        <div class="col-md-8">
+                            <label class="form-label fw-semibold">Số phiếu thanh toán</label>
+                            <input type="text"
+                                   name="sophieu"
+                                   class="form-control input-custom"
+                                   placeholder="Nhập số phiếu..."
+                                   value="@ViewBag.SoPhieuTimKiem"
+                                   required
+                                   autofocus />
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button type="submit" class="btn btn-search-custom w-100">
+                                🔍 Tìm kiếm
+                            </button>
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <a asp-action="Index" class="btn btn-outline-secondary w-100" style="border-radius: 6px; padding: 10px 20px; font-weight: 600;">
+                                🔄 Làm mới
+                            </a>
+                        </div>
+                    </form>
                 </div>
-            }
+            </div>
+        </div>
+    </div>
 
-            <!-- Thông tin tổng hợp (nếu có kết quả) -->
-            @if (Model != null && Model.Count > 0)
-            {
-                var firstItem = Model.First();
-                <div class="row mb-4">
-                    <div class="col-md-12">
-                        <div class="alert alert-info mb-3">
-                            <h5 class="mb-2">📋 Thông tin phiếu</h5>
-                            <table class="table table-sm table-borderless mb-0">
-                                <tr>
-                                    <td style="width: 200px;"><strong>Số phiếu:</strong></td>
-                                    <td>@firstItem.sophieu</td>
-                                    <td style="width: 200px;"><strong>Mã KCB:</strong></td>
-                                    <td>@firstItem.makcb</td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Ngày thanh toán:</strong></td>
-                                    <td>@(firstItem.ngay?.ToString("dd/MM/yyyy HH:mm"))</td>
-                                    <td><strong>Mã thanh toán:</strong></td>
-                                    <td>@firstItem.mathanhtoan</td>
-                                </tr>
-                            </table>
+    <!-- Thông báo -->
+    @if (ViewBag.Message != null)
+    {
+        <div class="alert alert-@(ViewBag.MessageType ?? "info") alert-dismissible fade show" role="alert">
+            @Html.Raw(ViewBag.Message)
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <!-- Kết quả -->
+    @if (Model != null && Model.Count > 0)
+    {
+        var firstItem = Model.First();
+
+        <!-- Thông tin tổng hợp -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card info-card-custom p-3">
+                    <h6 class="fw-bold mb-2" style="color: #1565c0;">📋 Thông tin phiếu</h6>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <span class="fw-semibold">Số phiếu:</span> <span class="text-primary">@firstItem.sophieu</span>
+                        </div>
+                        <div class="col-md-3">
+                            <span class="fw-semibold">Mã KCB:</span> <span class="text-primary">@firstItem.makcb</span>
+                        </div>
+                        <div class="col-md-3">
+                            <span class="fw-semibold">Ngày thanh toán:</span> <span class="text-primary">@(firstItem.ngay?.ToString("dd/MM/yyyy HH:mm"))</span>
+                        </div>
+                        <div class="col-md-3">
+                            <span class="fw-semibold">Mã thanh toán:</span> <span class="text-primary">@firstItem.mathanhtoan</span>
                         </div>
                     </div>
                 </div>
-
-                <!-- Bảng chi tiết -->
-                <div class="table-responsive">
-                    <table class="table table-striped table-hover table-bordered">
-                        <thead class="table-dark">
-                            <tr class="text-center">
-                                <th>STT</th>
-                                <th>Mã thanh toán chi tiết</th>
-                                <th>Số phiếu</th>
-                                <th>Mã KCB</th>
-                                <th>Ngày</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @for (int i = 0; i < Model.Count; i++)
-                            {
-                                <tr>
-                                    <td class="text-center">@(i + 1)</td>
-                                    <td class="text-center">@Model[i].mathanhtoanct</td>
-                                    <td>@Model[i].sophieu</td>
-                                    <td>@Model[i].makcb</td>
-                                    <td class="text-center">@Model[i].ngay?.ToString("dd/MM/yyyy")</td>
-                                </tr>
-                            }
-                        </tbody>
-                    </table>
-                </div>
-
-                <div class="alert alert-success mt-3">
-                    <strong>✅ Tổng số bản ghi:</strong> @Model.Count
-                </div>
-            }
-            else if (ViewBag.Message == null)
-            {
-                <div class="text-center text-muted py-5">
-                    <i class="bi bi-search" style="font-size: 4rem;"></i>
-                    <p class="mt-3">Nhập số phiếu để tra cứu thông tin thanh toán</p>
-                </div>
-            }
+            </div>
         </div>
-    </div>
+
+        <!-- Bảng chi tiết -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card data-table-custom">
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover table-bordered table-custom mb-0">
+                                <thead>
+                                    <tr>
+                                        <th class="text-center" style="width: 60px;">STT</th>
+                                        <th class="text-center">Mã Thanh Toán CT</th>
+                                        <th class="text-center">Số Phiếu</th>
+                                        <th class="text-center">Mã KCB</th>
+                                        <th class="text-center">Ngày</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @for (int i = 0; i < Model.Count; i++)
+                                    {
+                                        <tr>
+                                            <td class="text-center">@(i + 1)</td>
+                                            <td class="text-center">@Model[i].mathanhtoanct</td>
+                                            <td>@Model[i].sophieu</td>
+                                            <td>@Model[i].makcb</td>
+                                            <td class="text-center">@Model[i].ngay?.ToString("dd/MM/yyyy")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="card-footer" style="background-color: #fafafa; border-top: 2px solid #f8bbd0;">
+                        <div class="text-center">
+                            <span class="badge" style="background: linear-gradient(135deg, #f8bbd0 0%, #f48fb1 100%); color: #880e4f; font-size: 13px; padding: 8px 16px; border-radius: 20px;">
+                                ✅ Tổng số bản ghi: @Model.Count
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    else if (ViewBag.Message == null)
+    {
+        <div class="text-center text-muted py-5">
+            <i class="bi bi-search" style="font-size: 4rem; color: #f48fb1;"></i>
+            <p class="mt-3 fs-5">Nhập số phiếu để tra cứu thông tin thanh toán</p>
+        </div>
+    }
 </div>
 
 @section Scripts {
