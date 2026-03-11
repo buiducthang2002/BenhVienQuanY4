@@ -42,18 +42,6 @@ namespace APP.Data
                 entity.Ignore(e => e.tenxa);
 
 
-
-
-
-
-
-
-
-
-
-
-
-
             });
 
                 
@@ -129,6 +117,8 @@ namespace APP.Data
         public DbSet<KetQuaCLS> KetQuaCLS { get; set; }
         public DbSet<PhauThuatThuThuat> PhauThuatThuThuat { get; set; }
         public DbSet<DangKy> DangKy { get; set; }
+
+        public DbSet<khambenh> khambenh { get; set; }
         public DbSet<KySo> KySo { get; set; }
 
         // Bảng nghiệp vụ

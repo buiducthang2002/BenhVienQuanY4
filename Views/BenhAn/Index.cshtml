@@ -138,7 +138,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const dakyContent = dakyRaw.trim();
         const signatures = dakyContent.split(';').filter(s => s.trim());
         
-        let html = '<table class="table table-bordered table-hover"><thead class="table-light"><tr><th>#</th><th>Người ký</th><th>Mã NV</th><th>Thời gian</th><th>Hành động</th></tr></thead><tbody>';
+        let html = '<table class="table table-bordered table-hover"><thead class="table-light"><tr><th>STT</th><th>Người ký</th><th>Mã nhân viên</th><th>Thời gian</th><th>Hành động</th></tr></thead><tbody>';
         
         signatures.forEach((sig, index) => {
             const parts = sig.trim().split('|');

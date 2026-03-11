@@ -322,6 +322,14 @@ namespace APP.Controllers
             existing.sonha = model.sonha;
             existing.thonpho = model.thonpho;
             
+            // Đồng bộ maphong và makk sang bảng khambenh
+            var khamBenhRecord = await _context.khambenh.FirstOrDefaultAsync(kb => kb.makcb == model.makcb);
+            if (khamBenhRecord != null)
+            {
+                khamBenhRecord.maphong = existing.maphong;
+                khamBenhRecord.makk = existing.makk;
+            }
+
             try
             {
                 await _context.SaveChangesAsync();
@@ -410,6 +418,8 @@ namespace APP.Controllers
 
             return RedirectToAction("Index");
         }
+
+        
 
     }
 }
