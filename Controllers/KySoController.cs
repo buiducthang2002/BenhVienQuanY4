@@ -151,6 +151,33 @@ namespace APP.Controllers
             return RedirectToAction("Index", new { t = DateTime.Now.Ticks });
         }
 
+        [HttpPost]
+        public async Task<IActionResult> UpdateInfo(string makcb, double? songaydieutri, double? songay285, string? phuongphapdieutri)
+        {
+            try
+            {
+                var record = await _context.KySo.FirstOrDefaultAsync(k => k.makcb == makcb);
+                if (record == null)
+                {
+                    TempData["Error"] = $"Không tìm thấy bệnh án {makcb}!";
+                    return RedirectToAction("Index");
+                }
+
+                record.songaydieutri = songaydieutri;
+                record.songay285 = songay285;
+                record.phuongphapdieutri = phuongphapdieutri;
+
+                await _context.SaveChangesAsync();
+                TempData["Success"] = $"✅ Đã cập nhật thông tin bệnh án {makcb}!";
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = $"Lỗi khi cập nhật: {ex.Message}";
+            }
+
+            return RedirectToAction("Index");
+        }
+
         public async Task<IActionResult> Index(int page = 1, int pageSize = 50)
         {
             try

@@ -30,9 +30,11 @@
                      <th style="white-space: nowrap;">Ngày làm</th>
                      <th style="white-space: nowrap;">Mã khoa</th>
                      <th style="white-space: nowrap;">Số ngày điều trị</th>
+                     <th style="white-space: nowrap;">Số ngày 285</th>
                      <th style="white-space: nowrap;">Phương pháp điều trị</th>                     
                      <th style="white-space: nowrap;">Ai làm</th>
                      <th style="white-space: nowrap;">Đã ký</th>
+                     <th style="white-space: nowrap;">Sửa</th>
                      <th style="white-space: nowrap;">Hủy ký</th>
                 </tr>
             </thead>
@@ -44,24 +46,38 @@
                         <td>@(item.ngay?.ToString("dd/MM/yyyy HH:mm") ?? "N/A")</td>
                         <td>@(item.makk?.ToString() ?? "N/A")</td>
                         <td>@(item.songaydieutri?.ToString() ?? "N/A")</td>
+                        <td>@(item.songay285?.ToString() ?? "N/A")</td>
                         <td>@(item.phuongphapdieutri ?? "N/A")</td>
                         <td>@(item.ailam ?? "N/A")</td>
                       
 
-                        <td class="text-start">
+                        <td>
+                            <button type="button" class="btn-icon btn-icon-edit"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#editModal"
+                                    data-makcb="@item.makcb"
+                                    data-songaydieutri="@item.songaydieutri"
+                                    data-songay285="@item.songay285"
+                                    data-phuongphap="@item.phuongphapdieutri"
+                                    title="Sửa thông tin">
+                                ✏️
+                            </button>
+                        </td>
+                        <td>
                             @if (!string.IsNullOrEmpty(item.daky))
                             {
-                                <button type="button" class="btn btn-sm btn-outline-info"
+                                <button type="button" class="btn-icon btn-icon-sign"
                                         data-bs-toggle="modal"
                                         data-bs-target="#signatureModal"
                                         data-makcb="@item.makcb"
-                                        data-daky="@item.daky">
-                                    📝 Xem chi tiết (@(item.daky.Count(c => c == ';')) chữ ký)
+                                        data-daky="@item.daky"
+                                        title="Xem chữ ký">
+                                    📝 <span class="sign-count">@(item.daky.Count(c => c == ';'))</span>
                                 </button>
                             }
                             else
                             {
-                                <span class="text-muted">Chưa ký</span>
+                                <span class="text-muted small">—</span>
                             }
                         </td>
                         <td>
@@ -73,6 +89,39 @@
             </table>
         </div>
     </form>
+
+    <!-- Modal sửa thông tin -->
+    <div class="modal fade" id="editModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color:#e91e63; color:white;">
+                    <h5 class="modal-title">✏️ Sửa thông tin - Mã KCB: <span id="editMaKCB"></span></h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <form method="post" action="/KySo/UpdateInfo">
+                    <div class="modal-body">
+                        <input type="hidden" name="makcb" id="editMakcbInput" />
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Số ngày điều trị</label>
+                            <input type="number" step="0.5" name="songaydieutri" id="editSongaydieutri" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Số ngày 285</label>
+                            <input type="number" step="0.5" name="songay285" id="editSongay285" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Phương pháp điều trị</label>
+                            <input type="text" name="phuongphapdieutri" id="editPhuongphap" class="form-control" />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-danger">💾 Lưu</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <!-- Modal chi tiết chữ ký -->
     <div class="modal fade" id="signatureModal" tabindex="-1">
@@ -95,6 +144,16 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
+    const editModal = document.getElementById('editModal');
+    editModal.addEventListener('show.bs.modal', function(event) {
+        const btn = event.relatedTarget;
+        document.getElementById('editMaKCB').textContent = btn.getAttribute('data-makcb');
+        document.getElementById('editMakcbInput').value = btn.getAttribute('data-makcb');
+        document.getElementById('editSongaydieutri').value = btn.getAttribute('data-songaydieutri') || '';
+        document.getElementById('editSongay285').value = btn.getAttribute('data-songay285') || '';
+        document.getElementById('editPhuongphap').value = btn.getAttribute('data-phuongphap') || '';
+    });
+
     const signatureModal = document.getElementById('signatureModal');
     
     signatureModal.addEventListener('show.bs.modal', function(event) {
@@ -332,4 +391,39 @@ document.addEventListener('DOMContentLoaded', function() {
         .clickable-text:hover {
             text-decoration: underline;
         }
+
+    .btn-icon {
+        display: inline-flex;
+        align-items: center;
+        gap: 3px;
+        border: none;
+        border-radius: 5px;
+        font-size: 13px;
+        padding: 3px 8px;
+        cursor: pointer;
+        white-space: nowrap;
+        line-height: 1.4;
+        transition: opacity 0.15s;
+    }
+    .btn-icon:hover { opacity: 0.8; }
+
+    .btn-icon-edit {
+        background-color: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffc107;
+    }
+    .btn-icon-sign {
+        background-color: #d1ecf1;
+        color: #0c5460;
+        border: 1px solid #bee5eb;
+    }
+    .sign-count {
+        display: inline-block;
+        background: #0c5460;
+        color: #fff;
+        border-radius: 10px;
+        font-size: 11px;
+        padding: 0 5px;
+        line-height: 1.5;
+    }
 </style>
