@@ -163,6 +163,10 @@ namespace APP.Controllers
                     return RedirectToAction(nameof(Index));
                 }
 
+                // Xóa các bản ghi chi tiết liên quan trước
+                var chiTiet = _context.ThanhToanCT.Where(x => x.mathanhtoan == id);
+                _context.ThanhToanCT.RemoveRange(chiTiet);
+
                 _context.ThanhToan.Remove(item);
                 await _context.SaveChangesAsync();
 
