@@ -26,8 +26,9 @@ namespace APP.Data
                     return;
                 }
             }
-            optionsBuilder.UseSqlServer("Server=192.168.0.26;Database=QY42026V6;User Id=sa;Password=123@vtt;TrustServerCertificate=True;");
+          optionsBuilder.UseSqlServer("Server=192.168.0.26;Database=QY42026V6;User Id=sa;Password=123@vtt;TrustServerCertificate=True;");
         }
+        
 
 
 
@@ -51,6 +52,13 @@ namespace APP.Data
                 entity.ToTable("dangkyravien");
                 entity.HasKey(k => k.makcb);
                 entity.Property(k => k.makcb).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<ChuyenVien>(entity =>
+            {
+                entity.ToTable("dangkychuyenvien");
+                entity.HasKey(c => c.makcb);
+                entity.Property(c => c.makcb).HasMaxLength(50);
             });
                 
             modelBuilder.Entity<DmCapbac>().HasNoKey();
@@ -96,6 +104,7 @@ namespace APP.Data
             {
                 entity.ToTable("thanhtoanct");
                 entity.HasKey(tc => tc.mathanhtoanct);
+                entity.Property(tc => tc.thanhtien).HasColumnType("decimal(18,2)");
             });
 
             modelBuilder.Entity<ThuChi>(entity =>
@@ -108,6 +117,21 @@ namespace APP.Data
             {
                 entity.ToTable("thuchict");
                 entity.HasKey(tc => tc.mathuchict);
+                entity.Property(tc => tc.dongia).HasColumnType("decimal(18,2)");
+            });
+
+            modelBuilder.Entity<DonThuoc>(entity =>
+            {
+                entity.ToTable("donthuoc");
+                entity.HasKey(d => d.makcb);
+            });
+
+            modelBuilder.Entity<DonThuocCT>(entity =>
+            {
+                entity.ToTable("donthuocct");
+                entity.HasKey(d => new { d.madonthuoc, d.madonthuocct });
+                entity.Property(d => d.dongia).HasColumnType("decimal(18,2)");
+                entity.Property(d => d.thanhtien).HasColumnType("decimal(18,2)");
             });
         }
 
@@ -117,16 +141,18 @@ namespace APP.Data
         public DbSet<KetQuaCLS> KetQuaCLS { get; set; }
         public DbSet<PhauThuatThuThuat> PhauThuatThuThuat { get; set; }
         public DbSet<DangKy> DangKy { get; set; }
-
         public DbSet<khambenh> khambenh { get; set; }
         public DbSet<KySo> KySo { get; set; }
 
         // Bảng nghiệp vụ
+        public DbSet<ChuyenVien> ChuyenVien { get; set; }
         public DbSet<ChuyenKhoa> chuyenkhoa { get; set; }
         public DbSet<ThanhToan> ThanhToan { get; set; }
         public DbSet<ThanhToanCT> ThanhToanCT { get; set; }
         public DbSet<ThuChi> ThuChi { get; set; }
         public DbSet<ThuChiCT> ThuChiCT { get; set; }
+        public DbSet<DonThuoc> DonThuoc { get; set; }
+        public DbSet<DonThuocCT> DonThuocCT { get; set; }
        
         
         // Danh mục

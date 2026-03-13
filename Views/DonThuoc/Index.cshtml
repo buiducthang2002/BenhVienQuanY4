@@ -1,0 +1,454 @@
+@model List<APP.Models.DonThuocViewModel>
+@{
+    ViewData["Title"] = "Đơn Thuốc";
+}
+
+<style>
+    .page-header-custom {
+        padding: 20px 0;
+        margin-bottom: 25px;
+    }
+
+    .page-header-custom h2 {
+        color: #1976d2;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin: 0;
+    }
+
+    .search-card-custom {
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .search-card-custom .card-header {
+        background: linear-gradient(135deg, #42a5f5 0%, #1976d2 100%);
+        border-radius: 10px 10px 0 0 !important;
+        padding: 15px 20px;
+    }
+
+    .btn-search-custom {
+        background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+        border: none;
+        color: white;
+        font-weight: 600;
+        padding: 10px 20px;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-search-custom:hover {
+        background: linear-gradient(135deg, #1565c0 0%, #0d47a1 100%);
+        transform: translateY(-2px);
+        color: white;
+    }
+
+    .btn-refresh-custom {
+        background: linear-gradient(135deg, #9e9e9e 0%, #757575 100%);
+        border: none;
+        color: white;
+        font-weight: 600;
+        padding: 10px 20px;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-refresh-custom:hover {
+        background: linear-gradient(135deg, #757575 0%, #616161 100%);
+        transform: translateY(-2px);
+        color: white;
+    }
+
+    .btn-delete-custom {
+        background: linear-gradient(135deg, #f44336 0%, #e53935 100%);
+        border: none;
+        color: white;
+        font-weight: 600;
+        padding: 10px 24px;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-delete-custom:hover:not(:disabled) {
+        background: linear-gradient(135deg, #e53935 0%, #c62828 100%);
+        transform: translateY(-2px);
+        color: white;
+    }
+
+    .btn-delete-custom:disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+    }
+
+    .data-table-custom {
+        border: none;
+        border-radius: 10px;
+        overflow: hidden;
+        box-shadow: 0 3px 10px rgba(0,0,0,0.12);
+    }
+
+    .data-table-custom .card-header {
+        background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+        border: none;
+        padding: 18px 20px;
+    }
+
+    .table-custom {
+        margin-bottom: 0;
+        font-size: 14px;
+    }
+
+    .table-custom thead {
+        background: linear-gradient(135deg, #1976d2 0%, #1565c0 100%);
+    }
+
+    .table-custom thead th {
+        color: white;
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 12px;
+        letter-spacing: 0.5px;
+        border: none;
+        padding: 15px 10px;
+        vertical-align: middle;
+    }
+
+    .table-custom tbody tr {
+        transition: all 0.2s ease;
+        cursor: pointer;
+    }
+
+    .table-custom tbody tr:hover {
+        background-color: #e3f2fd !important;
+    }
+
+    .table-custom tbody tr.row-selected {
+        background-color: #bbdefb !important;
+    }
+
+    .table-custom tbody td {
+        vertical-align: middle;
+        padding: 12px 10px;
+        border-color: #e3f2fd;
+    }
+
+    .info-card-custom {
+        background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+        border: none;
+        border-radius: 10px;
+        box-shadow: 0 2px 8px rgba(25, 118, 210, 0.15);
+    }
+
+    .info-card-custom .info-label {
+        font-weight: 600;
+        color: #1565c0;
+        min-width: 150px;
+    }
+
+    .info-card-custom .info-value {
+        color: #0d47a1;
+    }
+
+    .input-custom {
+        border: 2px solid #90caf9;
+        border-radius: 6px;
+        padding: 10px 15px;
+        transition: all 0.3s ease;
+    }
+
+    .input-custom:focus {
+        border-color: #1976d2;
+        box-shadow: 0 0 0 0.2rem rgba(25, 118, 210, 0.15);
+    }
+
+    .selected-info-badge {
+        display: inline-block;
+        background: linear-gradient(135deg, #bbdefb 0%, #90caf9 100%);
+        color: #0d47a1;
+        padding: 6px 14px;
+        border-radius: 20px;
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .empty-state {
+        padding: 60px 20px;
+        color: #9e9e9e;
+    }
+
+    .empty-state .empty-icon {
+        font-size: 48px;
+        margin-bottom: 16px;
+    }
+
+    .select-all-label {
+        cursor: pointer;
+        font-size: 12px;
+        color: white;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+</style>
+
+<div class="container-fluid">
+    <div class="page-header-custom text-center">
+        <h2>ĐƠN THUỐC - XÓA CHI TIẾT ĐƠN THUỐC</h2>
+    </div>
+
+    @if (ViewBag.Success != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <strong>✅ Thành công!</strong> @Html.Raw(ViewBag.Success)
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+            <strong>❌ Lỗi!</strong> @Html.Raw(ViewBag.Error)
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    <!-- Form tìm kiếm -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card search-card-custom">
+                <div class="card-header text-white">
+                    <h6 class="mb-0 fw-bold">🔍 TÌM KIẾM ĐƠN THUỐC THEO MÃ KCB</h6>
+                </div>
+                <div class="card-body">
+                    <form asp-controller="DonThuoc" asp-action="Search" method="post">
+                        <div class="row g-3 align-items-end">
+                            <div class="col-md-7">
+                                <label class="form-label fw-semibold">Mã KCB</label>
+                                <input type="text"
+                                       name="makcb"
+                                       class="form-control input-custom"
+                                       placeholder="Nhập mã KCB để tra cứu đơn thuốc..."
+                                       value="@ViewBag.MaKCB"
+                                       required
+                                       autofocus />
+                            </div>
+                            <div class="col-md-3">
+                                <button type="submit" class="btn btn-search-custom w-100">
+                                    🔍 Tìm kiếm
+                                </button>
+                            </div>
+                            <div class="col-md-2">
+                                <a asp-action="Index" class="btn btn-refresh-custom w-100">
+                                    🔄 Làm mới
+                                </a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (Model != null && Model.Count > 0)
+    {
+        var firstItem = Model.First();
+
+        <!-- Thông tin đơn thuốc -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <div class="card info-card-custom">
+                    <div class="card-body py-3">
+                        <h6 class="fw-bold text-primary mb-3">💊 Thông tin đơn thuốc</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="d-flex mb-2">
+                                    <span class="info-label">Mã KCB:</span>
+                                    <span class="info-value fw-bold">@firstItem.makcb</span>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="d-flex mb-2">
+                                    <span class="info-label">Mã đơn thuốc:</span>
+                                    <span class="info-value">@firstItem.madonthuoc</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bảng danh sách + Form xóa -->
+        <div class="row">
+            <div class="col-12">
+                <div class="card data-table-custom">
+                    <div class="card-header text-white d-flex justify-content-between align-items-center">
+                        <h6 class="mb-0 fw-bold">💊 DANH SÁCH CHI TIẾT ĐƠN THUỐC</h6>
+                        <span class="badge" style="background:rgba(255,255,255,0.25); font-size:13px; padding:6px 14px; border-radius:20px;">
+                            @Model.Count bản ghi
+                        </span>
+                    </div>
+
+                    <form asp-controller="DonThuoc" asp-action="Delete" method="post" id="deleteForm">
+                        <input type="hidden" name="madonthuoc" value="@firstItem.madonthuoc" />
+                        <input type="hidden" name="makcb" value="@firstItem.makcb" />
+
+                        <div class="card-body p-0">
+                            <div class="table-responsive">
+                                <table class="table table-striped table-hover table-bordered table-custom mb-0">
+                                    <thead>
+                                        <tr class="text-center">
+                                            <th style="width:50px;">
+                                                <label class="select-all-label">
+                                                    <input type="checkbox" id="checkAll" class="form-check-input" />
+                                                    Tất cả
+                                                </label>
+                                            </th>
+                                            <th style="width:50px;">STT</th>
+                                            <th>Mã CT Đơn Thuốc</th>
+                                            <th>Mã Đơn Thuốc</th>
+                                            <th>Mã KCB</th>
+                                            <th>Số Lượng</th>
+                                            <th>Đơn Giá</th>
+                                            <th>Thành Tiền</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @for (int i = 0; i < Model.Count; i++)
+                                        {
+                                            <tr class="selectable-row">
+                                                <td class="text-center">
+                                                    <input type="checkbox"
+                                                           name="selectedItems"
+                                                           class="form-check-input row-checkbox"
+                                                           value="@Model[i].madonthuocct" />
+                                                </td>
+                                                <td class="text-center">@(i + 1)</td>
+                                                <td class="text-center"><strong>@Model[i].madonthuocct</strong></td>
+                                                <td class="text-center">@Model[i].madonthuoc</td>
+                                                <td class="text-center">@Model[i].makcb</td>
+                                                <td class="text-center">@Model[i].soluong</td>
+                                                <td class="text-end">@Model[i].dongia.ToString("N0")</td>
+                                                <td class="text-end" style="font-weight:600; color:#1565c0;">
+                                                    @Model[i].thanhtien.ToString("N0")
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="card-footer d-flex align-items-center gap-3" style="background-color:#fafafa; border-top: 2px solid #90caf9;">
+                            <button type="button"
+                                    class="btn btn-delete-custom"
+                                    id="btnDelete"
+                                    disabled
+                                    onclick="confirmDelete()">
+                                🗑️ Xóa các dòng đã chọn
+                            </button>
+                            <span id="selectedInfo"></span>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    }
+    else if (ViewBag.Success == null && ViewBag.Error == null)
+    {
+        <div class="card data-table-custom">
+            <div class="card-body empty-state text-center">
+                <div class="empty-icon">💊</div>
+                <p class="text-muted fs-5">Nhập mã KCB để tra cứu danh sách chi tiết đơn thuốc</p>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        // Click vào hàng để toggle checkbox
+        document.querySelectorAll('.selectable-row').forEach(function (row) {
+            row.addEventListener('click', function (e) {
+                if (e.target.type === 'checkbox') return; // tránh double toggle
+                var cb = this.querySelector('.row-checkbox');
+                if (cb) {
+                    cb.checked = !cb.checked;
+                    updateRowStyle(this, cb.checked);
+                    updateSelectionInfo();
+                }
+            });
+        });
+
+        // Click trực tiếp checkbox
+        document.querySelectorAll('.row-checkbox').forEach(function (cb) {
+            cb.addEventListener('change', function () {
+                updateRowStyle(this.closest('tr'), this.checked);
+                updateSelectionInfo();
+                updateCheckAllState();
+            });
+        });
+
+        // Checkbox "Chọn tất cả"
+        document.getElementById('checkAll').addEventListener('change', function () {
+            var checked = this.checked;
+            document.querySelectorAll('.row-checkbox').forEach(function (cb) {
+                cb.checked = checked;
+                updateRowStyle(cb.closest('tr'), checked);
+            });
+            updateSelectionInfo();
+        });
+
+        function updateRowStyle(row, selected) {
+            if (selected) {
+                row.classList.add('row-selected');
+            } else {
+                row.classList.remove('row-selected');
+            }
+        }
+
+        function updateSelectionInfo() {
+            var checked = document.querySelectorAll('.row-checkbox:checked');
+            var btn = document.getElementById('btnDelete');
+            var info = document.getElementById('selectedInfo');
+
+            if (checked.length > 0) {
+                btn.disabled = false;
+                info.innerHTML = '<span class="selected-info-badge">✅ Đã chọn ' + checked.length + ' bản ghi</span>';
+            } else {
+                btn.disabled = true;
+                info.innerHTML = '';
+            }
+        }
+
+        function updateCheckAllState() {
+            var all = document.querySelectorAll('.row-checkbox');
+            var checked = document.querySelectorAll('.row-checkbox:checked');
+            var checkAll = document.getElementById('checkAll');
+            checkAll.checked = all.length === checked.length && all.length > 0;
+            checkAll.indeterminate = checked.length > 0 && checked.length < all.length;
+        }
+
+        function confirmDelete() {
+            var checked = document.querySelectorAll('.row-checkbox:checked');
+            if (checked.length === 0) {
+                alert('Vui lòng chọn ít nhất một bản ghi để xóa!');
+                return;
+            }
+            var ids = Array.from(checked).map(cb => cb.value).join(', ');
+            if (confirm('Bạn có chắc chắn muốn xóa ' + checked.length + ' bản ghi sau?\n' + ids + '\n\nThao tác này không thể hoàn tác!')) {
+                document.getElementById('deleteForm').submit();
+            }
+        }
+
+        // Tự tắt alert sau 6 giây
+        setTimeout(function () {
+            document.querySelectorAll('.alert-dismissible').forEach(function (el) {
+                var a = new bootstrap.Alert(el);
+                a.close();
+            });
+        }, 6000);
+    </script>
+}

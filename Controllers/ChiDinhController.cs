@@ -163,11 +163,19 @@ namespace APP.Controllers
                     return RedirectToAction(nameof(Index));
                 }
 
-                // Xóa các bản ghi chi tiết liên quan trước
-                var chiTiet = _context.ThanhToanCT.Where(x => x.mathanhtoan == id);
-                _context.ThanhToanCT.RemoveRange(chiTiet);
+                // B1: Lấy danh sách ThanhToanCT liên quan
+                var listCT = _context.ThanhToanCT
+                    .Where(x => x.mathanhtoan == id)
+                    .ToList();
+                var listMathanhtoanct = listCT.Select(x => (int)x.mathanhtoanct).ToList();
 
-                _context.ThanhToan.Remove(item);
+                // B1: Xóa KetQuaCLS theo mathanhtoanct
+                var ketQuaCLS = _context.KetQuaCLS.Where(x => listMathanhtoanct.Contains(x.mathanhtoan));
+                _context.KetQuaCLS.RemoveRange(ketQuaCLS);
+
+                // B2: Xóa ThanhToanCT
+                _context.ThanhToanCT.RemoveRange(listCT);
+
                 await _context.SaveChangesAsync();
 
                 TempData["SuccessMessage"] = "Xóa bản ghi thành công!";

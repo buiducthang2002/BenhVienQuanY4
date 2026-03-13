@@ -1,0 +1,290 @@
+@model IEnumerable<APP.Models.ChuyenVien>
+
+@{
+    ViewData["Title"] = "Danh sách chuyển viện";
+}
+
+<div class="container mt-4">
+    <h4 class="page-title text-center mb-4">DANH SÁCH CHUYỂN VIỆN</h4>
+
+    <form asp-action="Search" method="post" class="d-flex justify-content-center align-items-center mb-3">
+        <input type="text" name="makcb" class="form-control search-box me-2" placeholder="Nhập Mã KCB..." />
+        <button type="submit" class="btn btn-danger me-2">🔍 Tìm kiếm</button>
+        <button type="submit" form="cancelForm" class="btn btn-outline-light border-danger text-danger"
+                onclick="return confirm('Bạn có chắc muốn hủy các bệnh án đã chọn không?');">
+            ❌ Hủy ký
+        </button>
+    </form>
+
+    @if (ViewBag.Message != null)
+    {
+        <div class="alert alert-warning text-center">@ViewBag.Message</div>
+    }
+
+    <form asp-action="CancelSign" method="post" id="cancelForm">
+
+        <div class="table-responsive shadow-sm rounded">
+            <table class="table table-bordered table-hover compact-table text-center">
+                <thead class="table-header-red text-white">
+                    <tr>
+                        <th style="white-space: nowrap;">Mã KCB</th>
+                        <th style="white-space: nowrap;">Ngày làm</th>
+                        <th style="white-space: nowrap;">Ai làm</th>
+                        <th style="white-space: nowrap;">Đã ký</th>
+                        <th style="white-space: nowrap;">Hủy ký</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.makcb</td>
+                            <td>@(item.ngay?.ToString("dd/MM/yyyy HH:mm") ?? "N/A")</td>
+                            <td>@(item.ailam ?? "N/A")</td>
+                            <td>
+                                @if (!string.IsNullOrEmpty(item.daky))
+                                {
+                                    <button type="button" class="btn-icon btn-icon-sign"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#signatureModal"
+                                            data-makcb="@item.makcb"
+                                            data-daky="@item.daky"
+                                            title="Xem chữ ký">
+                                        📝 <span class="sign-count">@(item.daky.Split(';').Count(s => !string.IsNullOrWhiteSpace(s)))</span>
+                                    </button>
+                                }
+                                else
+                                {
+                                    <span class="text-muted small">—</span>
+                                }
+                            </td>
+                            <td>
+                                <input type="checkbox" name="makcb" value="@item.makcb" class="form-check-input" />
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </form>
+
+    <!-- Modal chi tiết chữ ký -->
+    <div class="modal fade" id="signatureModal" tabindex="-1">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color:#e91e63; color:white;">
+                    <h5 class="modal-title">📝 Danh sách chữ ký - Mã KCB: <span id="modalMaKCB"></span></h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="signatureList"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const signatureModal = document.getElementById('signatureModal');
+    signatureModal.addEventListener('show.bs.modal', function(event) {
+        const button = event.relatedTarget;
+        const makcb = button.getAttribute('data-makcb');
+        const dakyRaw = button.getAttribute('data-daky');
+
+        document.getElementById('modalMaKCB').textContent = makcb;
+
+        const signatures = dakyRaw.trim().split(';').filter(s => s.trim());
+
+        let html = '<table class="table table-bordered table-hover"><thead class="table-light"><tr><th>#</th><th>Người ký</th><th>Mã NV</th><th>Thời gian</th><th>Hành động</th></tr></thead><tbody>';
+
+        signatures.forEach((sig, index) => {
+            const parts = sig.trim().split('|');
+            if (parts.length >= 5) {
+                const user = parts[1];
+                const manv = parts[2];
+                const datetime = parts[4];
+
+                html += `<tr>
+                    <td><strong>${index + 1}</strong></td>
+                    <td>${user}</td>
+                    <td>${manv}</td>
+                    <td>${datetime}</td>
+                    <td>
+                        <form method="post" action="/ChuyenVien/CancelSingleSign" style="display:inline;"
+                              onsubmit="return confirm('Bạn có chắc muốn hủy chữ ký #${index + 1} (${user})?');">
+                            <input type="hidden" name="makcb" value="${makcb}" />
+                            <input type="hidden" name="signIndex" value="${index}" />
+                            <button type="submit" class="btn btn-sm btn-danger">❌ Hủy</button>
+                        </form>
+                    </td>
+                </tr>`;
+            }
+        });
+
+        html += '</tbody></table>';
+        document.getElementById('signatureList').innerHTML = html;
+    });
+});
+</script>
+
+@if (TempData["Error"] != null)
+{
+    <div class="corner-toast toast-error" id="toastError">@TempData["Error"]</div>
+    <script>
+        setTimeout(function(){
+            var t = document.getElementById('toastError');
+            if(t){ t.style.transition='opacity 300ms'; t.style.opacity='0'; setTimeout(function(){ t.remove(); }, 350); }
+        }, 3500);
+    </script>
+}
+
+@if (TempData["Success"] != null)
+{
+    <div id="successToast" class="center-toast">
+        @TempData["Success"]
+    </div>
+    <script>
+        setTimeout(function () {
+            var toast = document.getElementById('successToast');
+            if (toast) {
+                toast.style.transition = 'opacity 300ms ease';
+                toast.style.opacity = '0';
+                setTimeout(function () { toast.remove(); }, 350);
+            }
+        }, 1800);
+    </script>
+}
+
+<style>
+    body {
+        background-color: #fff5f7;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .page-title {
+        color: #e91e63;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+    }
+
+    .search-box {
+        max-width: 240px;
+        border: 1px solid #e91e63;
+        border-radius: 5px;
+        font-size: 14px;
+        height: 34px;
+    }
+
+    .btn-danger {
+        background-color: #e91e63 !important;
+        border-color: #e91e63 !important;
+        font-weight: 600;
+        font-size: 14px;
+        padding: 5px 12px;
+    }
+
+    .btn-outline-light {
+        background-color: white !important;
+        border: 1px solid #e91e63 !important;
+        color: #e91e63 !important;
+        font-weight: 600;
+        font-size: 14px;
+        padding: 5px 12px;
+    }
+
+        .btn-outline-light:hover {
+            background-color: #e91e63 !important;
+            color: #fff !important;
+        }
+
+    .center-toast {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1080;
+        min-width: 280px;
+        max-width: 80vw;
+        background: rgba(33, 37, 41, 0.95);
+        color: #fff;
+        padding: 14px 18px;
+        border-radius: 8px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        text-align: center;
+        font-weight: 600;
+    }
+
+    .corner-toast {
+        position: fixed;
+        top: 18px;
+        right: 18px;
+        z-index: 1080;
+        min-width: 240px;
+        max-width: 50vw;
+        padding: 8px 12px;
+        border-radius: 8px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        font-weight: 500;
+        font-size: 13px;
+    }
+    .toast-error { background: #dc3545; color: white; }
+
+    .table.compact-table th,
+    .table.compact-table td {
+        padding: 6px 8px !important;
+        font-size: 13px;
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    .table-header-red {
+        background-color: #e91e63 !important;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #fff0f3 !important;
+    }
+
+    .table td,
+    .table th {
+        border: 1px solid #f3b8c5;
+    }
+
+    .shadow-sm {
+        box-shadow: 0 3px 6px rgba(233, 30, 99, 0.1);
+    }
+
+    .btn-icon {
+        display: inline-flex;
+        align-items: center;
+        gap: 3px;
+        border: none;
+        border-radius: 5px;
+        font-size: 13px;
+        padding: 3px 8px;
+        cursor: pointer;
+        white-space: nowrap;
+        line-height: 1.4;
+        transition: opacity 0.15s;
+    }
+    .btn-icon:hover { opacity: 0.8; }
+
+    .btn-icon-sign {
+        background-color: #d1ecf1;
+        color: #0c5460;
+        border: 1px solid #bee5eb;
+    }
+    .sign-count {
+        display: inline-block;
+        background: #0c5460;
+        color: #fff;
+        border-radius: 10px;
+        font-size: 11px;
+        padding: 0 5px;
+        line-height: 1.5;
+    }
+</style>

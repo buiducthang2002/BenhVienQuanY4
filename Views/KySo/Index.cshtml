@@ -72,7 +72,7 @@
                                         data-makcb="@item.makcb"
                                         data-daky="@item.daky"
                                         title="Xem chữ ký">
-                                    📝 <span class="sign-count">@(item.daky.Count(c => c == ';'))</span>
+                                    📝 <span class="sign-count">@(item.daky.Split(';').Count(s => !string.IsNullOrWhiteSpace(s)))</span>
                                 </button>
                             }
                             else
