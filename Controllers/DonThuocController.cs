@@ -62,12 +62,12 @@ namespace APP.Controllers
                     where dtct.madonthuoc == donthuoc.madonthuoc
                     select new DonThuocViewModel
                     {
-                        makcb        = donthuoc.makcb,
-                        madonthuoc   = donthuoc.madonthuoc,
+                        makcb = donthuoc.makcb,
+                        madonthuoc = donthuoc.madonthuoc,
                         madonthuocct = dtct.madonthuocct,
-                        soluong      = dtct.soluong,
-                        dongia       = dtct.dongia,
-                        thanhtien    = dtct.thanhtien
+                        soluong = dtct.soluong,
+                        dongia = dtct.dongia,
+                        thanhtien = dtct.thanhtien
                     }
                 ).AsNoTracking().ToListAsync();
 

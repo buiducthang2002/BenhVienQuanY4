@@ -6,8 +6,8 @@ namespace APP.Models
 {
     [Table("donthuocct")]
     public class DonThuocCT
-	{
-        [Key]    
+    {
+        [Key]
         public int madonthuoc { get; set; }
         public long madonthuocct { get; set; }
         public decimal soluong { get; set; }

@@ -6,7 +6,7 @@ namespace APP.Models
 {
     [Table("dmdichvu")]
     public class DMDichVu
-	{
+    {
         [Key]
         public int mahh { get; set; }
 

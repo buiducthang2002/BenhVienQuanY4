@@ -10,9 +10,9 @@ namespace APP.Models
         public int nguoidungid { get; set; }
 
         [Required, MaxLength(100)]
-        public string tendangnhap { get; set; }
+        public string tendangnhap { get; set; } = null!;
 
         [Required]
-        public string matkhau { get; set; }
+        public string matkhau { get; set; } = null!;
     }
 }

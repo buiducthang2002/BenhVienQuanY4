@@ -6,8 +6,8 @@ namespace APP.Models
 {
     [Table("ketquacls")]
     public class KetQuaCLS
-	{
-         [Key]
+    {
+        [Key]
         public string? makcb { get; set; }
         public string? barcode { get; set; }
         public int mahh { get; set; }

@@ -5,10 +5,10 @@ namespace APP.Models
 {
     [Table("dmhinhthucdenkham")]
     public class DmHinhthucdenkham
-	{
-		public int mahtd { set; get; }
-		public string tenhtd { set; get; }
-		
-	}
+    {
+        public int mahtd { set; get; }
+        public string? tenhtd { set; get; }
+
+    }
 }
 

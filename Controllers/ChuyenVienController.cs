@@ -62,7 +62,7 @@ namespace APP.Controllers
 
             if (result == null)
             {
-                ViewBag.Message = "Không tìm thấy bệnh án với Mã KCB này !!!";
+                ViewBag.Message = "Không tìm thấy chuyển viện với Mã KCB này !!!";
                 ViewBag.TotalRecords = 0;
                 return View("Index", new List<ChuyenVien>());
             }
@@ -81,7 +81,7 @@ namespace APP.Controllers
             {
                 if (makcb == null || makcb.Length == 0)
                 {
-                    TempData["Error"] = "Vui lòng chọn ít nhất một bệnh án để hủy ký!";
+                    TempData["Error"] = "Vui lòng chọn ít nhất một chuyển viện để hủy ký!";
                     return RedirectToAction("Index");
                 }
 
@@ -107,7 +107,7 @@ namespace APP.Controllers
                 }
                 else
                 {
-                    TempData["Error"] = "❌ Không tìm thấy bệnh án nào để hủy ký!";
+                    TempData["Error"] = "❌ Không tìm thấy chuyển viện nào để hủy ký!";
                 }
             }
             catch (Exception ex)
@@ -126,13 +126,13 @@ namespace APP.Controllers
                 var record = await _context.ChuyenVien.FirstOrDefaultAsync(k => k.makcb == makcb);
                 if (record == null)
                 {
-                    TempData["Error"] = $"Không tìm thấy bệnh án {makcb}!";
+                    TempData["Error"] = $"Không tìm thấy chuyển viện {makcb}!";
                     return RedirectToAction("Index");
                 }
 
                 if (string.IsNullOrEmpty(record.daky))
                 {
-                    TempData["Error"] = "Bệnh án chưa có chữ ký nào!";
+                    TempData["Error"] = "Chuyển viện chưa có chữ ký nào!";
                     return RedirectToAction("Index");
                 }
 
@@ -156,7 +156,7 @@ namespace APP.Controllers
                 record.daky = signatures.Count == 0 ? null : string.Join(";", signatures);
 
                 await _context.SaveChangesAsync();
-                TempData["Success"] = $"✅ Đã hủy chữ ký #{signIndex + 1} ({signUser}) của bệnh án {makcb}!";
+                TempData["Success"] = $"✅ Đã hủy chữ ký #{signIndex + 1} ({signUser}) của chuyển viện {makcb}!";
             }
             catch (Exception ex)
             {

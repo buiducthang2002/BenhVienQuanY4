@@ -17,7 +17,7 @@ namespace APP.Controllers
             _context = context;
         }
 
-  
+
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteSelected(long[] selectedIds)
@@ -79,7 +79,7 @@ namespace APP.Controllers
                             ngayketthucmo = pt.ngayketthucmo,
                             chandoantruocmo = pt.chandoantruocmo,
                             chandoansaumo = pt.chandoansaumo,
-                            dienbien =pt.dienbien,
+                            dienbien = pt.dienbien,
                             ailam = pt.ailam,
                             bac = pt.bac,
                             daky = pt.daky,

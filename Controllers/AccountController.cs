@@ -41,7 +41,7 @@ namespace APP.Controllers
 
             if (model.matkhau.Trim() != "1")
             {
-           
+
                 ModelState.AddModelError(string.Empty, " mật khẩu không đúng");
                 return View(model);
             }

@@ -8,16 +8,10 @@ namespace APP.Models
     public class ChuyenKhoa
     {
         [Key]
-                   
-        public string makcb { get; set; } = string.Empty;  // mã KCB (string)
-       
+        public string makcb { get; set; } = string.Empty;
 
         // Navigation Properties
-       
         public virtual DmPhong? PhongGoc { get; set; }
-
-     
         public virtual DmPhong? PhongChuyen { get; set; }
     }
 }
-

@@ -62,12 +62,12 @@ namespace APP.Controllers
                     where ttct.mathanhtoan == thanhtoan.mathanhtoan
                     select new ThanhToanViewModel
                     {
-                        sophieu       = thanhtoan.sophieu,
-                        makcb         = thanhtoan.makcb,
-                        ngay          = thanhtoan.ngay,
-                        mathanhtoan   = thanhtoan.mathanhtoan,
+                        sophieu = thanhtoan.sophieu,
+                        makcb = thanhtoan.makcb,
+                        ngay = thanhtoan.ngay,
+                        mathanhtoan = thanhtoan.mathanhtoan,
                         mathanhtoanct = ttct.mathanhtoanct,
-                        thanhtien     = ttct.thanhtien
+                        thanhtien = ttct.thanhtien
                     }
                 ).AsNoTracking().ToListAsync();
 
@@ -77,7 +77,7 @@ namespace APP.Controllers
                     return View("Index", new List<ThanhToanViewModel>());
                 }
 
-              
+
                 ViewBag.SoPhieu = sophieu;
                 return View("Index", result);
             }

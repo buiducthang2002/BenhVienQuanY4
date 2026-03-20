@@ -11,12 +11,12 @@ namespace APP.Controllers
 {
     public class KySoController : Controller
     {
-        
+
         private readonly AppDbContext _context;
 
         public KySoController(AppDbContext context)
         {
-            _context = context; 
+            _context = context;
         }
 
 
@@ -43,7 +43,7 @@ namespace APP.Controllers
             return View("Index", new List<KySo> { result });
         }
 
- 
+
         [HttpPost]
         public async Task<IActionResult> CancelSign(string[] makcb)
         {
@@ -57,7 +57,7 @@ namespace APP.Controllers
 
                 int successCount = 0;
                 var updatedRecords = new List<string>();
-                
+
                 foreach (var id in makcb)
                 {
                     var record = await _context.KySo.FirstOrDefaultAsync(b => b.makcb == id);
@@ -86,7 +86,7 @@ namespace APP.Controllers
             {
                 TempData["Error"] = $"Lỗi khi hủy ký: {ex.Message}";
             }
-            
+
 
             return RedirectToAction("Index", new { t = DateTime.Now.Ticks });
         }

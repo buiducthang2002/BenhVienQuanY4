@@ -6,17 +6,17 @@ namespace APP.Models
 {
     [Table("dangkyravien")]
     public class KySo
-	{
+    {
         [Key]
         [StringLength(50)]
-       public string makcb { get; set; } = string.Empty;
-       public DateTime? ngay { get; set; }
-       public int? makk { get; set; }      
-       public double? songaydieutri { get; set; }
-       public double? songay285 { get; set; }
-       public string? phuongphapdieutri { get; set; }
-       public string? ailam { get; set; }
-       public string? daky { get; set; }
+        public string makcb { get; set; } = string.Empty;
+        public DateTime? ngay { get; set; }
+        public int? makk { get; set; }
+        public double? songaydieutri { get; set; }
+        public double? songay285 { get; set; }
+        public string? phuongphapdieutri { get; set; }
+        public string? ailam { get; set; }
+        public string? daky { get; set; }
     }
 }
-    
+

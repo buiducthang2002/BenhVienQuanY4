@@ -17,7 +17,7 @@ namespace APP.Controllers
             _context = context;
         }
 
-   
+
         [HttpGet]
         public async Task<IActionResult> Index(int page = 1, int pageSize = 50)
         {
@@ -28,13 +28,13 @@ namespace APP.Controllers
 
             var query = from kq in _context.KetQuaCLS.AsNoTracking()
                         join dv in _context.DMDichVu on kq.mahh equals dv.mahh
-                        join dk in _context.DangKy on kq.makcb equals dk.makcb      
+                        join dk in _context.DangKy on kq.makcb equals dk.makcb
                         select new CanLamSang
                         {
                             mahh = kq.mahh,
                             tendichvu = dv.tendichvu ?? "",
                             makcb = kq.makcb ?? "",
-                            hoten = dk.hoten?? "",
+                            hoten = dk.hoten ?? "",
                             barcode = kq.barcode ?? "",
                             manvlam = kq.manvlam ?? 0,
                             ketluan = kq.ketluan ?? "",
@@ -66,7 +66,7 @@ namespace APP.Controllers
             return View(list);
         }
 
-     
+
         [HttpPost]
         public async Task<IActionResult> Search(string makcb)
         {
@@ -102,7 +102,7 @@ namespace APP.Controllers
             ViewBag.TotalPages = 1;
             ViewBag.PageSize = list.Count;
 
-            return View("Index", list); 
+            return View("Index", list);
         }
 
 

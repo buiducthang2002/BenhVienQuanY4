@@ -105,7 +105,7 @@ namespace APP.Controllers
             ViewBag.PageSize = pageSize;
             ViewBag.TotalPages = totalPages;
             ViewBag.TotalRecords = totalRecords;
-            
+
             return View(list);
         }
 
@@ -180,7 +180,7 @@ namespace APP.Controllers
             // Cập nhật tất cả các trường từ form
             existing.hoten = model.hoten;
             existing.ngaysinh = model.ngaysinh;
-            
+
             // Xử lý maphai - bắt buộc phải có giá trị (1 hoặc 2)
             if (!model.maphai.HasValue || (model.maphai.Value != 1 && model.maphai.Value != 2))
             {
@@ -188,11 +188,11 @@ namespace APP.Controllers
                 return View(model);
             }
             existing.maphai = model.maphai.Value;
-            
+
             existing.socmnd = model.socmnd;
             existing.manghenghiep = model.manghenghiep;
             existing.madoituong = model.madoituong;
-            
+
             // Xử lý các trường int? - chuyển 0 hoặc null thành null và validate foreign key
             if (model.maphong.HasValue && model.maphong.Value > 0)
             {
@@ -314,14 +314,14 @@ namespace APP.Controllers
             {
                 existing.idloaihinhkcb = null;
             }
-            
+
             existing.dienthoai = model.dienthoai;
             existing.sobhxh = model.sobhxh;
             existing.lydovv130 = model.lydovv130;
             existing.noilamviec = model.noilamviec;
             existing.sonha = model.sonha;
             existing.thonpho = model.thonpho;
-            
+
             // Đồng bộ maphong và makk sang bảng khambenh
             var khamBenhRecord = await _context.khambenh.FirstOrDefaultAsync(kb => kb.makcb == model.makcb);
             if (khamBenhRecord != null)
@@ -341,7 +341,7 @@ namespace APP.Controllers
                 if (dbEx.InnerException != null)
                 {
                     errorMessage += $" | Chi tiết: {dbEx.InnerException.Message}";
-                    
+
                     // Kiểm tra lỗi SQL Server cụ thể
                     if (dbEx.InnerException is SqlException sqlEx)
                     {
@@ -356,7 +356,7 @@ namespace APP.Controllers
                         }
                     }
                 }
-                
+
                 TempData["Error"] = $"Lỗi khi lưu dữ liệu: {errorMessage}";
                 await LoadDropdownListsAsync(model.maphong, model.makk, model.machucvu, model.macapbac, model.matt, model.mapx, model.idloaihinhkcb, model.mahtd);
                 return View(model);
@@ -419,7 +419,7 @@ namespace APP.Controllers
             return RedirectToAction("Index");
         }
 
-        
+
 
     }
 }

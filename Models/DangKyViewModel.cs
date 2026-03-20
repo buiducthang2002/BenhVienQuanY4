@@ -4,7 +4,7 @@ namespace APP.Models
 {
     public class DangKyViewModel
     {
-        public string makcb { get; set; }
+        public string? makcb { get; set; }
         public string? hoten { get; set; }
         public DateTime? ngaysinh { get; set; }
         public int? maphai { get; set; }
@@ -23,7 +23,7 @@ namespace APP.Models
         public int? manv { get; set; }
         public int? madonvi { get; set; }
 
-        
+
 
         public string? tenphong { get; set; }
         public string? tenkk { get; set; }
@@ -33,5 +33,5 @@ namespace APP.Models
         public string? tentinh { get; set; }
         public string? diengiai { get; set; }
         public string? tenhtd { get; set; }
-        }
     }
+}

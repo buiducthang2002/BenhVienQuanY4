@@ -4,7 +4,7 @@ namespace APP.Models
 {
     public class DonThuocViewModel
     {
-        public string makcb { get; set; }
+        public string? makcb { get; set; }
         public int madonthuoc { get; set; }
         public long madonthuocct { get; set; }
         public decimal soluong { get; set; }

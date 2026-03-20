@@ -6,9 +6,9 @@ namespace APP.Models
 {
     [Table("donthuoc")]
     public class DonThuoc
-	{
+    {
         [Key]
-        public string makcb { get; set; }
+        public string? makcb { get; set; }
         public int madonthuoc { get; set; }
     }
 }

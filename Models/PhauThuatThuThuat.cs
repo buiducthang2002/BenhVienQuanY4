@@ -21,12 +21,12 @@ namespace APP.Models
         [Key, Column(Order = 1)]
         public long maphauthuat { get; set; }
         public string? bac { get; set; }
-        public int makk{get;set;}
-        public int maphong{get;set;}
-        public int mathanhtoan{get;set;}
-        
+        public int makk { get; set; }
+        public int maphong { get; set; }
+        public int mathanhtoan { get; set; }
 
-        
+
+
 
         [Column("ngaybatdaumo")]
         public DateTime? ngaybatdaumo { get; set; }
@@ -41,14 +41,14 @@ namespace APP.Models
         public string? chandoansaumo { get; set; }
         public string? ailam { get; set; }
         [Column("dienbien", TypeName = "nvarchar(1000)")]
-        public string? dienbien{get;set;}
+        public string? dienbien { get; set; }
 
-      
+
 
         [Column("daky", TypeName = "nvarchar(max)")]
         public string? daky { get; set; }
 
-        
+
     }
 }
 

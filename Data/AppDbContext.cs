@@ -26,9 +26,9 @@ namespace APP.Data
                     return;
                 }
             }
-          optionsBuilder.UseSqlServer("Server=192.168.0.26;Database=QY42026V6;User Id=sa;Password=123@vtt;TrustServerCertificate=True;");
+            optionsBuilder.UseSqlServer("Server=192.168.0.26;Database=QY42026V6;User Id=sa;Password=123@vtt;TrustServerCertificate=True;");
         }
-        
+
 
 
 
@@ -45,7 +45,7 @@ namespace APP.Data
 
             });
 
-                
+
 
             modelBuilder.Entity<KySo>(entity =>
             {
@@ -60,7 +60,7 @@ namespace APP.Data
                 entity.HasKey(c => c.makcb);
                 entity.Property(c => c.makcb).HasMaxLength(50);
             });
-                
+
             modelBuilder.Entity<DmCapbac>().HasNoKey();
             modelBuilder.Entity<DmChucvu>().HasNoKey();
             modelBuilder.Entity<DmKhoa>().HasNoKey();
@@ -75,7 +75,7 @@ namespace APP.Data
                 entity.HasNoKey();
                 entity.Property(e => e.makk).HasColumnName("makk");
                 entity.Property(e => e.tenkk).HasColumnName("tenkk");
-                entity.Ignore(e => e.maphong); 
+                entity.Ignore(e => e.maphong);
             });
 
             modelBuilder.Entity<DmPhuongxa>(entity =>
@@ -135,35 +135,35 @@ namespace APP.Data
             });
         }
 
-        public DbSet<NguoiDung> NguoiDung { get; set; }
-        public DbSet<BenhAn> BenhAn { get; set; }
-        public DbSet<DMDichVu> DMDichVu { get; set; }
-        public DbSet<KetQuaCLS> KetQuaCLS { get; set; }
-        public DbSet<PhauThuatThuThuat> PhauThuatThuThuat { get; set; }
-        public DbSet<DangKy> DangKy { get; set; }
-        public DbSet<khambenh> khambenh { get; set; }
-        public DbSet<KySo> KySo { get; set; }
+        public DbSet<NguoiDung> NguoiDung { get; set; } = null!;
+        public DbSet<BenhAn> BenhAn { get; set; } = null!;
+        public DbSet<DMDichVu> DMDichVu { get; set; } = null!;
+        public DbSet<KetQuaCLS> KetQuaCLS { get; set; } = null!;
+        public DbSet<PhauThuatThuThuat> PhauThuatThuThuat { get; set; } = null!;
+        public DbSet<DangKy> DangKy { get; set; } = null!;
+        public DbSet<khambenh> khambenh { get; set; } = null!;
+        public DbSet<KySo> KySo { get; set; } = null!;
 
         // Bảng nghiệp vụ
-        public DbSet<ChuyenVien> ChuyenVien { get; set; }
-        public DbSet<ChuyenKhoa> chuyenkhoa { get; set; }
-        public DbSet<ThanhToan> ThanhToan { get; set; }
-        public DbSet<ThanhToanCT> ThanhToanCT { get; set; }
-        public DbSet<ThuChi> ThuChi { get; set; }
-        public DbSet<ThuChiCT> ThuChiCT { get; set; }
-        public DbSet<DonThuoc> DonThuoc { get; set; }
-        public DbSet<DonThuocCT> DonThuocCT { get; set; }
-       
-        
+        public DbSet<ChuyenVien> ChuyenVien { get; set; } = null!;
+        public DbSet<ChuyenKhoa> chuyenkhoa { get; set; } = null!;
+        public DbSet<ThanhToan> ThanhToan { get; set; } = null!;
+        public DbSet<ThanhToanCT> ThanhToanCT { get; set; } = null!;
+        public DbSet<ThuChi> ThuChi { get; set; } = null!;
+        public DbSet<ThuChiCT> ThuChiCT { get; set; } = null!;
+        public DbSet<DonThuoc> DonThuoc { get; set; } = null!;
+        public DbSet<DonThuocCT> DonThuocCT { get; set; } = null!;
+
+
         // Danh mục
-        public DbSet<DmKhoa> DmKhoa { get; set; }
-        public DbSet<DmChucvu> DmChucvu { get; set; }
-        public DbSet<DmCapbac> DmCapbac { get; set; }
-        public DbSet<DmPhuongxa> DmPhuongxa { get; set; }
-        public DbSet<DmTt> DmTt { get; set; }
-        public DbSet<DmDangkyloaihinhkcb> DmDangkyloaihinhkcb { get; set; }
-        public DbSet<DmHinhthucdenkham> DmHinhthucdenkham { get; set; }
-        public DbSet<DmPhong> DmPhong { get; set; }
+        public DbSet<DmKhoa> DmKhoa { get; set; } = null!;
+        public DbSet<DmChucvu> DmChucvu { get; set; } = null!;
+        public DbSet<DmCapbac> DmCapbac { get; set; } = null!;
+        public DbSet<DmPhuongxa> DmPhuongxa { get; set; } = null!;
+        public DbSet<DmTt> DmTt { get; set; } = null!;
+        public DbSet<DmDangkyloaihinhkcb> DmDangkyloaihinhkcb { get; set; } = null!;
+        public DbSet<DmHinhthucdenkham> DmHinhthucdenkham { get; set; } = null!;
+        public DbSet<DmPhong> DmPhong { get; set; } = null!;
 
     }
 }

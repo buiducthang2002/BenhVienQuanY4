@@ -5,9 +5,9 @@ namespace APP.Models
 {
     [Table("dmcapbac")]
     public class DmCapbac
-	{
+    {
         public int? macapbac { get; set; }
-        public string tencapbac { get; set; }
-	}
+        public string? tencapbac { get; set; }
+    }
 }
 

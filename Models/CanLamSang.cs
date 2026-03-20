@@ -4,8 +4,8 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace APP.Models
 {
-	public class CanLamSang
-	{
+    public class CanLamSang
+    {
         public int mahh { get; set; }
         public string? tendichvu { get; set; }
         public string? makcb { get; set; }

@@ -13,11 +13,11 @@ namespace APP.Models
 
         [Column("makcb")]
         [StringLength(15)]
-        public string makcb { get; set; }
+        public string? makcb { get; set; }
 
         [Column("sophieu")]
         [StringLength(50)]
-        public string sophieu { get; set; }
+        public string? sophieu { get; set; }
 
         [Column("ngay")]
         public DateTime ngay { get; set; }
