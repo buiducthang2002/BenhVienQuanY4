@@ -90,18 +90,12 @@ namespace APP.Controllers
         }
 
         // POST: ThuChi/Delete
-        // Bước 3→8: Người dùng chọn 1 mathanhtoanct → xóa trong transaction
         [HttpPost]
         public async Task<IActionResult> Delete(int mathanhtoan, long mathanhtoanct, string sophieu)
         {
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
-                _logger.LogInformation(
-                    "Bắt đầu xóa thu chi: mathanhtoan={mathanhtoan}, mathanhtoanct={mathanhtoanct}",
-                    mathanhtoan, mathanhtoanct);
-
-                // Bước 5: DELETE FROM thuchict
                 var rows1 = await _context.Database.ExecuteSqlRawAsync(@"
                     DELETE FROM thuchict
                     WHERE mathanhtoan = @mathanhtoan
@@ -109,9 +103,6 @@ namespace APP.Controllers
                     new SqlParameter("@mathanhtoan", mathanhtoan),
                     new SqlParameter("@mathanhtoanct", mathanhtoanct));
 
-                _logger.LogInformation("Đã xóa {rows} bản ghi từ thuchict", rows1);
-
-                // Bước 6: DELETE FROM thanhtoanct
                 var rows2 = await _context.Database.ExecuteSqlRawAsync(@"
                     DELETE FROM thanhtoanct
                     WHERE mathanhtoan = @mathanhtoan
@@ -119,22 +110,58 @@ namespace APP.Controllers
                     new SqlParameter("@mathanhtoan", mathanhtoan),
                     new SqlParameter("@mathanhtoanct", mathanhtoanct));
 
-                _logger.LogInformation("Đã xóa {rows} bản ghi từ thanhtoanct", rows2);
-
-                // Bước 7: COMMIT
                 await transaction.CommitAsync();
-
                 TempData["Success"] = $"✅ Xóa thành công! thuchict: {rows1} bản ghi, thanhtoanct: {rows2} bản ghi";
-                _logger.LogInformation("Xóa thu chi thành công");
-
                 return RedirectToAction("Index");
             }
             catch (Exception ex)
             {
-                // Bước 8: ROLLBACK
                 await transaction.RollbackAsync();
                 _logger.LogError(ex, "Lỗi khi xóa thu chi");
+                TempData["Error"] = $"❌ Lỗi khi xóa: {ex.Message}";
+                return RedirectToAction("Index");
+            }
+        }
 
+        // POST: ThuChi/DeleteMultiple
+        [HttpPost]
+        public async Task<IActionResult> DeleteMultiple(int mathanhtoan, List<long> mathanhtoanct, string sophieu)
+        {
+            if (mathanhtoanct == null || mathanhtoanct.Count == 0)
+            {
+                TempData["Error"] = "Vui lòng chọn ít nhất một bản ghi để xóa!";
+                return RedirectToAction("Index");
+            }
+
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                int totalRows1 = 0, totalRows2 = 0;
+                foreach (var id in mathanhtoanct)
+                {
+                    totalRows1 += await _context.Database.ExecuteSqlRawAsync(@"
+                        DELETE FROM thuchict
+                        WHERE mathanhtoan = @mathanhtoan
+                          AND mathanhtoanct = @mathanhtoanct",
+                        new SqlParameter("@mathanhtoan", mathanhtoan),
+                        new SqlParameter("@mathanhtoanct", id));
+
+                    totalRows2 += await _context.Database.ExecuteSqlRawAsync(@"
+                        DELETE FROM thanhtoanct
+                        WHERE mathanhtoan = @mathanhtoan
+                          AND mathanhtoanct = @mathanhtoanct",
+                        new SqlParameter("@mathanhtoan", mathanhtoan),
+                        new SqlParameter("@mathanhtoanct", id));
+                }
+
+                await transaction.CommitAsync();
+                TempData["Success"] = $"✅ Xóa thành công {mathanhtoanct.Count} bản ghi! thuchict: {totalRows1}, thanhtoanct: {totalRows2}";
+                return RedirectToAction("Index");
+            }
+            catch (Exception ex)
+            {
+                await transaction.RollbackAsync();
+                _logger.LogError(ex, "Lỗi khi xóa nhiều thu chi");
                 TempData["Error"] = $"❌ Lỗi khi xóa: {ex.Message}";
                 return RedirectToAction("Index");
             }

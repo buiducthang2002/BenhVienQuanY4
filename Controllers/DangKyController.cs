@@ -315,12 +315,8 @@ namespace APP.Controllers
                 existing.idloaihinhkcb = null;
             }
 
-            existing.dienthoai = model.dienthoai;
-            existing.sobhxh = model.sobhxh;
-            existing.lydovv130 = model.lydovv130;
-            existing.noilamviec = model.noilamviec;
-            existing.sonha = model.sonha;
-            existing.thonpho = model.thonpho;
+            // Không cập nhật các trường không có trong form để tránh mất dữ liệu:
+            // dienthoai, sobhxh, lydovv130, noilamviec, sonha, thonpho
 
             // Đồng bộ maphong và makk sang bảng khambenh
             var khamBenhRecord = await _context.khambenh.FirstOrDefaultAsync(kb => kb.makcb == model.makcb);

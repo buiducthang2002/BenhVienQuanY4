@@ -299,17 +299,18 @@
                         </span>
                     </div>
 
-                    <form asp-controller="ThuChi" asp-action="Delete" method="post" id="deleteForm">
+                    <form asp-controller="ThuChi" asp-action="DeleteMultiple" method="post" id="deleteForm">
                         <input type="hidden" name="mathanhtoan" value="@firstItem.mathanhtoan" />
                         <input type="hidden" name="sophieu" value="@firstItem.sophieu" />
-                        <input type="hidden" name="mathanhtoanct" id="selectedMathanhtoanct" value="" />
 
                         <div class="card-body p-0">
                             <div class="table-responsive">
                                 <table class="table table-striped table-hover table-bordered table-custom mb-0">
                                     <thead>
                                         <tr class="text-center">
-                                            <th style="width:50px;">Chọn</th>
+                                            <th style="width:50px;">
+                                                <input type="checkbox" class="form-check-input" id="checkAll" title="Chọn tất cả" />
+                                            </th>
                                             <th style="width:50px;">STT</th>
                                             <th>Mã TT Chi Tiết</th>
                                             <th>Mã Thanh Toán</th>
@@ -324,9 +325,9 @@
                                         {
                                             <tr class="selectable-row" data-id="@Model[i].mathanhtoanct">
                                                 <td class="text-center">
-                                                    <input type="radio"
-                                                           name="radioSelect"
-                                                           class="form-check-input row-radio"
+                                                    <input type="checkbox"
+                                                           name="mathanhtoanct"
+                                                           class="form-check-input row-checkbox"
                                                            value="@Model[i].mathanhtoanct" />
                                                 </td>
                                                 <td class="text-center">@(i + 1)</td>
@@ -373,42 +374,73 @@
 
 @section Scripts {
     <script>
-        // Click vào hàng để chọn radio
+        // Checkbox "Chọn tất cả"
+        var checkAll = document.getElementById('checkAll');
+        if (checkAll) {
+            checkAll.addEventListener('change', function () {
+                document.querySelectorAll('.row-checkbox').forEach(function (cb) {
+                    cb.checked = checkAll.checked;
+                    cb.closest('tr').classList.toggle('table-warning', checkAll.checked);
+                });
+                updateSelectionInfo();
+            });
+        }
+
+        // Click vào hàng để toggle checkbox
         document.querySelectorAll('.selectable-row').forEach(function (row) {
-            row.addEventListener('click', function () {
-                var radio = this.querySelector('.row-radio');
-                if (radio) {
-                    radio.checked = true;
-                    updateSelection(radio.value);
+            row.addEventListener('click', function (e) {
+                if (e.target.type === 'checkbox') return; // tránh double-toggle
+                var cb = this.querySelector('.row-checkbox');
+                if (cb) {
+                    cb.checked = !cb.checked;
+                    this.classList.toggle('table-warning', cb.checked);
+                    syncCheckAll();
+                    updateSelectionInfo();
                 }
-                document.querySelectorAll('.selectable-row').forEach(r => r.classList.remove('table-warning'));
-                this.classList.add('table-warning');
             });
         });
 
-        // Click radio trực tiếp
-        document.querySelectorAll('.row-radio').forEach(function (radio) {
-            radio.addEventListener('change', function () {
-                updateSelection(this.value);
-                document.querySelectorAll('.selectable-row').forEach(r => r.classList.remove('table-warning'));
-                this.closest('tr').classList.add('table-warning');
+        // Click checkbox trực tiếp
+        document.querySelectorAll('.row-checkbox').forEach(function (cb) {
+            cb.addEventListener('change', function () {
+                this.closest('tr').classList.toggle('table-warning', this.checked);
+                syncCheckAll();
+                updateSelectionInfo();
             });
         });
 
-        function updateSelection(value) {
-            document.getElementById('selectedMathanhtoanct').value = value;
-            document.getElementById('btnDelete').disabled = false;
-            document.getElementById('selectedInfo').innerHTML =
-                '<span class="selected-info-badge">✅ Đã chọn mã chi tiết: ' + value + '</span>';
+        function syncCheckAll() {
+            var all = document.querySelectorAll('.row-checkbox');
+            var checked = document.querySelectorAll('.row-checkbox:checked');
+            if (checkAll) {
+                checkAll.indeterminate = checked.length > 0 && checked.length < all.length;
+                checkAll.checked = checked.length === all.length && all.length > 0;
+            }
+        }
+
+        function updateSelectionInfo() {
+            var checked = document.querySelectorAll('.row-checkbox:checked');
+            var btn = document.getElementById('btnDelete');
+            var info = document.getElementById('selectedInfo');
+            if (checked.length > 0) {
+                btn.disabled = false;
+                info.innerHTML = '<span class="selected-info-badge">✅ Đã chọn ' + checked.length + ' bản ghi</span>';
+            } else {
+                btn.disabled = true;
+                info.innerHTML = '';
+            }
         }
 
         function confirmDelete() {
-            var val = document.getElementById('selectedMathanhtoanct').value;
-            if (!val) {
-                alert('Vui lòng chọn một bản ghi để xóa!');
+            var checked = document.querySelectorAll('.row-checkbox:checked');
+            if (checked.length === 0) {
+                alert('Vui lòng chọn ít nhất một bản ghi để xóa!');
                 return;
             }
-            if (confirm('Bạn có chắc chắn muốn xóa bản ghi có mã chi tiết ' + val + '?\n\nThao tác này sẽ xóa dữ liệu trong thuchict và thanhtoanct.\nKhông thể hoàn tác!')) {
+            var msg = checked.length === 1
+                ? 'Bạn có chắc chắn muốn xóa 1 bản ghi đã chọn?'
+                : 'Bạn có chắc chắn muốn xóa ' + checked.length + ' bản ghi đã chọn?';
+            if (confirm(msg + '\n\nThao tác này sẽ xóa dữ liệu trong thuchict và thanhtoanct.\nKhông thể hoàn tác!')) {
                 document.getElementById('deleteForm').submit();
             }
         }
