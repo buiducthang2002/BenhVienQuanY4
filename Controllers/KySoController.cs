@@ -26,7 +26,7 @@ namespace APP.Controllers
         {
             var result = await _context.KySo
                 .AsNoTracking()
-                .Where(b => b.makcb == makcb)
+                .Where(b => b.makcb == makcb || b.makcb.EndsWith(makcb))
                 .FirstOrDefaultAsync();
 
             if (result == null)

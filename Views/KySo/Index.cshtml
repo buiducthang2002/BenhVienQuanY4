@@ -12,7 +12,7 @@
     @* Inline top alerts removed; will show top-right toasts instead *@
 
     <form asp-action="Search" method="post" class="d-flex justify-content-center align-items-center mb-3">
-        <input type="text" name="makcb" class="form-control search-box me-2" placeholder="Nhập Mã KCB..." />
+        <input type="text" name="makcb" class="form-control search-box me-2" placeholder="Nhập Mã KCB hoặc 5 số cuối..." />
         <button type="submit" class="btn btn-danger me-2">🔍 Tìm kiếm</button>
         <button type="submit" form="cancelForm" class="btn btn-outline-light border-danger text-danger"
                 onclick="return confirm('Bạn có chắc muốn hủy các bệnh án đã chọn không?');">
@@ -52,18 +52,6 @@
                       
 
                         <td>
-                            <button type="button" class="btn-icon btn-icon-edit"
-                                    data-bs-toggle="modal"
-                                    data-bs-target="#editModal"
-                                    data-makcb="@item.makcb"
-                                    data-songaydieutri="@item.songaydieutri"
-                                    data-songay285="@item.songay285"
-                                    data-phuongphap="@item.phuongphapdieutri"
-                                    title="Sửa thông tin">
-                                ✏️
-                            </button>
-                        </td>
-                        <td>
                             @if (!string.IsNullOrEmpty(item.daky))
                             {
                                 <button type="button" class="btn-icon btn-icon-sign"
@@ -79,6 +67,18 @@
                             {
                                 <span class="text-muted small">—</span>
                             }
+                        </td>
+                        <td>
+                            <button type="button" class="btn-icon btn-icon-edit"
+                                    data-bs-toggle="modal"
+                                    data-bs-target="#editModal"
+                                    data-makcb="@item.makcb"
+                                    data-songaydieutri="@item.songaydieutri"
+                                    data-songay285="@item.songay285"
+                                    data-phuongphap="@item.phuongphapdieutri"
+                                    title="Sửa thông tin">
+                                ✏️
+                            </button>
                         </td>
                         <td>
                             <input type="checkbox" name="makcb" value="@item.makcb" class="form-check-input" />
