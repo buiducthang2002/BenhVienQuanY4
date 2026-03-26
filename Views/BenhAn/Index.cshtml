@@ -23,6 +23,11 @@
         </div>
     }
 
+    @if (ViewBag.Message != null)
+    {
+        <div class="alert alert-warning text-center">@ViewBag.Message</div>
+    }
+
     <form asp-action="Search" method="post" class="d-flex justify-content-center align-items-center mb-3">
         <input type="text" name="makcb" class="form-control search-box me-2" placeholder="Nhập Mã KCB..." />
         <button type="submit" class="btn btn-danger">🔍 Tìm kiếm</button>

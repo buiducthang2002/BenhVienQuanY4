@@ -23,10 +23,17 @@ namespace APP.Controllers
         [HttpPost]
         public async Task<IActionResult> Search(string makcb)
         {
+            if (string.IsNullOrWhiteSpace(makcb))
+                return RedirectToAction("Index");
+
             var result = await _context.BenhAn
                 .AsNoTracking()
-                .Where(b => b.makcb == makcb)
+                .Where(b => b.makcb == makcb || (b.makcb != null && b.makcb.EndsWith(makcb)))  // makcb guaranteed non-empty (checked above)
                 .FirstOrDefaultAsync();
+
+            ViewBag.CurrentPage = 1;
+            ViewBag.TotalPages = 1;
+            ViewBag.PageSize = 1;
 
             if (result == null)
             {
@@ -36,9 +43,6 @@ namespace APP.Controllers
             }
 
             ViewBag.TotalRecords = 1;
-            ViewBag.CurrentPage = 1;
-            ViewBag.TotalPages = 1;
-            ViewBag.PageSize = 1;
             return View("Index", new List<BenhAn> { result });
         }
 
@@ -48,7 +52,9 @@ namespace APP.Controllers
         {
             try
             {
-                var record = await _context.BenhAn.FirstOrDefaultAsync(b => b.makcb == makcb);
+                var record = string.IsNullOrEmpty(makcb)
+                    ? null
+                    : await _context.BenhAn.FirstOrDefaultAsync(b => b.makcb == makcb || (b.makcb != null && b.makcb.EndsWith(makcb)));
                 if (record != null)
                 {
                     record.daky = null;
@@ -74,7 +80,9 @@ namespace APP.Controllers
         {
             try
             {
-                var record = await _context.BenhAn.FirstOrDefaultAsync(b => b.makcb == makcb);
+                var record = string.IsNullOrEmpty(makcb)
+                    ? null
+                    : await _context.BenhAn.FirstOrDefaultAsync(b => b.makcb == makcb || (b.makcb != null && b.makcb.EndsWith(makcb)));
                 if (record == null)
                 {
                     TempData["Error"] = $"Không tìm thấy bệnh án {makcb}!";
@@ -135,7 +143,9 @@ namespace APP.Controllers
         {
             try
             {
-                var record = await _context.BenhAn.FirstOrDefaultAsync(b => b.makcb == makcb);
+                var record = string.IsNullOrEmpty(makcb)
+                    ? null
+                    : await _context.BenhAn.FirstOrDefaultAsync(b => b.makcb == makcb || (b.makcb != null && b.makcb.EndsWith(makcb)));
                 if (record == null)
                 {
                     TempData["Error"] = $"Không tìm thấy bệnh án {makcb}!";

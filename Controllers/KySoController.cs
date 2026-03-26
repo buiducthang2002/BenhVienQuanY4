@@ -60,7 +60,7 @@ namespace APP.Controllers
 
                 foreach (var id in makcb)
                 {
-                    var record = await _context.KySo.FirstOrDefaultAsync(b => b.makcb == id);
+                    var record = await _context.KySo.FirstOrDefaultAsync(b => b.makcb == id || b.makcb.EndsWith(id));
                     if (record != null)
                     {
                         // Debug: Log trước khi update
@@ -96,7 +96,7 @@ namespace APP.Controllers
         {
             try
             {
-                var record = await _context.KySo.FirstOrDefaultAsync(k => k.makcb == makcb);
+                var record = await _context.KySo.FirstOrDefaultAsync(k => k.makcb == makcb || k.makcb.EndsWith(makcb));
                 if (record == null)
                 {
                     TempData["Error"] = $"Không tìm thấy bệnh án {makcb}!";
@@ -156,7 +156,7 @@ namespace APP.Controllers
         {
             try
             {
-                var record = await _context.KySo.FirstOrDefaultAsync(k => k.makcb == makcb);
+                var record = await _context.KySo.FirstOrDefaultAsync(k => k.makcb == makcb || k.makcb.EndsWith(makcb));
                 if (record == null)
                 {
                     TempData["Error"] = $"Không tìm thấy bệnh án {makcb}!";

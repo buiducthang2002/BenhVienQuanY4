@@ -1,5 +1,12 @@
 @model IEnumerable<APP.Models.DangKyViewModel>
 
+@{
+    int currentPage = ViewBag.CurrentPage ?? 1;
+    int totalPages = ViewBag.TotalPages ?? 1;
+    int totalRecords = ViewBag.TotalRecords ?? 0;
+    int pageSize = ViewBag.PageSize ?? 50;
+}
+
 <div class="container mt-5 text-center">
     <h3 class="fw-bold text-danger mb-4">
         <i class="bi bi-person-vcard"></i> DANH SÁCH ĐĂNG KÝ KHÁM BỆNH
@@ -10,9 +17,9 @@
                class="form-control me-2 search-box"
                placeholder="Nhập mã KCB hoặc họ tên..." />
         <select name="pageSize" class="form-select me-2" style="max-width: 120px;">
-            <option value="25" selected="@(ViewBag.PageSize == 25)">25 dòng</option>
-            <option value="50" selected="@(ViewBag.PageSize == 50)">50 dòng</option>
-            <option value="100" selected="@(ViewBag.PageSize == 100)">100 dòng</option>
+            <option value="25" selected="@(pageSize == 25)">25 dòng</option>
+            <option value="50" selected="@(pageSize == 50)">50 dòng</option>
+            <option value="100" selected="@(pageSize == 100)">100 dòng</option>
         </select>
         <button type="submit" class="btn btn-danger me-2">🔍 Tìm kiếm</button>
         <button type="submit" form="deleteForm" class="btn btn-outline-danger"
@@ -23,34 +30,34 @@
 
     <div class="d-flex justify-content-between align-items-center mb-3">
         <div class="text-muted">
-            Hiển thị @Model.Count() / @ViewBag.TotalRecords bản ghi
+            Hiển thị @Model.Count() / @totalRecords bản ghi
         </div>
         <nav aria-label="Pagination">
             <ul class="pagination mb-0">
-                @if (ViewBag.CurrentPage > 1)
+                @if (currentPage > 1)
                 {
                     <li class="page-item">
-                        <a class="page-link" href="?search=@ViewBag.Search&page=1&pageSize=@ViewBag.PageSize">Đầu</a>
+                        <a class="page-link" href="?search=@ViewBag.Search&page=1&pageSize=@pageSize">Đầu</a>
                     </li>
                     <li class="page-item">
-                        <a class="page-link" href="?search=@ViewBag.Search&page=@(ViewBag.CurrentPage - 1)&pageSize=@ViewBag.PageSize">‹</a>
+                        <a class="page-link" href="?search=@ViewBag.Search&page=@(currentPage - 1)&pageSize=@pageSize">‹</a>
                     </li>
                 }
 
-                @for (int i = Math.Max(1, ViewBag.CurrentPage - 2); i <= Math.Min(ViewBag.TotalPages, ViewBag.CurrentPage + 2); i++)
+                @for (int i = Math.Max(1, currentPage - 2); i <= Math.Min(totalPages, currentPage + 2); i++)
                 {
-                    <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
-                        <a class="page-link" href="?search=@ViewBag.Search&page=@i&pageSize=@ViewBag.PageSize">@i</a>
+                    <li class="page-item @(i == currentPage ? "active" : "")">
+                        <a class="page-link" href="?search=@ViewBag.Search&page=@i&pageSize=@pageSize">@i</a>
                     </li>
                 }
 
-                @if (ViewBag.CurrentPage < ViewBag.TotalPages)
+                @if (currentPage < totalPages)
                 {
                     <li class="page-item">
-                        <a class="page-link" href="?search=@ViewBag.Search&page=@(ViewBag.CurrentPage + 1)&pageSize=@ViewBag.PageSize">›</a>
+                        <a class="page-link" href="?search=@ViewBag.Search&page=@(currentPage + 1)&pageSize=@pageSize">›</a>
                     </li>
                     <li class="page-item">
-                        <a class="page-link" href="?search=@ViewBag.Search&page=@ViewBag.TotalPages&pageSize=@ViewBag.PageSize">Cuối</a>
+                        <a class="page-link" href="?search=@ViewBag.Search&page=@totalPages&pageSize=@pageSize">Cuối</a>
                     </li>
                 }
             </ul>
