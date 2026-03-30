@@ -119,26 +119,24 @@ namespace APP.Controllers
             if (record == null)
                 return NotFound();
 
-            // Load all dropdown lists from cache for better performance
-            var phuongTask = _cache.GetPhuongListAsync();
-            var phongTask = _cache.GetPhongListAsync();
-            var khoaTask = _cache.GetKhoaListAsync();
-            var chucvuTask = _cache.GetChucVuListAsync();
-            var capbacTask = _cache.GetCapBacListAsync();
-            var tinhTask = _cache.GetTinhListAsync();
-            var loaiHinhTask = _cache.GetLoaiHinhListAsync();
-            var hinhThucTask = _cache.GetHinhThucListAsync();
+            // Load all dropdown lists from cache sequentially to avoid DbContext concurrency issues
+            var phuongList = await _cache.GetPhuongListAsync();
+            var phongList = await _cache.GetPhongListAsync();
+            var khoaList = await _cache.GetKhoaListAsync();
+            var chucvuList = await _cache.GetChucVuListAsync();
+            var capbacList = await _cache.GetCapBacListAsync();
+            var tinhList = await _cache.GetTinhListAsync();
+            var loaiHinhList = await _cache.GetLoaiHinhListAsync();
+            var hinhThucList = await _cache.GetHinhThucListAsync();
 
-            await Task.WhenAll(phuongTask, phongTask, khoaTask, chucvuTask, capbacTask, tinhTask, loaiHinhTask, hinhThucTask);
-
-            ViewBag.PhongList = new SelectList(phongTask.Result, "maphong", "tenphong", record.maphong);
-            ViewBag.KhoaList = new SelectList(khoaTask.Result, "makk", "tenkk", record.makk);
-            ViewBag.ChucVuList = new SelectList(chucvuTask.Result, "machucvu", "tenchucvu", record.machucvu);
-            ViewBag.CapBacList = new SelectList(capbacTask.Result, "macapbac", "tencapbac", record.macapbac);
-            ViewBag.TinhList = new SelectList(tinhTask.Result, "matt", "tentinh", record.matt);
-            ViewBag.PhuongList = new SelectList(phuongTask.Result, "mapx", "tenxa", record.mapx);
-            ViewBag.LoaiHinhList = new SelectList(loaiHinhTask.Result, "idloaihinhkcb", "diengiai", record.idloaihinhkcb);
-            ViewBag.HinhThucList = new SelectList(hinhThucTask.Result, "mahtd", "tenhtd", record.mahtd);
+            ViewBag.PhongList = new SelectList(phongList, "maphong", "tenphong", record.maphong);
+            ViewBag.KhoaList = new SelectList(khoaList, "makk", "tenkk", record.makk);
+            ViewBag.ChucVuList = new SelectList(chucvuList, "machucvu", "tenchucvu", record.machucvu);
+            ViewBag.CapBacList = new SelectList(capbacList, "macapbac", "tencapbac", record.macapbac);
+            ViewBag.TinhList = new SelectList(tinhList, "matt", "tentinh", record.matt);
+            ViewBag.PhuongList = new SelectList(phuongList, "mapx", "tenxa", record.mapx);
+            ViewBag.LoaiHinhList = new SelectList(loaiHinhList, "idloaihinhkcb", "diengiai", record.idloaihinhkcb);
+            ViewBag.HinhThucList = new SelectList(hinhThucList, "mahtd", "tenhtd", record.mahtd);
             return View(record);
 
         }
@@ -374,25 +372,23 @@ namespace APP.Controllers
 
         private async Task LoadDropdownListsAsync(int? maphong = null, int? makk = null, int? machucvu = null, int? macapbac = null, int? matt = null, int? mapx = null, int? idloaihinhkcb = null, int? mahtd = null)
         {
-            var phuongTask = _cache.GetPhuongListAsync();
-            var phongTask = _cache.GetPhongListAsync();
-            var khoaTask = _cache.GetKhoaListAsync();
-            var chucvuTask = _cache.GetChucVuListAsync();
-            var capbacTask = _cache.GetCapBacListAsync();
-            var tinhTask = _cache.GetTinhListAsync();
-            var loaiHinhTask = _cache.GetLoaiHinhListAsync();
-            var hinhThucTask = _cache.GetHinhThucListAsync();
+            var phuongList = await _cache.GetPhuongListAsync();
+            var phongList = await _cache.GetPhongListAsync();
+            var khoaList = await _cache.GetKhoaListAsync();
+            var chucvuList = await _cache.GetChucVuListAsync();
+            var capbacList = await _cache.GetCapBacListAsync();
+            var tinhList = await _cache.GetTinhListAsync();
+            var loaiHinhList = await _cache.GetLoaiHinhListAsync();
+            var hinhThucList = await _cache.GetHinhThucListAsync();
 
-            await Task.WhenAll(phuongTask, phongTask, khoaTask, chucvuTask, capbacTask, tinhTask, loaiHinhTask, hinhThucTask);
-
-            ViewBag.PhongList = new SelectList(phongTask.Result, "maphong", "tenphong", maphong);
-            ViewBag.KhoaList = new SelectList(khoaTask.Result, "makk", "tenkk", makk);
-            ViewBag.ChucVuList = new SelectList(chucvuTask.Result, "machucvu", "tenchucvu", machucvu);
-            ViewBag.CapBacList = new SelectList(capbacTask.Result, "macapbac", "tencapbac", macapbac);
-            ViewBag.TinhList = new SelectList(tinhTask.Result, "matt", "tentinh", matt);
-            ViewBag.PhuongList = new SelectList(phuongTask.Result, "mapx", "tenxa", mapx);
-            ViewBag.LoaiHinhList = new SelectList(loaiHinhTask.Result, "idloaihinhkcb", "diengiai", idloaihinhkcb);
-            ViewBag.HinhThucList = new SelectList(hinhThucTask.Result, "mahtd", "tenhtd", mahtd);
+            ViewBag.PhongList = new SelectList(phongList, "maphong", "tenphong", maphong);
+            ViewBag.KhoaList = new SelectList(khoaList, "makk", "tenkk", makk);
+            ViewBag.ChucVuList = new SelectList(chucvuList, "machucvu", "tenchucvu", machucvu);
+            ViewBag.CapBacList = new SelectList(capbacList, "macapbac", "tencapbac", macapbac);
+            ViewBag.TinhList = new SelectList(tinhList, "matt", "tentinh", matt);
+            ViewBag.PhuongList = new SelectList(phuongList, "mapx", "tenxa", mapx);
+            ViewBag.LoaiHinhList = new SelectList(loaiHinhList, "idloaihinhkcb", "diengiai", idloaihinhkcb);
+            ViewBag.HinhThucList = new SelectList(hinhThucList, "mahtd", "tenhtd", mahtd);
         }
 
         [HttpPost]

@@ -195,12 +195,11 @@ namespace APP.Controllers
 
         private async Task LoadDropdownListsAsync()
         {
-            var khoaTask = _context.DmKhoa.AsNoTracking().ToListAsync();
-            var phongTask = _context.DmPhong.AsNoTracking().ToListAsync();
-            await Task.WhenAll(khoaTask, phongTask);
+            var khoaList = await _context.DmKhoa.AsNoTracking().ToListAsync();
+            var phongList = await _context.DmPhong.AsNoTracking().ToListAsync();
 
-            ViewBag.KhoaList = new SelectList(khoaTask.Result, "makk", "tenkk");
-            ViewBag.PhongList = new SelectList(phongTask.Result, "maphong", "tenphong");
+            ViewBag.KhoaList = new SelectList(khoaList, "makk", "tenkk");
+            ViewBag.PhongList = new SelectList(phongList, "maphong", "tenphong");
         }
 
     }
