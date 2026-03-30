@@ -1,0 +1,64 @@
+@model IEnumerable<APP.Models.HoiChan>
+
+@{
+    ViewData["Title"] = "Hội chẩn";
+}
+
+<div class="container mt-4">
+    <h4 class="page-title text-center mb-4">HỘI CHẨN</h4>
+
+    <form asp-action="Index" method="get" class="d-flex justify-content-center align-items-center mb-3">
+        <input type="text" name="makcb" value="@ViewBag.makcb" class="form-control me-2" style="max-width:300px;" placeholder="Nhập Mã KCB..." />
+        <button type="submit" class="btn btn-danger">🔍 Tìm kiếm</button>
+    </form>
+
+    @if (Model != null && Model.Any())
+    {
+        <div class="table-responsive shadow-sm rounded">
+            <table class="table table-bordered table-hover text-center">
+                <thead class="table-danger text-white">
+                    <tr>
+                        <th>Mã KCB</th>
+                        <th>Mã điều trị</th>
+                        <th>Ngày hội chẩn</th>
+                        <th>Chủ tọa</th>
+                        <th>Thư ký</th>
+                        <th>Thành viên</th>
+                        <th>Số phiếu</th>
+                        <th>Đã ký</th>
+                        <th>Sửa</th>
+                        <th>Xóa</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.makcb</td>
+                            <td>@(item.madieutri?.ToString() ?? "N/A")</td>
+                            <td>@item.ngay.ToString("dd/MM/yyyy HH:mm")</td>
+                            <td>@(item.chutoa?.ToString() ?? "N/A")</td>
+                            <td>@(item.thuky?.ToString() ?? "N/A")</td>
+                            <td>@item.thanhvien</td>
+                            <td>@(item.sophieu ?? "N/A")</td>
+                            <td>@(string.IsNullOrEmpty(item.daky) ? "Chưa ký" : "Đã ký")</td>
+                            <td>
+                                <a asp-action="Edit" asp-route-id="@item.makcb" class="btn btn-sm btn-warning">✏️ Sửa</a>
+                            </td>
+                            <td>
+                                <form asp-action="Delete" asp-route-id="@item.makcb" method="post" onsubmit="return confirm('Bạn có chắc muốn xóa bản ghi này?');">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-sm btn-danger">🗑️ Xóa</button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else if (ViewBag.makcb != null)
+    {
+        <div class="alert alert-warning text-center">Không tìm thấy dữ liệu với Mã KCB này.</div>
+    }
+</div>

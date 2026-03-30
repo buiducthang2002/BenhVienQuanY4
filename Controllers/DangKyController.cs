@@ -319,7 +319,7 @@ namespace APP.Controllers
             // dienthoai, sobhxh, lydovv130, noilamviec, sonha, thonpho
 
             // Đồng bộ maphong và makk sang bảng khambenh
-            var khamBenhRecord = await _context.khambenh.FirstOrDefaultAsync(kb => kb.makcb == model.makcb);
+            var khamBenhRecord = await _context.BanLamViecKhamBenhs.FirstOrDefaultAsync(kb => kb.makcb == model.makcb);
             if (khamBenhRecord != null)
             {
                 khamBenhRecord.maphong = existing.maphong;

@@ -133,6 +133,18 @@ namespace APP.Data
                 entity.Property(d => d.dongia).HasColumnType("decimal(18,2)");
                 entity.Property(d => d.thanhtien).HasColumnType("decimal(18,2)");
             });
+
+            modelBuilder.Entity<BanLamViecKhamBenh>(entity =>
+            {
+                entity.ToTable("khambenh");
+                entity.HasKey(b => b.makcb);
+            });
+
+            modelBuilder.Entity<HoiChan>(entity =>
+            {
+                entity.ToTable("hoichan");
+                entity.HasKey(h => h.makcb);
+            });
         }
 
         public DbSet<NguoiDung> NguoiDung { get; set; } = null!;
@@ -141,7 +153,9 @@ namespace APP.Data
         public DbSet<KetQuaCLS> KetQuaCLS { get; set; } = null!;
         public DbSet<PhauThuatThuThuat> PhauThuatThuThuat { get; set; } = null!;
         public DbSet<DangKy> DangKy { get; set; } = null!;
-        public DbSet<khambenh> khambenh { get; set; } = null!;
+
+        public DbSet<BanLamViecKhamBenh> BanLamViecKhamBenhs { get; set; } = null!;
+        public DbSet<HoiChan> HoiChan { get; set; } = null!;
         public DbSet<KySo> KySo { get; set; } = null!;
 
         // Bảng nghiệp vụ

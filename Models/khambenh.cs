@@ -8,6 +8,7 @@ namespace APP.Models
     public class khambenh
     {
         [Key]
+        [StringLength(15)]
         public string? makcb { get; set; }
         public int? maphong { get; set; }
         public int? makk { get; set; }

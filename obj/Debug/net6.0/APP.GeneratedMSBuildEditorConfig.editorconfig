@@ -19,6 +19,14 @@ build_property._RazorSourceGeneratorDebug =
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQWNjb3VudFxMb2dpbi5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
+[C:/Users/HH/source/repos/BenhVienQuanY4/Views/BanLamViecKhamBenh/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmFuTGFtVmllY0toYW1CZW5oXEVkaXQuY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/HH/source/repos/BenhVienQuanY4/Views/BanLamViecKhamBenh/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmFuTGFtVmllY0toYW1CZW5oXEluZGV4LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
 [C:/Users/HH/source/repos/BenhVienQuanY4/Views/BenhAn/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcQmVuaEFuXEluZGV4LmNzaHRtbA==
 build_metadata.AdditionalFiles.CssScope = 
@@ -49,6 +57,14 @@ build_metadata.AdditionalFiles.CssScope =
 
 [C:/Users/HH/source/repos/BenhVienQuanY4/Views/DonThuoc/Index.cshtml]
 build_metadata.AdditionalFiles.TargetPath = Vmlld3NcRG9uVGh1b2NcSW5kZXguY3NodG1s
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/HH/source/repos/BenhVienQuanY4/Views/HoiChan/Edit.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9pQ2hhblxFZGl0LmNzaHRtbA==
+build_metadata.AdditionalFiles.CssScope = 
+
+[C:/Users/HH/source/repos/BenhVienQuanY4/Views/HoiChan/Index.cshtml]
+build_metadata.AdditionalFiles.TargetPath = Vmlld3NcSG9pQ2hhblxJbmRleC5jc2h0bWw=
 build_metadata.AdditionalFiles.CssScope = 
 
 [C:/Users/HH/source/repos/BenhVienQuanY4/Views/Home/Index.cshtml]
