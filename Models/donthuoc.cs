@@ -7,9 +7,12 @@ namespace APP.Models
     [Table("donthuoc")]
     public class DonThuoc
     {
-        [Key]
         public string? makcb { get; set; }
+        [Key]
         public int madonthuoc { get; set; }
+        public DateTime? ngay { get; set; }
+        public DateTime? ngayduyet { get; set; }
+        public string? sophieu { get; set; }
     }
 }
 

@@ -5,6 +5,7 @@
     int totalPages = ViewBag.TotalPages ?? 1;
     int totalRecords = ViewBag.TotalRecords ?? 0;
     int pageSize = ViewBag.PageSize ?? 50;
+    string searchTerm = (ViewBag.Search as string) ?? "";
 }
 
 <div class="container mt-5 text-center">
@@ -13,7 +14,7 @@
     </h3>
 
     <form method="get" asp-action="Index" class="d-flex justify-content-center mb-4 align-items-center">
-        <input type="text" name="search" value="@ViewBag.Search"
+        <input type="text" name="search" value="@searchTerm"
                class="form-control me-2 search-box"
                placeholder="Nhập mã KCB hoặc họ tên..." />
         <select name="pageSize" class="form-select me-2" style="max-width: 120px;">
@@ -37,27 +38,27 @@
                 @if (currentPage > 1)
                 {
                     <li class="page-item">
-                        <a class="page-link" href="?search=@ViewBag.Search&page=1&pageSize=@pageSize">Đầu</a>
+                        <a class="page-link" href="?search=@searchTerm&page=1&pageSize=@pageSize">Đầu</a>
                     </li>
                     <li class="page-item">
-                        <a class="page-link" href="?search=@ViewBag.Search&page=@(currentPage - 1)&pageSize=@pageSize">‹</a>
+                        <a class="page-link" href="?search=@searchTerm&page=@(currentPage - 1)&pageSize=@pageSize">‹</a>
                     </li>
                 }
 
                 @for (int i = Math.Max(1, currentPage - 2); i <= Math.Min(totalPages, currentPage + 2); i++)
                 {
                     <li class="page-item @(i == currentPage ? "active" : "")">
-                        <a class="page-link" href="?search=@ViewBag.Search&page=@i&pageSize=@pageSize">@i</a>
+                        <a class="page-link" href="?search=@searchTerm&page=@i&pageSize=@pageSize">@i</a>
                     </li>
                 }
 
                 @if (currentPage < totalPages)
                 {
                     <li class="page-item">
-                        <a class="page-link" href="?search=@ViewBag.Search&page=@(currentPage + 1)&pageSize=@pageSize">›</a>
+                        <a class="page-link" href="?search=@searchTerm&page=@(currentPage + 1)&pageSize=@pageSize">›</a>
                     </li>
                     <li class="page-item">
-                        <a class="page-link" href="?search=@ViewBag.Search&page=@totalPages&pageSize=@pageSize">Cuối</a>
+                        <a class="page-link" href="?search=@searchTerm&page=@totalPages&pageSize=@pageSize">Cuối</a>
                     </li>
                 }
             </ul>

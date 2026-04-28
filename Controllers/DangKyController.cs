@@ -178,6 +178,7 @@ namespace APP.Controllers
             // Cập nhật tất cả các trường từ form
             existing.hoten = model.hoten;
             existing.ngaysinh = model.ngaysinh;
+            existing.ngaydk = model.ngaydk;
 
             // Xử lý maphai - bắt buộc phải có giá trị (1 hoặc 2)
             if (!model.maphai.HasValue || (model.maphai.Value != 1 && model.maphai.Value != 2))

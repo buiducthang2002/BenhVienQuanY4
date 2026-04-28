@@ -32,10 +32,9 @@ namespace APP.Controllers
         }
 
         // GET: Form sửa
-        public async Task<IActionResult> Edit(string id)
+        public async Task<IActionResult> Edit(string makcb)
         {
-            if (string.IsNullOrEmpty(id)) return NotFound();
-            var item = await _context.HoiChan.FindAsync(id);
+            var item = await _context.HoiChan.FindAsync(makcb);
             if (item == null) return NotFound();
             return View(item);
         }
@@ -57,15 +56,27 @@ namespace APP.Controllers
         // POST: Xóa
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(string id)
+        public async Task<IActionResult> Delete(string makcb)
         {
-            if (string.IsNullOrEmpty(id)) return NotFound();
-            var item = await _context.HoiChan.FindAsync(id);
+            var item = await _context.HoiChan.FindAsync(makcb);
             if (item == null) return NotFound();
-            var makcb = item.makcb;
             _context.HoiChan.Remove(item);
             await _context.SaveChangesAsync();
             return RedirectToAction("Index", new { makcb });
+        }
+
+        // POST: Huỷ ký
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> HuyKy(string makcb)
+        {
+            var item = await _context.HoiChan.FindAsync(makcb);
+            if (item == null) return NotFound();
+            item.chutoa = null;
+            item.thuky = null;
+            item.daky = null;
+            await _context.SaveChangesAsync();
+            return RedirectToAction("Index", new { makcb = item.makcb });
         }
     }
 }

@@ -12,7 +12,8 @@
       "Bash(powershell -Command \"Start-Sleep -Seconds 3\")",
       "Bash(tasklist:*)",
       "Bash(findstr:*)",
-      "Bash(dotnet format:*)"
+      "Bash(dotnet format:*)",
+      "Bash(dotnet run *)"
     ]
   }
 }

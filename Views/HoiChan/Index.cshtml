@@ -8,7 +8,8 @@
     <h4 class="page-title text-center mb-4">HỘI CHẨN</h4>
 
     <form asp-action="Index" method="get" class="d-flex justify-content-center align-items-center mb-3">
-        <input type="text" name="makcb" value="@ViewBag.makcb" class="form-control me-2" style="max-width:300px;" placeholder="Nhập Mã KCB..." />
+        <input type="text" name="makcb" value="@ViewBag.makcb" class="form-control me-2" style="max-width:300px;"
+            placeholder="Nhập Mã KCB..." />
         <button type="submit" class="btn btn-danger">🔍 Tìm kiếm</button>
     </form>
 
@@ -41,12 +42,26 @@
                             <td>@(item.thuky?.ToString() ?? "N/A")</td>
                             <td>@item.thanhvien</td>
                             <td>@(item.sophieu ?? "N/A")</td>
-                            <td>@(string.IsNullOrEmpty(item.daky) ? "Chưa ký" : "Đã ký")</td>
                             <td>
-                                <a asp-action="Edit" asp-route-id="@item.makcb" class="btn btn-sm btn-warning">✏️ Sửa</a>
+                                @if (string.IsNullOrEmpty(item.daky))
+                                {
+                                    <span class="text-muted">Chưa ký</span>
+                                }
+                                else
+                                {
+                                    <form asp-action="HuyKy" asp-route-makcb="@item.makcb" method="post"
+                                        onsubmit="return confirm('Bạn có chắc muốn huỷ ký?');">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-sm btn-warning">🔓 Huỷ ký</button>
+                                    </form>
+                                }
                             </td>
                             <td>
-                                <form asp-action="Delete" asp-route-id="@item.makcb" method="post" onsubmit="return confirm('Bạn có chắc muốn xóa bản ghi này?');">
+                                <a asp-action="Edit" asp-route-makcb="@item.makcb" class="btn btn-sm btn-warning">✏️ Sửa</a>
+                            </td>
+                            <td>
+                                <form asp-action="Delete" asp-route-makcb="@item.makcb" method="post"
+                                    onsubmit="return confirm('Bạn có chắc muốn xóa bản ghi này?');">
                                     @Html.AntiForgeryToken()
                                     <button type="submit" class="btn btn-sm btn-danger">🗑️ Xóa</button>
                                 </form>

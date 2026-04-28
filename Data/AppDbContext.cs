@@ -123,7 +123,8 @@ namespace APP.Data
             modelBuilder.Entity<DonThuoc>(entity =>
             {
                 entity.ToTable("donthuoc");
-                entity.HasKey(d => d.makcb);
+                entity.HasKey(d => d.madonthuoc);
+                entity.Property(d => d.madonthuoc).ValueGeneratedNever();
             });
 
             modelBuilder.Entity<DonThuocCT>(entity =>
