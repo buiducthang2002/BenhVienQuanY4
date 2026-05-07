@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\HH\\source\\repos\\BenhVienQuanY4\\APP.csproj": {}
+    "c:\\Users\\HH\\source\\repos\\BenhVienQuanY4\\APP.csproj": {}
   },
   "projects": {
-    "C:\\Users\\HH\\source\\repos\\BenhVienQuanY4\\APP.csproj": {
+    "c:\\Users\\HH\\source\\repos\\BenhVienQuanY4\\APP.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\HH\\source\\repos\\BenhVienQuanY4\\APP.csproj",
+        "projectUniqueName": "c:\\Users\\HH\\source\\repos\\BenhVienQuanY4\\APP.csproj",
         "projectName": "APP",
-        "projectPath": "C:\\Users\\HH\\source\\repos\\BenhVienQuanY4\\APP.csproj",
+        "projectPath": "c:\\Users\\HH\\source\\repos\\BenhVienQuanY4\\APP.csproj",
         "packagesPath": "C:\\Users\\HH\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\HH\\source\\repos\\BenhVienQuanY4\\obj\\",
+        "outputPath": "c:\\Users\\HH\\source\\repos\\BenhVienQuanY4\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\HH\\AppData\\Roaming\\NuGet\\NuGet.Config"

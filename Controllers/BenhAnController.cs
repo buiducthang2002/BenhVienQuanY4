@@ -26,44 +26,46 @@ namespace APP.Controllers
             if (string.IsNullOrWhiteSpace(makcb))
                 return RedirectToAction("Index");
 
-            var result = await _context.BenhAn
+            var results = await _context.BenhAn
                 .AsNoTracking()
-                .Where(b => b.makcb == makcb || (b.makcb != null && b.makcb.EndsWith(makcb)))  // makcb guaranteed non-empty (checked above)
-                .FirstOrDefaultAsync();
+                .Where(b => b.makcb == makcb || (b.makcb != null && b.makcb.EndsWith(makcb)))
+                .ToListAsync();
 
             ViewBag.CurrentPage = 1;
             ViewBag.TotalPages = 1;
-            ViewBag.PageSize = 1;
+            ViewBag.PageSize = results.Count == 0 ? 1 : results.Count;
 
-            if (result == null)
+            if (results.Count == 0)
             {
                 ViewBag.Message = "Không tìm thấy bệnh án với Mã KCB này.";
                 ViewBag.TotalRecords = 0;
                 return View("Index", new List<BenhAn>());
             }
 
-            ViewBag.TotalRecords = 1;
-            return View("Index", new List<BenhAn> { result });
+            ViewBag.TotalRecords = results.Count;
+            return View("Index", results);
         }
 
 
+
         [HttpPost]
-        public async Task<IActionResult> CancelSign(string makcb)
+        public async Task<IActionResult> CancelSign(string makcb, string? maubenhan)
         {
             try
             {
-                var record = string.IsNullOrEmpty(makcb)
-                    ? null
-                    : await _context.BenhAn.FirstOrDefaultAsync(b => b.makcb == makcb || (b.makcb != null && b.makcb.EndsWith(makcb)));
-                if (record != null)
+                if (string.IsNullOrEmpty(makcb))
                 {
-                    record.daky = null;
-                    await _context.SaveChangesAsync();
-                    TempData["Success"] = $"Đã hủy toàn bộ chữ ký bệnh án {makcb} thành công!";
+                    TempData["Error"] = "Mã KCB không hợp lệ!";
                 }
                 else
                 {
-                    TempData["Error"] = $"Không tìm thấy bệnh án {makcb}!";
+                    var sql = "UPDATE tbl_benhan_benhantheobn SET daky = NULL WHERE (makcb = {0} OR makcb LIKE {1}) AND maubenhan = {2}";
+                    var affected = await _context.Database.ExecuteSqlRawAsync(sql, makcb, "%" + makcb, maubenhan ?? string.Empty);
+
+                    if (affected > 0)
+                        TempData["Success"] = $"Đã hủy toàn bộ chữ ký bệnh án {makcb} ({maubenhan})! ({affected} bản ghi)";
+                    else
+                        TempData["Error"] = $"Không tìm thấy bệnh án {makcb} ({maubenhan})!";
                 }
             }
             catch (Exception ex)
@@ -71,64 +73,67 @@ namespace APP.Controllers
                 TempData["Error"] = $"Lỗi khi hủy ký: {ex.Message}";
             }
 
-            // Force refresh với cache busting
             return RedirectToAction("Index", new { t = DateTime.Now.Ticks });
         }
 
         [HttpPost]
-        public async Task<IActionResult> CancelSingleSign(string makcb, int signIndex)
+        public async Task<IActionResult> CancelSingleSign(string makcb, int signIndex, string? maubenhan)
         {
             try
             {
-                var record = string.IsNullOrEmpty(makcb)
-                    ? null
-                    : await _context.BenhAn.FirstOrDefaultAsync(b => b.makcb == makcb || (b.makcb != null && b.makcb.EndsWith(makcb)));
-                if (record == null)
+                if (string.IsNullOrEmpty(makcb))
                 {
-                    TempData["Error"] = $"Không tìm thấy bệnh án {makcb}!";
+                    TempData["Error"] = "Mã KCB không hợp lệ!";
                     return RedirectToAction("Index");
                 }
 
-                if (string.IsNullOrEmpty(record.daky))
+                var records = await _context.BenhAn
+                    .AsNoTracking()
+                    .Where(b => (b.makcb == makcb || (b.makcb != null && b.makcb.EndsWith(makcb)))
+                                && b.maubenhan == maubenhan)
+                    .ToListAsync();
+
+                if (records.Count == 0)
                 {
-                    TempData["Error"] = "Bệnh án chưa có chữ ký nào!";
+                    TempData["Error"] = $"Không tìm thấy bệnh án {makcb} ({maubenhan})!";
                     return RedirectToAction("Index");
                 }
 
-                // Parse danh sách chữ ký: format 1|user|...|;2|user|...|;
-                var dakyContent = record.daky.Trim();
-                var signatures = dakyContent.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
-                                             .Select(s => s.Trim())
-                                             .ToList();
+                int totalUpdated = 0;
+                string? signUser = null;
 
-                if (signIndex < 0 || signIndex >= signatures.Count)
+                foreach (var record in records)
                 {
-                    TempData["Error"] = "Chữ ký không tồn tại!";
-                    return RedirectToAction("Index");
+                    if (string.IsNullOrEmpty(record.daky)) continue;
+
+                    var oldDaky = record.daky;
+                    var signatures = oldDaky.Trim()
+                        .Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries)
+                        .Select(s => s.Trim())
+                        .ToList();
+
+                    if (signIndex < 0 || signIndex >= signatures.Count) continue;
+
+                    var signParts = signatures[signIndex].Split('|');
+                    if (signUser == null && signParts.Length > 1) signUser = signParts[1];
+
+                    signatures.RemoveAt(signIndex);
+                    string? newDaky = signatures.Count == 0 ? null : string.Join(";", signatures);
+
+                    var sql = "UPDATE tbl_benhan_benhantheobn SET daky = {0} WHERE makcb = {1} AND maubenhan = {2} AND daky = {3}";
+                    var updated = await _context.Database.ExecuteSqlRawAsync(
+                        sql,
+                        (object?)newDaky ?? DBNull.Value,
+                        record.makcb ?? (object)DBNull.Value,
+                        record.maubenhan ?? (object)DBNull.Value,
+                        oldDaky);
+                    totalUpdated += updated;
                 }
 
-                // Lấy thông tin chữ ký sẽ xóa
-                var signToRemove = signatures[signIndex];
-                var signParts = signToRemove.Split('|');
-                var signUser = signParts.Length > 1 ? signParts[1] : "Unknown";
-
-                // Xóa chữ ký theo index
-                signatures.RemoveAt(signIndex);
-
-                // Cập nhật lại chuỗi daky
-                if (signatures.Count == 0)
-                {
-                    // Nếu không còn chữ ký nào, set null
-                    record.daky = null;
-                }
+                if (totalUpdated > 0)
+                    TempData["Success"] = $"Đã hủy chữ ký #{signIndex + 1} ({signUser ?? "Unknown"}) của bệnh án {makcb} ({maubenhan})!";
                 else
-                {
-                    // Join lại: 1|...|;2|...|;3|...| (không có ngoặc, không có ; cuối)
-                    record.daky = string.Join(";", signatures);
-                }
-
-                await _context.SaveChangesAsync();
-                TempData["Success"] = $"Đã hủy chữ ký #{signIndex + 1} ({signUser}) của bệnh án {makcb}!";
+                    TempData["Error"] = "Chữ ký không tồn tại hoặc bệnh án chưa có chữ ký!";
             }
             catch (Exception ex)
             {
@@ -143,18 +148,19 @@ namespace APP.Controllers
         {
             try
             {
-                var record = string.IsNullOrEmpty(makcb)
-                    ? null
-                    : await _context.BenhAn.FirstOrDefaultAsync(b => b.makcb == makcb || (b.makcb != null && b.makcb.EndsWith(makcb)));
-                if (record == null)
+                if (string.IsNullOrEmpty(makcb))
                 {
-                    TempData["Error"] = $"Không tìm thấy bệnh án {makcb}!";
+                    TempData["Error"] = "Mã KCB không hợp lệ!";
                 }
                 else
                 {
-                    _context.BenhAn.Remove(record);
-                    await _context.SaveChangesAsync();
-                    TempData["Success"] = $"Đã xóa bệnh án {makcb} thành công!";
+                    var sql = "DELETE FROM tbl_benhan_benhantheobn WHERE makcb = {0} OR makcb LIKE {1}";
+                    var affected = await _context.Database.ExecuteSqlRawAsync(sql, makcb, "%" + makcb);
+
+                    if (affected > 0)
+                        TempData["Success"] = $"Đã xóa bệnh án {makcb} thành công! ({affected} bản ghi)";
+                    else
+                        TempData["Error"] = $"Không tìm thấy bệnh án {makcb}!";
                 }
             }
             catch (Exception ex)
@@ -197,4 +203,3 @@ namespace APP.Controllers
         }
     }
 }
-

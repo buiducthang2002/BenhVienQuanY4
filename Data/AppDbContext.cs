@@ -146,6 +146,13 @@ namespace APP.Data
                 entity.ToTable("hoichan");
                 entity.HasKey(h => h.makcb);
             });
+
+            // BenhAn: 1 makcb có thể có nhiều bệnh án (mẫu khác nhau) → keyless
+            modelBuilder.Entity<BenhAn>(entity =>
+            {
+                entity.ToTable("tbl_benhan_benhantheobn");
+                entity.HasNoKey();
+            });
         }
 
         public DbSet<NguoiDung> NguoiDung { get; set; } = null!;

@@ -71,6 +71,7 @@
                                         data-bs-toggle="modal"
                                         data-bs-target="#signatureModal"
                                         data-makcb="@item.makcb"
+                                        data-maubenhan="@item.maubenhan"
                                         data-daky="@dakyValue">
                                     📝 Xem chi tiết (@(dakyValue.Count(c => c == ';')) chữ ký)
                                 </button>
@@ -93,8 +94,9 @@
                             {
                                 <form asp-action="CancelSign" method="post" style="display: inline;">
                                     <input type="hidden" name="makcb" value="@item.makcb" />
+                                    <input type="hidden" name="maubenhan" value="@item.maubenhan" />
                                     <button type="submit" class="btn btn-sm btn-outline-danger"
-                                            onclick="return confirm('Bạn có chắc muốn hủy TẤT CẢ chữ ký của bệnh án @item.makcb?');">
+                                            onclick="return confirm('Bạn có chắc muốn hủy TẤT CẢ chữ ký của bệnh án @item.makcb (@item.maubenhan)?');">
                                         ❌ Hủy tất cả
                                     </button>
                                 </form>
@@ -135,9 +137,10 @@ document.addEventListener('DOMContentLoaded', function() {
     signatureModal.addEventListener('show.bs.modal', function(event) {
         const button = event.relatedTarget;
         const makcb = button.getAttribute('data-makcb');
+        const maubenhan = button.getAttribute('data-maubenhan') || '';
         const dakyRaw = button.getAttribute('data-daky');
-        
-        document.getElementById('modalMaKCB').textContent = makcb;
+
+        document.getElementById('modalMaKCB').textContent = makcb + (maubenhan ? ' (' + maubenhan + ')' : '');
         
         // Parse signatures: 1|user|109|0|09/02/2026 10:20|0|;2|...
         const dakyContent = dakyRaw.trim();
@@ -159,9 +162,10 @@ document.addEventListener('DOMContentLoaded', function() {
                     <td>${manv}</td>
                     <td>${datetime}</td>
                     <td>
-                        <form method="post" action="/BenhAn/CancelSingleSign" style="display:inline;" 
+                        <form method="post" action="/BenhAn/CancelSingleSign" style="display:inline;"
                               onsubmit="return confirm('Bạn có chắc muốn hủy chữ ký #${index + 1} (${user})?');">
                             <input type="hidden" name="makcb" value="${makcb}" />
+                            <input type="hidden" name="maubenhan" value="${maubenhan}" />
                             <input type="hidden" name="signIndex" value="${index}" />
                             <button type="submit" class="btn btn-sm btn-danger">❌ Hủy</button>
                         </form>
