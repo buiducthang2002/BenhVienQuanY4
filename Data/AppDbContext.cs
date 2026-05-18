@@ -54,6 +54,12 @@ namespace APP.Data
                 entity.Property(k => k.makcb).HasMaxLength(50);
             });
 
+            modelBuilder.Entity<GtktPhieu>(entity =>
+            {
+                entity.ToTable("gtkt_danhsachphieutheobn");
+                entity.HasKey(g => new { g.sophieu, g.makcb, g.mauphieu });
+            });
+
             modelBuilder.Entity<ChuyenVien>(entity =>
             {
                 entity.ToTable("dangkychuyenvien");
@@ -144,7 +150,7 @@ namespace APP.Data
             modelBuilder.Entity<HoiChan>(entity =>
             {
                 entity.ToTable("hoichan");
-                entity.HasKey(h => h.makcb);
+                entity.HasKey(h => h.mathanhtoan);
             });
 
             // BenhAn: 1 makcb có thể có nhiều bệnh án (mẫu khác nhau) → keyless
@@ -165,6 +171,7 @@ namespace APP.Data
         public DbSet<BanLamViecKhamBenh> BanLamViecKhamBenhs { get; set; } = null!;
         public DbSet<HoiChan> HoiChan { get; set; } = null!;
         public DbSet<KySo> KySo { get; set; } = null!;
+        public DbSet<GtktPhieu> GtktPhieu { get; set; } = null!;
 
         // Bảng nghiệp vụ
         public DbSet<ChuyenVien> ChuyenVien { get; set; } = null!;

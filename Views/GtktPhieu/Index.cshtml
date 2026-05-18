@@ -1,0 +1,409 @@
+@model IEnumerable<APP.Models.GtktPhieu>
+
+@{
+    ViewData["Title"] = "Danh sách phiếu theo bệnh nhân";
+}
+
+<div class="container mt-4">
+    <h4 class="page-title text-center mb-4">DANH SÁCH PHIẾU THEO BỆNH NHÂN</h4>
+
+    <form asp-action="Search" method="post" class="d-flex justify-content-center align-items-center mb-3">
+        <input type="text" name="makcb" class="form-control search-box me-2" placeholder="Nhập Mã KCB..." />
+        <button type="submit" class="btn btn-danger me-2">🔍 Tìm kiếm</button>
+        <button type="submit" form="cancelForm" class="btn btn-outline-light border-danger text-danger"
+                onclick="return confirm('Bạn có chắc muốn hủy ký các phiếu đã chọn không?');">
+            ❌ Hủy ký
+        </button>
+    </form>
+
+    @if (ViewBag.Message != null)
+    {
+        <div class="alert alert-warning text-center">@ViewBag.Message</div>
+    }
+
+    <form asp-action="CancelSignMulti" method="post" id="cancelForm">
+        <div class="table-responsive shadow-sm rounded">
+            <table class="table table-bordered table-hover compact-table text-center">
+                <thead class="table-header-red text-white">
+                    <tr>
+                        <th style="white-space: nowrap;">
+                            <input type="checkbox" id="selectAll" />
+                        </th>
+                        <th style="white-space: nowrap;">Số phiếu</th>
+                        <th style="white-space: nowrap;">Mã KCB</th>
+                        <th style="white-space: nowrap;">Mẫu phiếu</th>
+                        <th style="white-space: nowrap;">Ngày</th>
+                        <th style="white-space: nowrap;">Đã ký</th>
+                        <th style="white-space: nowrap;">Sửa</th>
+                        <th style="white-space: nowrap;">Hủy ký</th>
+                        <th style="white-space: nowrap;">Xóa</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model != null && Model.Any())
+                    {
+                        @foreach (var item in Model)
+                        {
+                            <tr>
+                                <td>
+                                    <input type="checkbox" name="keys" value="@($"{item.sophieu}|{item.makcb}|{item.mauphieu}")" class="form-check-input row-check" />
+                                </td>
+                                <td>@item.sophieu</td>
+                                <td>@item.makcb</td>
+                                <td class="text-start">@item.mauphieu</td>
+                                <td>@item.ngay.ToString("dd/MM/yyyy HH:mm")</td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(item.daky))
+                                    {
+                                        <span class="badge bg-success">✅ Đã ký</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge bg-secondary">—</span>
+                                    }
+                                </td>
+                                <td>
+                                    <button type="button" class="btn-icon btn-icon-edit"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#editModal"
+                                            data-sophieu="@item.sophieu"
+                                            data-makcb="@item.makcb"
+                                            data-mauphieu="@item.mauphieu"
+                                            data-ngay="@item.ngay.ToString("yyyy-MM-ddTHH:mm")"
+                                            title="Sửa ngày">
+                                        ✏️
+                                    </button>
+                                </td>
+                                <td>
+                                    @if (!string.IsNullOrEmpty(item.daky))
+                                    {
+                                        <button type="button" class="btn btn-sm btn-danger"
+                                                data-bs-toggle="modal"
+                                                data-bs-target="#cancelSignModal"
+                                                data-sophieu="@item.sophieu"
+                                                data-makcb="@item.makcb"
+                                                data-mauphieu="@item.mauphieu"
+                                                title="Hủy ký phiếu này">
+                                            ❌
+                                        </button>
+                                    }
+                                    else
+                                    {
+                                        <span class="text-muted small">—</span>
+                                    }
+                                </td>
+                                <td>
+                                    <button type="button" class="btn btn-sm btn-outline-danger"
+                                            data-bs-toggle="modal"
+                                            data-bs-target="#deleteModal"
+                                            data-sophieu="@item.sophieu"
+                                            data-makcb="@item.makcb"
+                                            data-mauphieu="@item.mauphieu"
+                                            data-ngay="@item.ngay.ToString("dd/MM/yyyy HH:mm")"
+                                            title="Xóa phiếu này">
+                                        🗑️
+                                    </button>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="9" class="text-muted">Không có dữ liệu</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </form>
+
+    <!-- Modal sửa ngày -->
+    <div class="modal fade" id="editModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color:#e91e63; color:white;">
+                    <h5 class="modal-title">✏️ Sửa ngày - Phiếu: <span id="editSoPhieu"></span></h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <form method="post" action="/GtktPhieu/UpdateNgay">
+                    <div class="modal-body">
+                        <input type="hidden" name="sophieu" id="editSophieuInput" />
+                        <input type="hidden" name="makcb" id="editMakcbInput" />
+                        <input type="hidden" name="mauphieu" id="editMauphieuInput" />
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Mã KCB</label>
+                            <input type="text" id="editMakcbDisplay" class="form-control" disabled />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Mẫu phiếu</label>
+                            <input type="text" id="editMauphieuDisplay" class="form-control" disabled />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold">Ngày</label>
+                            <input type="datetime-local" name="ngay" id="editNgay" class="form-control" required />
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                        <button type="submit" class="btn btn-danger">💾 Lưu</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal xác nhận xóa phiếu -->
+    <div class="modal fade" id="deleteModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color:#dc3545; color:white;">
+                    <h5 class="modal-title">🗑️ Xác nhận xóa phiếu</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <form method="post" action="/GtktPhieu/Delete">
+                    <div class="modal-body">
+                        <input type="hidden" name="sophieu" id="deleteSophieuInput" />
+                        <input type="hidden" name="makcb" id="deleteMakcbInput" />
+                        <input type="hidden" name="mauphieu" id="deleteMauphieuInput" />
+                        <p class="mb-2">Bạn có chắc muốn <strong class="text-danger">XÓA</strong> phiếu này không?</p>
+                        <table class="table table-sm table-bordered">
+                            <tr><th style="width:130px;">Số phiếu</th><td id="deleteSophieuLabel"></td></tr>
+                            <tr><th>Mã KCB</th><td id="deleteMakcbLabel"></td></tr>
+                            <tr><th>Mẫu phiếu</th><td id="deleteMauphieuLabel"></td></tr>
+                            <tr><th>Ngày</th><td id="deleteNgayLabel"></td></tr>
+                        </table>
+                        <p class="text-danger small mb-0">⚠️ Chỉ xóa duy nhất phiếu này, các phiếu khác cùng Mã KCB vẫn được giữ nguyên. Hành động không thể hoàn tác!</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-danger">🗑️ Xóa phiếu</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal xác nhận hủy ký 1 phiếu -->
+    <div class="modal fade" id="cancelSignModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header" style="background-color:#e91e63; color:white;">
+                    <h5 class="modal-title">❌ Xác nhận hủy ký</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <form method="post" action="/GtktPhieu/CancelSign">
+                    <div class="modal-body">
+                        <input type="hidden" name="sophieu" id="cancelSophieuInput" />
+                        <input type="hidden" name="makcb" id="cancelMakcbInput" />
+                        <input type="hidden" name="mauphieu" id="cancelMauphieuInput" />
+                        <p>Bạn có chắc muốn hủy ký phiếu <strong id="cancelSoPhieuLabel"></strong>?</p>
+                        <p class="text-muted small">Trường <code>daky</code> sẽ được đặt về NULL.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                        <button type="submit" class="btn btn-danger">❌ Hủy ký</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Modal sửa ngày
+        const editModal = document.getElementById('editModal');
+        editModal.addEventListener('show.bs.modal', function (event) {
+            const btn = event.relatedTarget;
+            document.getElementById('editSoPhieu').textContent = btn.getAttribute('data-sophieu');
+            document.getElementById('editSophieuInput').value = btn.getAttribute('data-sophieu');
+            document.getElementById('editMakcbInput').value = btn.getAttribute('data-makcb');
+            document.getElementById('editMauphieuInput').value = btn.getAttribute('data-mauphieu');
+            document.getElementById('editMakcbDisplay').value = btn.getAttribute('data-makcb');
+            document.getElementById('editMauphieuDisplay').value = btn.getAttribute('data-mauphieu');
+            document.getElementById('editNgay').value = btn.getAttribute('data-ngay');
+        });
+
+        // Modal xóa phiếu
+        const deleteModal = document.getElementById('deleteModal');
+        deleteModal.addEventListener('show.bs.modal', function (event) {
+            const btn = event.relatedTarget;
+            const sophieu = btn.getAttribute('data-sophieu');
+            const makcb = btn.getAttribute('data-makcb');
+            const mauphieu = btn.getAttribute('data-mauphieu');
+            const ngay = btn.getAttribute('data-ngay');
+            document.getElementById('deleteSophieuInput').value = sophieu;
+            document.getElementById('deleteMakcbInput').value = makcb;
+            document.getElementById('deleteMauphieuInput').value = mauphieu;
+            document.getElementById('deleteSophieuLabel').textContent = sophieu;
+            document.getElementById('deleteMakcbLabel').textContent = makcb;
+            document.getElementById('deleteMauphieuLabel').textContent = mauphieu;
+            document.getElementById('deleteNgayLabel').textContent = ngay;
+        });
+
+        // Modal hủy ký 1 phiếu
+        const cancelModal = document.getElementById('cancelSignModal');
+        cancelModal.addEventListener('show.bs.modal', function (event) {
+            const btn = event.relatedTarget;
+            const sophieu = btn.getAttribute('data-sophieu');
+            document.getElementById('cancelSophieuInput').value = sophieu;
+            document.getElementById('cancelMakcbInput').value = btn.getAttribute('data-makcb');
+            document.getElementById('cancelMauphieuInput').value = btn.getAttribute('data-mauphieu');
+            document.getElementById('cancelSoPhieuLabel').textContent = sophieu;
+        });
+
+        // Chọn tất cả
+        const selectAll = document.getElementById('selectAll');
+        if (selectAll) {
+            selectAll.addEventListener('change', function () {
+                document.querySelectorAll('.row-check').forEach(cb => cb.checked = selectAll.checked);
+            });
+        }
+    });
+</script>
+
+@if (TempData["Error"] != null)
+{
+    <div class="corner-toast toast-error" id="toastError">@TempData["Error"]</div>
+    <script>
+        setTimeout(function () {
+            var t = document.getElementById('toastError');
+            if (t) { t.style.transition = 'opacity 300ms'; t.style.opacity = '0'; setTimeout(function () { t.remove(); }, 350); }
+        }, 3500);
+    </script>
+}
+
+@if (TempData["Success"] != null)
+{
+    <div id="successToast" class="center-toast">@TempData["Success"]</div>
+    <script>
+        setTimeout(function () {
+            var toast = document.getElementById('successToast');
+            if (toast) {
+                toast.style.transition = 'opacity 300ms ease';
+                toast.style.opacity = '0';
+                setTimeout(function () { toast.remove(); }, 350);
+            }
+        }, 1800);
+    </script>
+}
+
+<style>
+    body {
+        background-color: #fff5f7;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .page-title {
+        color: #e91e63;
+        font-weight: 700;
+        letter-spacing: 0.5px;
+    }
+
+    .search-box {
+        max-width: 240px;
+        border: 1px solid #e91e63;
+        border-radius: 5px;
+        font-size: 14px;
+        height: 34px;
+    }
+
+    .btn-danger {
+        background-color: #e91e63 !important;
+        border-color: #e91e63 !important;
+        font-weight: 600;
+        font-size: 14px;
+        padding: 5px 12px;
+    }
+
+    .btn-outline-light {
+        background-color: white !important;
+        border: 1px solid #e91e63 !important;
+        color: #e91e63 !important;
+        font-weight: 600;
+        font-size: 14px;
+        padding: 5px 12px;
+    }
+
+    .btn-outline-light:hover {
+        background-color: #e91e63 !important;
+        color: #fff !important;
+    }
+
+    .center-toast {
+        position: fixed;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        z-index: 1080;
+        min-width: 280px;
+        max-width: 80vw;
+        background: rgba(33, 37, 41, 0.95);
+        color: #fff;
+        padding: 14px 18px;
+        border-radius: 8px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+        text-align: center;
+        font-weight: 600;
+    }
+
+    .corner-toast {
+        position: fixed;
+        top: 18px;
+        right: 18px;
+        z-index: 1080;
+        min-width: 240px;
+        max-width: 50vw;
+        padding: 8px 12px;
+        border-radius: 8px;
+        box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        font-weight: 500;
+        font-size: 13px;
+    }
+
+    .toast-error { background: #dc3545; color: #fff; }
+
+    .table.compact-table th,
+    .table.compact-table td {
+        padding: 6px 8px !important;
+        font-size: 13px;
+        vertical-align: middle;
+        text-align: center;
+    }
+
+    .table-header-red {
+        background-color: #e91e63 !important;
+    }
+
+    .table-hover tbody tr:hover {
+        background-color: #fff0f3 !important;
+    }
+
+    .table td,
+    .table th {
+        border: 1px solid #f3b8c5;
+    }
+
+    .btn-icon {
+        display: inline-flex;
+        align-items: center;
+        gap: 3px;
+        border: none;
+        border-radius: 5px;
+        font-size: 13px;
+        padding: 3px 8px;
+        cursor: pointer;
+        white-space: nowrap;
+        line-height: 1.4;
+        transition: opacity 0.15s;
+    }
+
+    .btn-icon:hover { opacity: 0.8; }
+
+    .btn-icon-edit {
+        background-color: #fff3cd;
+        color: #856404;
+        border: 1px solid #ffc107;
+    }
+</style>

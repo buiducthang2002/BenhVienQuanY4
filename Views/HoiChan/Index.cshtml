@@ -49,7 +49,7 @@
                                 }
                                 else
                                 {
-                                    <form asp-action="HuyKy" asp-route-makcb="@item.makcb" method="post"
+                                    <form asp-action="HuyKy" asp-route-mathanhtoan="@item.mathanhtoan" method="post"
                                         onsubmit="return confirm('Bạn có chắc muốn huỷ ký?');">
                                         @Html.AntiForgeryToken()
                                         <button type="submit" class="btn btn-sm btn-warning">🔓 Huỷ ký</button>
@@ -57,10 +57,10 @@
                                 }
                             </td>
                             <td>
-                                <a asp-action="Edit" asp-route-makcb="@item.makcb" class="btn btn-sm btn-warning">✏️ Sửa</a>
+                                <a asp-action="Edit" asp-route-mathanhtoan="@item.mathanhtoan" class="btn btn-sm btn-warning">✏️ Sửa</a>
                             </td>
                             <td>
-                                <form asp-action="Delete" asp-route-makcb="@item.makcb" method="post"
+                                <form asp-action="Delete" asp-route-mathanhtoan="@item.mathanhtoan" method="post"
                                     onsubmit="return confirm('Bạn có chắc muốn xóa bản ghi này?');">
                                     @Html.AntiForgeryToken()
                                     <button type="submit" class="btn btn-sm btn-danger">🗑️ Xóa</button>

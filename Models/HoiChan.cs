@@ -8,6 +8,9 @@ namespace APP.Models
     public class HoiChan
     {
         [Key]
+        [Display(Name = "Mã thanh toán")]
+        public long mathanhtoan { get; set; }
+
         [StringLength(15)]
         [Display(Name = "Mã KCB")]
         public string makcb { get; set; } = null!;

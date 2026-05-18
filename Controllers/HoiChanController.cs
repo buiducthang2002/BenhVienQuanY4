@@ -32,9 +32,9 @@ namespace APP.Controllers
         }
 
         // GET: Form sửa
-        public async Task<IActionResult> Edit(string makcb)
+        public async Task<IActionResult> Edit(long mathanhtoan)
         {
-            var item = await _context.HoiChan.FindAsync(makcb);
+            var item = await _context.HoiChan.FindAsync(mathanhtoan);
             if (item == null) return NotFound();
             return View(item);
         }
@@ -56,21 +56,21 @@ namespace APP.Controllers
         // POST: Xóa
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Delete(string makcb)
+        public async Task<IActionResult> Delete(long mathanhtoan)
         {
-            var item = await _context.HoiChan.FindAsync(makcb);
+            var item = await _context.HoiChan.FindAsync(mathanhtoan);
             if (item == null) return NotFound();
             _context.HoiChan.Remove(item);
             await _context.SaveChangesAsync();
-            return RedirectToAction("Index", new { makcb });
+            return RedirectToAction("Index", new { item.makcb });
         }
 
         // POST: Huỷ ký
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> HuyKy(string makcb)
+        public async Task<IActionResult> HuyKy(long mathanhtoan)
         {
-            var item = await _context.HoiChan.FindAsync(makcb);
+            var item = await _context.HoiChan.FindAsync(mathanhtoan);
             if (item == null) return NotFound();
             item.chutoa = null;
             item.thuky = null;
