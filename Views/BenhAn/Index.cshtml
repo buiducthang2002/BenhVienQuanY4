@@ -82,8 +82,9 @@
                             }
                         </td>
                         <td>
-                            <form asp-action="Delete" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa bệnh án @item.makcb? Hành động này không thể hoàn tác.');" style="display:inline;">
+                            <form asp-action="Delete" method="post" onsubmit="return confirm('Bạn có chắc chắn muốn xóa bệnh án @item.makcb (@item.maubenhan)? Hành động này không thể hoàn tác.');" style="display:inline;">
                                 <input type="hidden" name="makcb" value="@item.makcb" />
+                                <input type="hidden" name="maubenhan" value="@item.maubenhan" />
                                 <button type="submit" class="btn btn-sm btn-outline-danger">
                                     🗑️ Xóa
                                 </button>

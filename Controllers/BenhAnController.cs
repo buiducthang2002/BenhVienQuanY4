@@ -144,7 +144,7 @@ namespace APP.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Delete(string makcb)
+        public async Task<IActionResult> Delete(string makcb, string? maubenhan)
         {
             try
             {
@@ -154,13 +154,13 @@ namespace APP.Controllers
                 }
                 else
                 {
-                    var sql = "DELETE FROM tbl_benhan_benhantheobn WHERE makcb = {0} OR makcb LIKE {1}";
-                    var affected = await _context.Database.ExecuteSqlRawAsync(sql, makcb, "%" + makcb);
+                    var sql = "DELETE FROM tbl_benhan_benhantheobn WHERE (makcb = {0} OR makcb LIKE {1}) AND maubenhan = {2}";
+                    var affected = await _context.Database.ExecuteSqlRawAsync(sql, makcb, "%" + makcb, maubenhan ?? string.Empty);
 
                     if (affected > 0)
-                        TempData["Success"] = $"Đã xóa bệnh án {makcb} thành công! ({affected} bản ghi)";
+                        TempData["Success"] = $"Đã xóa bệnh án {makcb} ({maubenhan}) thành công! ({affected} bản ghi)";
                     else
-                        TempData["Error"] = $"Không tìm thấy bệnh án {makcb}!";
+                        TempData["Error"] = $"Không tìm thấy bệnh án {makcb} ({maubenhan})!";
                 }
             }
             catch (Exception ex)
