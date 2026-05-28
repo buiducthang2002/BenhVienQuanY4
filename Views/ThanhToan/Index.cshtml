@@ -65,6 +65,24 @@
         color: white;
     }
 
+    .btn-delete-custom {
+        background: linear-gradient(135deg, #f44336 0%, #c62828 100%);
+        border: none;
+        color: white;
+        font-weight: 600;
+        padding: 10px 24px;
+        border-radius: 6px;
+        transition: all 0.3s ease;
+        box-shadow: 0 3px 6px rgba(244, 67, 54, 0.3);
+    }
+
+    .btn-delete-custom:hover {
+        background: linear-gradient(135deg, #c62828 0%, #b71c1c 100%);
+        transform: translateY(-2px);
+        box-shadow: 0 5px 10px rgba(244, 67, 54, 0.4);
+        color: white;
+    }
+
     .data-table-custom {
         border: none;
         border-radius: 10px;
@@ -301,6 +319,17 @@
                             <div class="text-end">
                                 <button type="submit" class="btn btn-save-custom">
                                     💾 Lưu thay đổi
+                                </button>
+                            </div>
+                        </form>
+
+                        <form asp-controller="ThanhToan" asp-action="Delete" method="post"
+                              onsubmit="return confirm('Bạn có chắc muốn xoá phiếu @firstItem.sophieu? Toàn bộ chi tiết thanh toán (thanhtoanct) cũng sẽ bị xoá. Hành động này KHÔNG thể hoàn tác.');"
+                              class="mt-2">
+                            <input type="hidden" name="sophieu" value="@firstItem.sophieu" />
+                            <div class="text-end">
+                                <button type="submit" class="btn btn-delete-custom">
+                                    🗑️ Xoá phiếu
                                 </button>
                             </div>
                         </form>

@@ -47,7 +47,8 @@ namespace APP.Controllers
 
                 var result = await (
                     from tt in _context.ThanhToan
-                    join ttct in _context.ThanhToanCT on tt.mathanhtoan equals ttct.mathanhtoan
+                    join ttct in _context.ThanhToanCT on tt.mathanhtoan equals ttct.mathanhtoan into ttctGroup
+                    from ttct in ttctGroup.DefaultIfEmpty()
                     join dt in _context.DonThuoc on tt.makcb equals dt.makcb into dtGroup
                     from dt in dtGroup.DefaultIfEmpty()
                     where tt.sophieu == sophieu
@@ -58,8 +59,8 @@ namespace APP.Controllers
                         ngay = tt.ngay,
                         ngaythyl = tt.ngaythyl,
                         mathanhtoan = tt.mathanhtoan,
-                        mathanhtoanct = ttct.mathanhtoanct,
-                        thanhtien = ttct.thanhtien,
+                        mathanhtoanct = ttct != null ? ttct.mathanhtoanct : 0,
+                        thanhtien = ttct != null ? ttct.thanhtien : null,
                         madonthuoc = dt != null ? dt.madonthuoc : (int?)null,
                         dt_ngay = dt != null ? dt.ngay : (DateTime?)null,
                         ngayduyet = dt != null ? dt.ngayduyet : (DateTime?)null
@@ -85,6 +86,42 @@ namespace APP.Controllers
                 ViewBag.MessageType = "danger";
                 return View("Index", new List<ThanhToanViewModel>());
             }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(string sophieu)
+        {
+            try
+            {
+                if (string.IsNullOrWhiteSpace(sophieu))
+                {
+                    TempData["ErrorMessage"] = "Thiếu số phiếu!";
+                    return RedirectToAction("Index");
+                }
+
+                int ctRows = await _context.Database.ExecuteSqlInterpolatedAsync(
+                    $"DELETE FROM thanhtoanct WHERE mathanhtoan IN (SELECT mathanhtoan FROM thanhtoan WHERE sophieu = {sophieu})");
+
+                int ttRows = await _context.Database.ExecuteSqlInterpolatedAsync(
+                    $"DELETE FROM thanhtoan WHERE sophieu = {sophieu}");
+
+                if (ttRows == 0)
+                {
+                    TempData["ErrorMessage"] = $"Không tìm thấy phiếu {sophieu} để xoá.";
+                    return RedirectToAction("Index");
+                }
+
+                TempData["SuccessMessage"] =
+                    $"Đã xoá phiếu {sophieu} — thanhtoan: {ttRows} dòng, thanhtoanct: {ctRows} dòng.";
+            }
+            catch (Exception ex)
+            {
+                var inner = ex.InnerException;
+                var detail = inner != null ? $"{ex.Message} | Inner: {inner.Message}" : ex.Message;
+                TempData["ErrorMessage"] = $"Lỗi xoá: {detail}";
+            }
+
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
