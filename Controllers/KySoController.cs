@@ -152,7 +152,7 @@ namespace APP.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> UpdateInfo(string makcb, double? songaydieutri, double? songay285, string? phuongphapdieutri)
+        public async Task<IActionResult> UpdateInfo(string makcb, DateTime? ngay, double? songaydieutri, double? songay285, string? phuongphapdieutri)
         {
             try
             {
@@ -163,6 +163,7 @@ namespace APP.Controllers
                     return RedirectToAction("Index");
                 }
 
+                record.ngay = ngay;
                 record.songaydieutri = songaydieutri;
                 record.songay285 = songay285;
                 record.phuongphapdieutri = phuongphapdieutri;
