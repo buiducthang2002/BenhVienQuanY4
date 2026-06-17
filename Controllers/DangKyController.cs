@@ -28,8 +28,30 @@ namespace APP.Controllers
             if (pageSize < 10) pageSize = 10;
             if (pageSize > 100) pageSize = 100;
 
+            // Lọc và đếm CHỈ trên bảng dangky (dùng được index, không join).
+            // Trước đây count chạy cả phép join 8 bảng nên rất chậm.
+            var baseQuery = _context.DangKy.AsNoTracking();
+
+            if (!string.IsNullOrEmpty(search))
+            {
+                baseQuery = baseQuery.Where(dk =>
+                    (dk.makcb ?? string.Empty).Contains(search) ||
+                    (dk.hoten ?? string.Empty).Contains(search));
+            }
+
+            // Get total count for pagination
+            var totalRecords = await baseQuery.CountAsync();
+            var totalPages = (int)Math.Ceiling(totalRecords / (double)pageSize);
+
+            // Phân trang trên bảng gốc TRƯỚC, sau đó mới join danh mục
+            // -> phép join 8 bảng chỉ chạy trên 50 dòng của trang hiện tại.
+            var pagedDangKy = baseQuery
+                .OrderByDescending(dk => dk.makcb)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize);
+
             var query =
-                from dk in _context.DangKy.AsNoTracking()
+                from dk in pagedDangKy
                 join p in _context.DmPhong on dk.maphong equals p.maphong into phongGroup
                 from phong in phongGroup.DefaultIfEmpty()
 
@@ -83,21 +105,8 @@ namespace APP.Controllers
                     tenhtd = hinhthuc.tenhtd
                 };
 
-            if (!string.IsNullOrEmpty(search))
-            {
-                query = query.Where(x =>
-                    (x.makcb ?? string.Empty).Contains(search) ||
-                    (x.hoten ?? string.Empty).Contains(search));
-            }
-
-            // Get total count for pagination
-            var totalRecords = await query.CountAsync();
-            var totalPages = (int)Math.Ceiling(totalRecords / (double)pageSize);
-
             var list = await query
                 .OrderByDescending(x => x.makcb)
-                .Skip((page - 1) * pageSize)
-                .Take(pageSize)
                 .ToListAsync();
 
             ViewBag.Search = search;
