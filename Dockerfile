@@ -14,11 +14,10 @@ RUN dotnet publish APP.csproj -c Release -o /app/publish /p:UseAppHost=false
 FROM mcr.microsoft.com/dotnet/aspnet:6.0 AS final
 WORKDIR /app
 
-# Lắng nghe trên cổng 8080 (HTTP) trong container
-ENV ASPNETCORE_URLS=http://+:8080 \
-    ASPNETCORE_ENVIRONMENT=Production
+ENV ASPNETCORE_ENVIRONMENT=Production
 EXPOSE 8080
 
 COPY --from=build /app/publish .
 
-ENTRYPOINT ["dotnet", "APP.dll"]
+# Lắng nghe trên $PORT do Railway cấp (mặc định 8080 khi chạy local)
+ENTRYPOINT ["sh", "-c", "dotnet APP.dll --urls=http://0.0.0.0:${PORT:-8080}"]
