@@ -1,0 +1,16 @@
+services:
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: benhvienquany4
+    ports:
+      - "8080:8080"
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - ASPNETCORE_URLS=http://+:8080
+      # Ghi đè chuỗi kết nối khi chạy bằng Docker (sửa lại cho phù hợp môi trường).
+      # Lưu ý: "localhost" trong container KHÔNG trỏ tới máy host.
+      # Dùng IP thật của SQL Server, hoặc "host.docker.internal" nếu SQL chạy trên máy host.
+      - ConnectionStrings__DefaultConnection=Server=192.168.0.26;Database=QY42026V6;User Id=sa;Password=123@vtt;TrustServerCertificate=True;
+    restart: unless-stopped

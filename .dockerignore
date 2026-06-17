@@ -1,0 +1,21 @@
+# Build output
+**/bin/
+**/obj/
+publish/
+
+# IDE / VS
+.vs/
+.vscode/
+*.user
+
+# Git
+.git/
+.gitignore
+
+# Docker
+Dockerfile*
+docker-compose*
+.dockerignore
+
+# Misc
+**/*.md
